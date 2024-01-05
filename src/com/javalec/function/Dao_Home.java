@@ -51,15 +51,67 @@ public class Dao_Home {
 
 	
 	// Method
-	public List<Dto_Home> findAll() {
-		List<Dto_Home> all = new ArrayList<Dto_Home>();
-		all.add(new Dto_Home(1, "구찌가방1.png"));
-		all.add(new Dto_Home(2, "구찌가방2.png"));
-		all.add(new Dto_Home(3, "구찌가방3.png"));
+	public List<Dto_Home> secondRow() {
+		List<Dto_Home> dtoList = new ArrayList<Dto_Home>();
 		
-		return all;
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+			Statement st = con.createStatement();
+			
+			String query = "select b.bid_status, p.title, b.start_price, u.nickname from bid b, post p, user u where b.userid = u.userid and b.postid = p.postid";
+			ResultSet rs = st.executeQuery(query);
+			
+			while(rs.next()) {
+				String bid_status = rs.getString(1);
+				String p_title = rs.getString(2);
+				int start_Price = rs.getInt(3);
+				String u_nickname = rs.getString(4);
+				
+				Dto_Home dto = new Dto_Home(bid_status, p_title, start_Price, u_nickname);
+				dtoList.add(dto);
+			}
+			con.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return dtoList;
 	}
 	
+	// 작업 수정 해야함 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+	// 작업 수정 해야함 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+	// 작업 수정 해야함 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+	public List<Dto_Home> findAll() {
+		List<Dto_Home> dtoList = new ArrayList<Dto_Home>();
+		
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+			Statement st = con.createStatement();
+			
+//			String query = "select "
+			
+			dtoList.add(new Dto_Home(1, "구찌가방1.png"));
+			dtoList.add(new Dto_Home(2, "구찌가방2.png"));
+			dtoList.add(new Dto_Home(3, "구찌가방3.png"));
+		}
+		
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return dtoList;
+	}
+	// 작업 수정 해야함 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+	// 작업 수정 해야함 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+	// 작업 수정 해야함 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+	
+	
+	
+	public void getFileName() {
+		
+	}
 	
 	// 검색 결과를 Table로
 //	public ArrayList<Dto_Home> userInfo() {

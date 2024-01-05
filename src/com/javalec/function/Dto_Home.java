@@ -2,7 +2,7 @@ package com.javalec.function;
 
 public class Dto_Home {
 	
-	String post_title; // 포스트 제목
+	 
 	String text;
 	String option; // 경매인지 일반판매인지
 	String user_nickname; // user_nickname
@@ -10,13 +10,18 @@ public class Dto_Home {
 	String user_image;
 	String file;
 	int price;
-	int start_price;
+	
 	int winning_price;
 	int postid;
 	int chat_count;
 	int wishlist_count;
 	int action_date;
 	int seq;
+	
+	String bid_status;
+	String post_title; // 포스트 제목
+	int start_price;
+	String nickname;
 	
 	
 	public Dto_Home() {
@@ -28,6 +33,15 @@ public class Dto_Home {
 		this.seq = seq;
 		this.file = file;
 	}
+	
+
+	public Dto_Home(String bid_status, String post_title, int start_price, String nickname) {
+		this.bid_status = bid_status;
+		this.post_title = post_title;
+		this.start_price = start_price;
+		this.nickname = nickname;
+	}
+
 
 	public Dto_Home(String post_title, String text, String option, String user_nickname, String post_image,
 			String user_image, String file, int price, int start_price, int winning_price, int postid, int chat_count,
