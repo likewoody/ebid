@@ -9,6 +9,8 @@ import java.awt.SystemColor;
 import javax.swing.JButton;
 import javax.swing.JSeparator;
 import java.awt.Color;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class MyPage extends JDialog {
 
@@ -187,6 +189,13 @@ public class MyPage extends JDialog {
 	private JButton getBtnEdit() {
 		if (btnEdit == null) {
 			btnEdit = new JButton("개인정보 수정");
+			btnEdit.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+				dispose();
+				MyPageEdit mpe = new MyPageEdit();
+				mpe.setVisible(true);
+				}
+			});
 			btnEdit.setBounds(201, 211, 117, 29);
 		}
 		return btnEdit;
