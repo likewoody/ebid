@@ -16,6 +16,7 @@ public class MyPageEdit extends JFrame {
 	private JButton btnAlarm;
 	private JButton btnChat;
 	private JLabel lblNewLabel;
+	private JButton btnNewButton;
 
 	/**
 	 * Launch the application.
@@ -46,6 +47,7 @@ public class MyPageEdit extends JFrame {
 		getContentPane().add(getBtnMy());
 		getContentPane().add(getBtnAlarm());
 		getContentPane().add(getBtnChat());
+		getContentPane().add(getBtnNewButton());
 		getContentPane().add(getLblNewLabel());
 
 	}
@@ -91,5 +93,12 @@ public class MyPageEdit extends JFrame {
 			lblNewLabel.setBounds(0, 0, 430, 704);
 		}
 		return lblNewLabel;
+	}
+	private JButton getBtnNewButton() {
+		if (btnNewButton == null) {
+			btnNewButton = new JButton("New button");
+			btnNewButton.setBounds(150, 650, 117, 29);
+		}
+		return btnNewButton;
 	}
 }
