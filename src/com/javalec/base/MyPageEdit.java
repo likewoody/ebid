@@ -10,6 +10,8 @@ import java.awt.Color;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class MyPageEdit extends JFrame {
 
@@ -137,6 +139,13 @@ public class MyPageEdit extends JFrame {
 	private JButton getBtnBack() {
 		if (btnBack == null) {
 			btnBack = new JButton("뒤로가기");
+			btnBack.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					dispose();
+					MyPage mp = new MyPage();
+					mp.setVisible(true);
+				}
+			});
 			btnBack.setBounds(150, 650, 117, 29);
 		}
 		return btnBack;
@@ -188,6 +197,7 @@ public class MyPageEdit extends JFrame {
 	private JTextField getTfName() {
 		if (tfName == null) {
 			tfName = new JTextField();
+			tfName.setEditable(false);
 			tfName.setColumns(10);
 			tfName.setBounds(115, 330, 200, 30);
 		}
@@ -203,6 +213,7 @@ public class MyPageEdit extends JFrame {
 	private JTextField getTfId() {
 		if (tfId == null) {
 			tfId = new JTextField();
+			tfId.setEditable(false);
 			tfId.setColumns(10);
 			tfId.setBounds(115, 380, 200, 30);
 		}
@@ -210,7 +221,7 @@ public class MyPageEdit extends JFrame {
 	}
 	private JLabel getLblUserNick_3() {
 		if (lblUserNick_3 == null) {
-			lblUserNick_3 = new JLabel("PW : ");
+			lblUserNick_3 = new JLabel("현재 PW : ");
 			lblUserNick_3.setBounds(42, 430, 61, 16);
 		}
 		return lblUserNick_3;
