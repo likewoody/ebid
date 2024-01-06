@@ -14,6 +14,9 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
+import javax.swing.JTextArea;
+import javax.swing.JSeparator;
+import javax.swing.JFormattedTextField;
 
 public class Writing {
 
@@ -25,10 +28,9 @@ public class Writing {
 	private JButton btnChat;
 	private JButton btnWrite;
 	private JComboBox comboBox;
-	private JLabel lblNewLabel_1;
 	private JLabel lblNewLabel_2;
-	private JLabel lblNewLabel_3;
-	private JTextField textField;
+	private JTextField tfTitle;
+	private JTextField tfPrice;
 
 	/**
 	 * Launch the application.
@@ -68,27 +70,46 @@ public class Writing {
 		frame.getContentPane().add(getBtnWrite());
 		frame.getContentPane().add(getComboBox());
 		
-		lblNewLabel_1 = new JLabel("제목을 입력해주세요.");
-		lblNewLabel_1.setFont(new Font("Dialog", Font.PLAIN, 14));
-		lblNewLabel_1.setBounds(143, 120, 187, 25);
-		frame.getContentPane().add(lblNewLabel_1);
+		tfTitle = new JTextField();
+		tfTitle.setFont(new Font("Dialog", Font.PLAIN, 14));
+		tfTitle.setText("제목을 입력하세요.");
+		tfTitle.setBounds(150, 119, 240, 28);
+		frame.getContentPane().add(tfTitle);
+		tfTitle.setColumns(10);
 		frame.getContentPane().add(getLblNewLabel_2());
-		frame.getContentPane().add(getLblNewLabel_3());
 		
-		textField = new JTextField();
-		textField.setBounds(38, 221, 355, 281);
-		frame.getContentPane().add(textField);
-		textField.setColumns(10);
+		tfPrice = new JTextField();
+		tfPrice.setHorizontalAlignment(SwingConstants.TRAILING);
+		tfPrice.setFont(new Font("Dialog", Font.PLAIN, 14));
+		tfPrice.setBounds(150, 156, 221, 24);
+		frame.getContentPane().add(tfPrice);
+		tfPrice.setColumns(10);
 		
-		JLabel lblNewLabel_4 = new JLabel("");
-		lblNewLabel_4.setBounds(37, 548, 50, 15);
-		frame.getContentPane().add(lblNewLabel_4);
+		JLabel lblNewLabel_1 = new JLabel("원");
+		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_1.setFont(new Font("Dialog", Font.PLAIN, 14));
+		lblNewLabel_1.setBounds(370, 156, 34, 25);
+		frame.getContentPane().add(lblNewLabel_1);
 		
-		JLabel lblNewLabel_5 = new JLabel("게시하기");
-		lblNewLabel_5.setFont(new Font("Dialog", Font.PLAIN, 14));
-		lblNewLabel_5.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_5.setBounds(115, 643, 50, 15);
-		frame.getContentPane().add(lblNewLabel_5);
+		JTextArea taWriting = new JTextArea();
+		taWriting.setLineWrap(true);
+		taWriting.setFont(new Font("Dialog", Font.PLAIN, 14));
+		taWriting.setBounds(39, 219, 351, 288);
+		frame.getContentPane().add(taWriting);
+		
+		JLabel lbladdimage = new JLabel("addimage");
+		lbladdimage.setBounds(37, 548, 64, 59);
+		frame.getContentPane().add(lbladdimage);
+		
+		JLabel lblimage = new JLabel("image");
+		lblimage.setBounds(127, 548, 64, 59);
+		frame.getContentPane().add(lblimage);
+		
+		JLabel lblPosting = new JLabel("게시하기");
+		lblPosting.setFont(new Font("Dialog", Font.PLAIN, 14));
+		lblPosting.setHorizontalAlignment(SwingConstants.CENTER);
+		lblPosting.setBounds(116, 640, 201, 34);
+		frame.getContentPane().add(lblPosting);
 		frame.getContentPane().add(getLblNewLabel());
 	}
 
@@ -166,13 +187,5 @@ public class Writing {
 			lblNewLabel_2.setBounds(37, 156, 70, 25);
 		}
 		return lblNewLabel_2;
-	}
-	private JLabel getLblNewLabel_3() {
-		if (lblNewLabel_3 == null) {
-			lblNewLabel_3 = new JLabel("");
-			lblNewLabel_3.setHorizontalAlignment(SwingConstants.TRAILING);
-			lblNewLabel_3.setBounds(153, 155, 230, 22);
-		}
-		return lblNewLabel_3;
 	}
 }
