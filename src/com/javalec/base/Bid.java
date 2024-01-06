@@ -20,7 +20,7 @@ public class Bid extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
-	private JLabel homeBackImage;
+	private JLabel bidBackground;
 	private JButton btnHome;
 	private JButton btnMypage;
 	private JButton btnAlarm;
@@ -82,24 +82,23 @@ public class Bid extends JDialog {
 		contentPanel.add(getLblNewLabel_3());
 		contentPanel.add(getLblNewLabel_2());
 		contentPanel.add(getLbPostTitle());
-		contentPanel.add(getHomeBackImage());
+		contentPanel.add(getBidBackground());
 	}
 
-	private JLabel getHomeBackImage() {
-		if (homeBackImage == null) {
-			homeBackImage = new JLabel("");
-			homeBackImage.setBounds(0, 0, 430, 704);
-			homeBackImage.setIcon(new ImageIcon(Main.class.getResource("/com/javalec/images/bidBackground.png")));
+	private JLabel getBidBackground() {
+		if (bidBackground == null) {
+			bidBackground = new JLabel("");
+			bidBackground.setBounds(0, 0, 430, 704);
+			bidBackground.setIcon(new ImageIcon(Main.class.getResource("/com/javalec/images/bidBackground.png")));
 		}
-		return homeBackImage;
+		return bidBackground;
 	}
 	private JButton getBtnHome() {
 		if (btnHome == null) {
 			btnHome = new JButton("홈");
 			btnHome.setFont(new Font("Helvetica", Font.PLAIN, 14));
 			btnHome.setBounds(20, 55, 70, 34);
-			
-			btnHome.setBorder(new LineBorder(new Color(214, 203, 216), 2));
+//			btnHome.setBorder(new LineBorder(new Color(214, 203, 216), 2));
 		}
 		return btnHome;
 	}
@@ -108,7 +107,7 @@ public class Bid extends JDialog {
 			btnMypage = new JButton("개인");
 			btnMypage.setFont(new Font("Helvetica", Font.PLAIN, 14));
 			btnMypage.setBounds(100, 55, 70, 34);
-			btnMypage.setBorder(new LineBorder(new Color(214, 203, 216), 2));
+//			btnMypage.setBorder(new LineBorder(new Color(214, 203, 216), 2));
 		}
 		return btnMypage;
 	}
@@ -117,7 +116,7 @@ public class Bid extends JDialog {
 			btnAlarm = new JButton("알림");
 			btnAlarm.setFont(new Font("Helvetica", Font.PLAIN, 14));
 			btnAlarm.setBounds(180, 55, 70, 34);
-			btnAlarm.setBorder(new LineBorder(new Color(214, 203, 216), 2));
+//			btnAlarm.setBorder(new LineBorder(new Color(214, 203, 216), 2));
 		}
 		return btnAlarm;
 	}
@@ -126,7 +125,7 @@ public class Bid extends JDialog {
 			btnChat = new JButton("채팅");
 			btnChat.setFont(new Font("Helvetica", Font.PLAIN, 14));
 			btnChat.setBounds(260, 55, 70, 34);
-			btnChat.setBorder(new LineBorder(new Color(214, 203, 216), 2));
+//			btnChat.setBorder(new LineBorder(new Color(214, 203, 216), 2));
 		}
 		return btnChat;
 	}
@@ -135,7 +134,7 @@ public class Bid extends JDialog {
 			btnWrite = new JButton("글쓰기");
 			btnWrite.setFont(new Font("Helvetica", Font.PLAIN, 14));
 			btnWrite.setBounds(340, 55, 70, 34);
-			btnWrite.setBorder(new LineBorder(new Color(214, 203, 216), 2));
+//			btnWrite.setBorder(new LineBorder(new Color(214, 203, 216), 2));
 		}
 		return btnWrite;
 	}

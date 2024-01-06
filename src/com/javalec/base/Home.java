@@ -109,7 +109,7 @@ public class Home extends JDialog {
 			btnHome.setFont(new Font("Helvetica", Font.PLAIN, 14));
 			btnHome.setBounds(20, 55, 70, 34);
 			
-			btnHome.setBorder(new LineBorder(new Color(214, 203, 216), 2));
+//			btnHome.setBorder(new LineBorder(new Color(214, 203, 216), 2));
 		}
 		return btnHome;
 	}
@@ -118,7 +118,7 @@ public class Home extends JDialog {
 			btnMypage = new JButton("개인");
 			btnMypage.setFont(new Font("Helvetica", Font.PLAIN, 14));
 			btnMypage.setBounds(100, 55, 70, 34);
-			btnMypage.setBorder(new LineBorder(new Color(214, 203, 216), 2));
+//			btnMypage.setBorder(new LineBorder(new Color(214, 203, 216), 2));
 		}
 		return btnMypage;
 	}
@@ -127,7 +127,7 @@ public class Home extends JDialog {
 			btnAlarm = new JButton("알림");
 			btnAlarm.setFont(new Font("Helvetica", Font.PLAIN, 14));
 			btnAlarm.setBounds(180, 55, 70, 34);
-			btnAlarm.setBorder(new LineBorder(new Color(214, 203, 216), 2));
+//			btnAlarm.setBorder(new LineBorder(new Color(214, 203, 216), 2));
 		}
 		return btnAlarm;
 	}
@@ -136,7 +136,7 @@ public class Home extends JDialog {
 			btnChat = new JButton("채팅");
 			btnChat.setFont(new Font("Helvetica", Font.PLAIN, 14));
 			btnChat.setBounds(260, 55, 70, 34);
-			btnChat.setBorder(new LineBorder(new Color(214, 203, 216), 2));
+//			btnChat.setBorder(new LineBorder(new Color(214, 203, 216), 2));
 		}
 		return btnChat;
 	}
@@ -145,7 +145,7 @@ public class Home extends JDialog {
 			btnWrite = new JButton("글쓰기");
 			btnWrite.setFont(new Font("Helvetica", Font.PLAIN, 14));
 			btnWrite.setBounds(340, 55, 70, 34);
-			btnWrite.setBorder(new LineBorder(new Color(214, 203, 216), 2));
+//			btnWrite.setBorder(new LineBorder(new Color(214, 203, 216), 2));
 		}
 		return btnWrite;
 	}
