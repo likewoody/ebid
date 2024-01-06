@@ -151,6 +151,7 @@ public class Home_detail extends JDialog {
 	private JTextField getTfOption() {
 		if (tfOption == null) {
 			tfOption = new JTextField();
+			tfOption.setEditable(false);
 			tfOption.setHorizontalAlignment(SwingConstants.CENTER);
 			tfOption.setText("경매");
 			tfOption.setBounds(10, 112, 85, 30);

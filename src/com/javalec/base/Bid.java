@@ -28,6 +28,17 @@ public class Bid extends JDialog {
 	private JButton btnWrite;
 	private JTextField tfOption;
 	private JLabel lbPostTitle;
+	private JLabel lblNewLabel;
+	private JLabel lblNewLabel_1;
+	private JLabel lbStartPrice;
+	private JLabel lbDeposit;
+	private JLabel lblNewLabel_1_1;
+	private JTextField tfBidPrice;
+	private JLabel lblNewLabel_2;
+	private JLabel lblNewLabel_3;
+	private JLabel lblNewLabel_3_1;
+	private JLabel lblNewLabel_2_1;
+	private JLabel lbBid;
 
 	/**
 	 * Launch the application.
@@ -58,7 +69,18 @@ public class Bid extends JDialog {
 		contentPanel.add(getBtnAlarm());
 		contentPanel.add(getBtnChat());
 		contentPanel.add(getBtnWrite());
+		contentPanel.add(getLblNewLabel());
+		contentPanel.add(getLblNewLabel_1());
+		contentPanel.add(getLbDeposit());
+		contentPanel.add(getLblNewLabel_1_1());
+		contentPanel.add(getTfBidPrice());
 		contentPanel.add(getTfOption());
+		contentPanel.add(getLbStartPrice());
+		contentPanel.add(getLbBid());
+		contentPanel.add(getLblNewLabel_2_1());
+		contentPanel.add(getLblNewLabel_3_1());
+		contentPanel.add(getLblNewLabel_3());
+		contentPanel.add(getLblNewLabel_2());
 		contentPanel.add(getLbPostTitle());
 		contentPanel.add(getHomeBackImage());
 	}
@@ -120,6 +142,7 @@ public class Bid extends JDialog {
 	private JTextField getTfOption() {
 		if (tfOption == null) {
 			tfOption = new JTextField();
+			tfOption.setEditable(false);
 			tfOption.setHorizontalAlignment(SwingConstants.CENTER);
 			tfOption.setText("경매");
 			tfOption.setBounds(10, 112, 85, 30);
@@ -136,5 +159,100 @@ public class Bid extends JDialog {
 			lbPostTitle.setBounds(109, 101, 301, 53);
 		}
 		return lbPostTitle;
+	}
+	private JLabel getLblNewLabel() {
+		if (lblNewLabel == null) {
+			lblNewLabel = new JLabel("시작금액");
+			lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+			lblNewLabel.setBounds(33, 184, 78, 16);
+		}
+		return lblNewLabel;
+	}
+	private JLabel getLblNewLabel_1() {
+		if (lblNewLabel_1 == null) {
+			lblNewLabel_1 = new JLabel("예약금 (10%)");
+			lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
+			lblNewLabel_1.setBounds(33, 223, 78, 16);
+		}
+		return lblNewLabel_1;
+	}
+	private JLabel getLbStartPrice() {
+		if (lbStartPrice == null) {
+			lbStartPrice = new JLabel("500,000 원");
+			lbStartPrice.setHorizontalAlignment(SwingConstants.RIGHT);
+			lbStartPrice.setBounds(180, 184, 221, 16);
+		}
+		return lbStartPrice;
+	}
+	private JLabel getLbDeposit() {
+		if (lbDeposit == null) {
+			lbDeposit = new JLabel("50,000 원");
+			lbDeposit.setHorizontalAlignment(SwingConstants.RIGHT);
+			lbDeposit.setBounds(180, 223, 221, 16);
+		}
+		return lbDeposit;
+	}
+	private JLabel getLblNewLabel_1_1() {
+		if (lblNewLabel_1_1 == null) {
+			lblNewLabel_1_1 = new JLabel("입찰 금액");
+			lblNewLabel_1_1.setHorizontalAlignment(SwingConstants.CENTER);
+			lblNewLabel_1_1.setBounds(180, 324, 85, 16);
+		}
+		return lblNewLabel_1_1;
+	}
+	private JTextField getTfBidPrice() {
+		if (tfBidPrice == null) {
+			tfBidPrice = new JTextField();
+			tfBidPrice.setText("550,000 원");
+			tfBidPrice.setHorizontalAlignment(SwingConstants.RIGHT);
+			tfBidPrice.setColumns(10);
+			tfBidPrice.setBounds(110, 366, 230, 40);
+			tfBidPrice.setBorder(new LineBorder(new Color(214, 203, 216), 2));
+		}
+		return tfBidPrice;
+	}
+	private JLabel getLblNewLabel_2() {
+		if (lblNewLabel_2 == null) {
+			lblNewLabel_2 = new JLabel("입찰 예약금은 시작금액의 10%입니다.");
+			lblNewLabel_2.setForeground(new Color(255, 38, 0));
+			lblNewLabel_2.setHorizontalAlignment(SwingConstants.CENTER);
+			lblNewLabel_2.setBounds(0, 470, 430, 16);
+		}
+		return lblNewLabel_2;
+	}
+	private JLabel getLblNewLabel_3() {
+		if (lblNewLabel_3 == null) {
+			lblNewLabel_3 = new JLabel("입찰은 최대 3번까지 가능하며, 낙찰 되지 않을 시 예약금은 100% 환불 됩니다.");
+			lblNewLabel_3.setForeground(new Color(255, 38, 0));
+			lblNewLabel_3.setHorizontalAlignment(SwingConstants.CENTER);
+			lblNewLabel_3.setBounds(0, 500, 430, 16);
+		}
+		return lblNewLabel_3;
+	}
+	private JLabel getLblNewLabel_3_1() {
+		if (lblNewLabel_3_1 == null) {
+			lblNewLabel_3_1 = new JLabel("낙찰 후 거래를 파기할 시 결재한 예약금 10%는 반환되지 않습니다.");
+			lblNewLabel_3_1.setForeground(new Color(255, 38, 0));
+			lblNewLabel_3_1.setHorizontalAlignment(SwingConstants.CENTER);
+			lblNewLabel_3_1.setBounds(0, 530, 430, 16);
+		}
+		return lblNewLabel_3_1;
+	}
+	private JLabel getLblNewLabel_2_1() {
+		if (lblNewLabel_2_1 == null) {
+			lblNewLabel_2_1 = new JLabel("신중한 입찰 부탁드립니다.");
+			lblNewLabel_2_1.setForeground(new Color(255, 38, 0));
+			lblNewLabel_2_1.setHorizontalAlignment(SwingConstants.CENTER);
+			lblNewLabel_2_1.setBounds(0, 560, 430, 16);
+		}
+		return lblNewLabel_2_1;
+	}
+	private JLabel getLbBid() {
+		if (lbBid == null) {
+			lbBid = new JLabel("입찰하기");
+			lbBid.setHorizontalAlignment(SwingConstants.CENTER);
+			lbBid.setBounds(102, 644, 227, 40);
+		}
+		return lbBid;
 	}
 }
