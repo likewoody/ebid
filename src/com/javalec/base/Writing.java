@@ -12,6 +12,8 @@ import java.awt.event.ActionEvent;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JTextPane;
+import javax.swing.SwingConstants;
+import javax.swing.JTextField;
 
 public class Writing {
 
@@ -23,7 +25,10 @@ public class Writing {
 	private JButton btnChat;
 	private JButton btnWrite;
 	private JComboBox comboBox;
-	private JTextPane textPane;
+	private JLabel lblNewLabel_1;
+	private JLabel lblNewLabel_2;
+	private JLabel lblNewLabel_3;
+	private JTextField textField;
 
 	/**
 	 * Launch the application.
@@ -62,14 +67,35 @@ public class Writing {
 		frame.getContentPane().add(getBtnChat());
 		frame.getContentPane().add(getBtnWrite());
 		frame.getContentPane().add(getComboBox());
-		frame.getContentPane().add(getTextPane());
+		
+		lblNewLabel_1 = new JLabel("제목을 입력해주세요.");
+		lblNewLabel_1.setFont(new Font("Dialog", Font.PLAIN, 14));
+		lblNewLabel_1.setBounds(143, 120, 187, 25);
+		frame.getContentPane().add(lblNewLabel_1);
+		frame.getContentPane().add(getLblNewLabel_2());
+		frame.getContentPane().add(getLblNewLabel_3());
+		
+		textField = new JTextField();
+		textField.setBounds(38, 221, 355, 281);
+		frame.getContentPane().add(textField);
+		textField.setColumns(10);
+		
+		JLabel lblNewLabel_4 = new JLabel("");
+		lblNewLabel_4.setBounds(37, 548, 50, 15);
+		frame.getContentPane().add(lblNewLabel_4);
+		
+		JLabel lblNewLabel_5 = new JLabel("게시하기");
+		lblNewLabel_5.setFont(new Font("Dialog", Font.PLAIN, 14));
+		lblNewLabel_5.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_5.setBounds(115, 643, 50, 15);
+		frame.getContentPane().add(lblNewLabel_5);
 		frame.getContentPane().add(getLblNewLabel());
 	}
 
 	private JLabel getLblNewLabel() {
 		if (lblNewLabel == null) {
 			lblNewLabel = new JLabel("");
-			lblNewLabel.setIcon(new ImageIcon(Writing.class.getResource("/com/javalec/images/mainFrame.png")));
+			lblNewLabel.setIcon(new ImageIcon(Writing.class.getResource("/com/javalec/images/writingBackgroud.png")));
 			lblNewLabel.setBounds(0, 0, 430, 704);
 		}
 		return lblNewLabel;
@@ -129,15 +155,24 @@ public class Writing {
 			comboBox.setFont(new Font("Helvetica", Font.PLAIN, 14));
 			comboBox.setEditable(true);
 			comboBox.setToolTipText("");
-			comboBox.setBounds(30, 131, 70, 34);
+			comboBox.setBounds(37, 116, 70, 34);
 		}
 		return comboBox;
 	}
-	private JTextPane getTextPane() {
-		if (textPane == null) {
-			textPane = new JTextPane();
-			textPane.setBounds(16, 177, 395, 428);
+	private JLabel getLblNewLabel_2() {
+		if (lblNewLabel_2 == null) {
+			lblNewLabel_2 = new JLabel("판매금액");
+			lblNewLabel_2.setFont(new Font("Dialog", Font.PLAIN, 14));
+			lblNewLabel_2.setBounds(37, 156, 70, 25);
 		}
-		return textPane;
+		return lblNewLabel_2;
+	}
+	private JLabel getLblNewLabel_3() {
+		if (lblNewLabel_3 == null) {
+			lblNewLabel_3 = new JLabel("");
+			lblNewLabel_3.setHorizontalAlignment(SwingConstants.TRAILING);
+			lblNewLabel_3.setBounds(153, 155, 230, 22);
+		}
+		return lblNewLabel_3;
 	}
 }
