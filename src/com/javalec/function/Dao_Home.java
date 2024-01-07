@@ -1,7 +1,9 @@
 package com.javalec.function;
 
+import java.awt.Image;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -12,6 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import javax.swing.ImageIcon;
+
+import com.mysql.cj.jdbc.Blob;
+
 
 public class Dao_Home {
 	
@@ -19,57 +25,79 @@ public class Dao_Home {
 	private final String id_mysql = Share.dbUser;
 	private final String pw_mysql = Share.dbPass;
 	
-	
-	String post_title;
-	String text;
-	String option;
-	String user_nickname;
-	String post_image;
-	String user_image;
-	String file;
-	int price;
-	int start_price;
-	int winning_price;
+	int imageid;
 	int postid;
-	int chat_count;
-	int wishlist_count;
-	int action_date;
-	int seq;
-	
+	byte[] post_image;
+	String post_title; // 포스트 제목
+	int start_price;
+	String nickname;
+	ImageIcon imageIcon;
 	
 	// Constructor
 	public Dao_Home() {
 		// TODO Auto-generated constructor stub
 	}
 	
-	
-	
-	public Dao_Home(int seq, String file) {
-		this.seq = seq;
-		this.file = file;
-	}
-
-	
 	// Method
-	public List<Dto_Home> secondRow() {
-		List<Dto_Home> dtoList = new ArrayList<Dto_Home>();
+	
+	// get 2번째 컬럼 정보
+	public ArrayList<Dto_Home> searchDB() {
+		ArrayList<Dto_Home> dtoList = new ArrayList<Dto_Home>();
+		Dto_Home dto = null;
 		
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
 			Statement st = con.createStatement();
 			
-			String query = "select b.bid_status, p.title, b.start_price, u.nickname from bid b, post p, user u where b.userid = u.userid and b.postid = p.postid";
-			ResultSet rs = st.executeQuery(query);
+			String query = "SELECT"
+					+ "    max_image.post_image, "
+					+ "    p.title, "
+					+ "    p.price, "
+					+ "    u.nickname, "
+					+ "	p.sort "
+					+ "FROM "
+					+ "    ( "
+					+ "        SELECT "
+					+ "            MAX(i.post_image) AS post_image, "
+					+ "            p.postid "
+					+ "        FROM "
+					+ "            image i "
+					+ "        JOIN post p ON p.postid = i.postid "
+					+ "        LEFT JOIN bid b ON b.postid = p.postid "
+					+ "        LEFT JOIN sell s ON s.postid = p.postid "
+					+ "        GROUP BY "
+					+ "            p.postid "
+					+ "    ) max_image "
+					+ "JOIN post p ON max_image.postid = p.postid "
+					+ "JOIN user u ON u.userid = ( "
+					+ "    SELECT "
+					+ "        CASE "
+					+ "            WHEN MAX(b.userid) IS NOT NULL THEN MAX(b.userid) "
+					+ "            WHEN MAX(s.userid) IS NOT NULL THEN MAX(s.userid) "
+					+ "        END "
+					+ "    FROM "
+					+ "        bid b "
+					+ "    LEFT JOIN sell s ON s.postid = p.postid "
+					+ "    WHERE "
+					+ "        b.postid = p.postid OR s.postid = p.postid "
+					+ ")"
+					+ "ORDER BY "
+					+ "    p.update_date DESC";
 			
-			while(rs.next()) {
-				String bid_status = rs.getString(1);
-				String p_title = rs.getString(2);
-				int start_Price = rs.getInt(3);
-				String u_nickname = rs.getString(4);
+			ResultSet rs = st.executeQuery(query);
+			while (rs.next()) {
 				
-				Dto_Home dto = new Dto_Home(bid_status, p_title, start_Price, u_nickname);
+				if (rs.getString(5).equals("판매")) {
+					dto = new Dto_Home(rs.getBytes(1), rs.getString(2), rs.getInt(3), rs.getString(4), rs.getString(5));
+				}
+				
+				if (rs.getString(5).equals("경매")) {
+					dto = new Dto_Home(rs.getBytes(1), rs.getString(2), rs.getInt(3), rs.getString(4), rs.getString(5));
+				}
+				
 				dtoList.add(dto);
+				
 			}
 			con.close();
 		}
@@ -79,76 +107,36 @@ public class Dao_Home {
 		return dtoList;
 	}
 	
-	// 작업 수정 해야함 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-	// 작업 수정 해야함 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-	// 작업 수정 해야함 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-	public List<Dto_Home> findAll() {
-		List<Dto_Home> dtoList = new ArrayList<Dto_Home>();
-		
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
-			Statement st = con.createStatement();
-			
-//			String query = "select "
-			
-			dtoList.add(new Dto_Home(1, "구찌가방1.png"));
-			dtoList.add(new Dto_Home(2, "구찌가방2.png"));
-			dtoList.add(new Dto_Home(3, "구찌가방3.png"));
-		}
-		
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return dtoList;
-	}
-	// 작업 수정 해야함 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-	// 작업 수정 해야함 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-	// 작업 수정 해야함 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-	
-	
-	
-	public void getFileName() {
-		
-	}
-	
-	// 검색 결과를 Table로
-//	public ArrayList<Dto_Home> userInfo() {
-//		ArrayList<Dto_Home> dto = new ArrayList<Dto_Home>();
+	// looking for image
+//	public ArrayList<Dto_Home> getImage() {
+//		ArrayList<Dto_Home> dtoList = new ArrayList<Dto_Home>();
 //		
-//		String WhereDefault = "select imageid, from images ";
-//		
-//		Scanner sc = new Scanner(System.in);
 //		try {
 //			Class.forName("com.mysql.cj.jdbc.Driver");
-//			Connection con = DriverManager.getConnection(url_mysql, id_mysql,pw_mysql);
+//			Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
 //			Statement st = con.createStatement();
 //			
-//			int num = sc.nextInt();
-//			String query = "select post_image from image where imageid = " + num;
+//			String query = "SELECT MAX(i.post_image) AS post_image "
+//					+ "FROM image i, user u, post p, bid b, sell s "
+//					+ "WHERE (b.userid = u.userid AND b.postid = p.postid AND p.postid = i.postid) "
+//					+ "   OR (s.userid = u.userid AND s.postid = p.postid AND i.postid = p.postid) "
+//					+ "GROUP BY p.postid "
+//					+ "order by p.update_date desc";
 //			
 //			ResultSet rs = st.executeQuery(query);
 //			
-//			rs.getString(1);
-//			
-//			//file
-//			Share.filename = Share.filename + 1;
-//			File file = new File(Integer.toString(Share.filename));
-//			FileOutputStream output = new FileOutputStream(file);
-//			InputStream input = rs.getBinaryStream(4);
-//			byte[] buffer = new byte[1024];
-//			while (input.read(buffer) > 0) {
-//				output.write(buffer);
+//			while(rs.next()) {
+//				
+//				Dto_Home dto = new Dto_Home(rs.getBytes(1));
+//				dtoList.add(dto);
 //			}
 //			
 //			con.close();
-//			
 //		}
 //		catch (Exception e) {
 //			e.printStackTrace();
 //		}
+//		return dtoList;
 //	}
 	
-
 }

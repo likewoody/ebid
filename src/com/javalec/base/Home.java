@@ -3,6 +3,7 @@ package com.javalec.base;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Frame;
@@ -10,12 +11,15 @@ import java.awt.Image;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.geom.RoundRectangle2D;
+import java.io.File;
+import java.util.ArrayList;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -23,10 +27,15 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
 
 import com.javalec.function.Dao_Home;
 import com.javalec.function.Dto_Home;
@@ -34,6 +43,8 @@ import com.javalec.function.Share;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class Home extends JDialog {
 
@@ -50,7 +61,7 @@ public class Home extends JDialog {
 	private JComboBox cbOption;
 	private JButton btnSearch;
 	private JTable innerTable;
-//	private final DefaultTableModel outerTable = new DefaultTableModel() ;
+	private final DefaultTableModel outerTable = new DefaultTableModel() ;
 
 	/**
 	 * Launch the application.
@@ -73,7 +84,7 @@ public class Home extends JDialog {
 			@Override
 			public void windowActivated(WindowEvent e) {
 				tableInit();
-//				searchAction();
+				searchDB();
 			}
 		});
 		setFont(new Font("Lucida Grande", Font.BOLD, 27));
@@ -106,8 +117,8 @@ public class Home extends JDialog {
 	private JButton getBtnHome() {
 		if (btnHome == null) {
 			btnHome = new JButton("홈");
-			btnHome.setFont(new Font("Helvetica", Font.PLAIN, 14));
 			btnHome.setBounds(20, 55, 70, 34);
+			btnHome.setFont(new Font("Helvetica", Font.PLAIN, 14));
 			
 //			btnHome.setBorder(new LineBorder(new Color(214, 203, 216), 2));
 		}
@@ -116,8 +127,8 @@ public class Home extends JDialog {
 	private JButton getBtnMypage() {
 		if (btnMypage == null) {
 			btnMypage = new JButton("개인");
-			btnMypage.setFont(new Font("Helvetica", Font.PLAIN, 14));
 			btnMypage.setBounds(100, 55, 70, 34);
+			btnMypage.setFont(new Font("Helvetica", Font.PLAIN, 14));
 //			btnMypage.setBorder(new LineBorder(new Color(214, 203, 216), 2));
 		}
 		return btnMypage;
@@ -125,8 +136,8 @@ public class Home extends JDialog {
 	private JButton getBtnAlarm() {
 		if (btnAlarm == null) {
 			btnAlarm = new JButton("알림");
-			btnAlarm.setFont(new Font("Helvetica", Font.PLAIN, 14));
 			btnAlarm.setBounds(180, 55, 70, 34);
+			btnAlarm.setFont(new Font("Helvetica", Font.PLAIN, 14));
 //			btnAlarm.setBorder(new LineBorder(new Color(214, 203, 216), 2));
 		}
 		return btnAlarm;
@@ -134,8 +145,8 @@ public class Home extends JDialog {
 	private JButton getBtnChat() {
 		if (btnChat == null) {
 			btnChat = new JButton("채팅");
-			btnChat.setFont(new Font("Helvetica", Font.PLAIN, 14));
 			btnChat.setBounds(260, 55, 70, 34);
+			btnChat.setFont(new Font("Helvetica", Font.PLAIN, 14));
 //			btnChat.setBorder(new LineBorder(new Color(214, 203, 216), 2));
 		}
 		return btnChat;
@@ -143,8 +154,8 @@ public class Home extends JDialog {
 	private JButton getBtnWrite() {
 		if (btnWrite == null) {
 			btnWrite = new JButton("글쓰기");
-			btnWrite.setFont(new Font("Helvetica", Font.PLAIN, 14));
 			btnWrite.setBounds(340, 55, 70, 34);
+			btnWrite.setFont(new Font("Helvetica", Font.PLAIN, 14));
 //			btnWrite.setBorder(new LineBorder(new Color(214, 203, 216), 2));
 		}
 		return btnWrite;
@@ -178,67 +189,106 @@ public class Home extends JDialog {
 	private JTable getInnerTable() {
 		if (innerTable == null) {
 			innerTable = new JTable();
+			innerTable.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					innerTable.setDefaultEditor(Object.class, null);
+				}
+			});
 			innerTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-//			innerTable.setModel(outerTable);
-		
+			innerTable.setModel(outerTable);
+			innerTable.setFont(new Font("Helvetica", Font.PLAIN, 14));
+			innerTable.setGridColor(Color.LIGHT_GRAY);
+			innerTable.setShowGrid(false);
+			innerTable.setShowHorizontalLines(true);
+			innerTable.setRowHeight(140);
 		}
 		return innerTable;
 	}
 	private JComboBox getCbOption() {
 		if (cbOption == null) {
 			cbOption = new JComboBox();
-			cbOption.setModel(new DefaultComboBoxModel(new String[] {"기본", "판매", "경매"}));
 			cbOption.setBounds(10, 641, 80, 34);
+			cbOption.setModel(new DefaultComboBoxModel(new String[] {"기본", "판매", "경매"}));
 		}
 		return cbOption;
 	}
 	
 	// ---- Fucntion ----
-	
 	private void tableInit() {
+		outerTable.addColumn("이미지");
+		outerTable.addColumn("상세정보");
+		outerTable.setColumnCount(2);
 		
-		Dao_Home dao = new Dao_Home();
-		DefaultTableModel outerTable = new DefaultTableModel() {
-			
-
-			@Override
-			public boolean isCellEditable(int row, int column) {
-				return false;
-			}
-			
-		};
+		int colNo = 0;
+		TableColumn col = innerTable.getColumnModel().getColumn(colNo);
+//		TableColumn col = innerTable.getColumnModel().getColumn(colNo).setCellRenderer(new ImageRender());
+		int width = 140;
+		col.setPreferredWidth(width);
 		
+		colNo = 1;
+		col = innerTable.getColumnModel().getColumn(colNo);
+		width = 290;
+		col.setPreferredWidth(width);
 		
-		// Add Column
-		outerTable.addColumn("No");	
-		outerTable.addColumn("file");
+		// 화면 자동 조절 오프, 오프시 화면 스크롤바가 나오게 한다.
+//		innerTable.setAutoResizeMode(innerTable.AUTO_RESIZE_OFF);
 		
-		
-		for (Dto_Home dto : dao.findAll()) {
-			outerTable.addRow(new Object[] {
-				dto.getSeq(),
-				dto.getFile()
-			});
-			
+		int i = outerTable.getRowCount();
+		for (int j = 0; j < i; j ++) {
+			outerTable.removeRow(0);
 		}
-		innerTable.setModel(outerTable);
-		// row 높이 설정
-		innerTable.setRowHeight(50);
-		innerTable.getTableHeader().setReorderingAllowed(false);
-		innerTable.getColumnModel().getColumn(1).setCellRenderer(new ImageRender());;
-			
 	}
 	
+	private void searchDB() {
+		Dao_Home dao = new Dao_Home();
+//		ArrayList<Dto_Home> dtoList = dao.searchDB();
+//		
+//		for (int i = 0; i < dtoList.size(); i++ ) {
+//			
+//		}
+		for (Dto_Home dto : dao.searchDB()) {
+			outerTable.addRow(new Object[] {
+					dto.getPost_image(),
+					String.format("<html><b>[%s]</b><br>%s<br>시작금액 : %d<br>작성자 : %s<ul></html>",
+							dto.getSort(), dto.getTitle(), dto.getStart_price(), dto.getNickname()),
+					
+			});
+		}
+		
+		
+		// true값과 false값의 차이를 모르겠음 *******
+		innerTable.getTableHeader().setReorderingAllowed(false); // true값과 false값의 차이를 모르겠음 *******
+		// true값과 false값의 차이를 모르겠음 *******
+		
+		// 1번째 이미지 컬럼을 새로 만든다.
+		innerTable.getColumnModel().getColumn(0).setCellRenderer(new ImageRender());
+	}
+	
+	// ImageRender는 그냥 class 이름 DefaultTableCellRenderer로 상속받는다.
 	private class ImageRender extends DefaultTableCellRenderer {
 
 		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 				int row, int column) {
-			String photoName = value.toString();
-			ImageIcon imageIcon = new ImageIcon(new ImageIcon("/Users/tj/woody/ebidapp/images/post images/" + photoName).getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT));
 			
-			return new JLabel(imageIcon);
+			// innerTable.getColumnModel().getColumn(0)로부터 데이터 받아오기
+			byte[] bytes = (byte[]) value;
+			
+			// 이미지 객체로 전환 및 이미지 사이즈 설정
+			ImageIcon imageIcon = new ImageIcon(bytes);
+			Image img = imageIcon.getImage();
+			Image setImg = img.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+			ImageIcon image = new ImageIcon(setImg);
+			
+			// 이미지 아이콘으로 세팅, 보더, 수직 수평, 배경 설정
+			setIcon(image);
+//			setBorder(UIManager.getBorder("TableHeader.cellBorder"));
+			setHorizontalAlignment(JLabel.CENTER);
+			setBackground(getBackground());
+			
+			return this;
 		}
-		
 	}
+	
 }
