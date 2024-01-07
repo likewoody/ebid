@@ -23,6 +23,7 @@ import java.awt.event.WindowEvent;
 import java.awt.font.TextAttribute;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JCheckBox;
@@ -55,7 +56,7 @@ public class Alarm {
 	private JTextField tfSellBuyAlarm;
 	private JTextField tfBidAlarm;
 	private JTextField tfKeyAlarm;
-	private JButton btnNewButton;
+	private JButton btndelete;
 	private JButton cbAllButten;
 	private JScrollPane scrollPane;
 	private JTable innerTable;
@@ -99,7 +100,7 @@ public class Alarm {
 		frame.setBounds(100, 100, 430, 732);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
-		frame.getContentPane().add(getBtnNewButton());
+		frame.getContentPane().add(getBtndelete());
 		frame.getContentPane().add(getBtnHome());
 		frame.getContentPane().add(getBtnMypage());
 		frame.getContentPane().add(getBtnAlarm());
@@ -269,21 +270,21 @@ public class Alarm {
 	}
 		
 	
-	private JButton getBtnNewButton() {
-		if (btnNewButton == null) {
-			btnNewButton = new JButton("삭제");
-			btnNewButton.setBackground(new Color(214, 203, 216));
-			btnNewButton.setOpaque(true);
-	        btnNewButton.setBorderPainted(false);
-			btnNewButton.addActionListener(new ActionListener() {
+	private JButton getBtndelete() {
+		if (btndelete == null) {
+			btndelete = new JButton("삭제");
+			btndelete.setBackground(new Color(214, 203, 216));
+			btndelete.setOpaque(true);
+	        btndelete.setBorderPainted(false);
+			btndelete.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					  deleteRow();
 				}
 			});
-			btnNewButton.setBounds(161, 649, 100, 34);
-			btnNewButton.setBorder(new LineBorder(new Color(214, 203, 216), 2));
+			btndelete.setBounds(161, 649, 100, 34);
+			btndelete.setBorder(new LineBorder(new Color(214, 203, 216), 2));
 		}
-		return btnNewButton;
+		return btndelete;
 	}
 	private JButton getCbAllButten() {
 		if (cbAllButten == null) {
@@ -407,9 +408,20 @@ public class Alarm {
 	//	    sbAlarmClick();					//처음에는 판매/구매 알림이 선택된 상태
 		    SellBuyListMouseEntered();
 			outer_Table.addColumn("선택");
-			outer_Table.addColumn("내용");
+			outer_Table.addColumn("내용");				//추후 수정
 			outer_Table.setColumnCount(2);
-			
+			 Vector<Vector<Object>> data = new Vector<>();		
+			 
+			  for (int i = 0; i < 5; i++) {
+		            Vector<Object> row = new Vector<>();				//sell 하나당 콤보박스 추가
+		            row.add("Row " + i);								//추가/수정 필요
+		            row.add("Option 1");
+		            row.add("Option 2");
+		            row.add("Option 3");
+		            data.add(row);
+		        }
+			 
+			 
 			//선택
 			int colNo =0;
 			TableColumn col = innerTable.getColumnModel().getColumn(colNo);
@@ -422,7 +434,7 @@ public class Alarm {
 			col.setPreferredWidth(width);
 			
 
-			int i = outer_Table.getRowCount();
+			int i = outer_Table.getRowCount();					// 테이블 초기화
 			for (int j = 0; j < i; j++) {
 				outer_Table.removeRow(0);
 			
@@ -433,10 +445,13 @@ public class Alarm {
 						
 		//판매/구매	카테고리 클릭 이밴트
 		public void sbAlarmClick() {
-			tableInit();
+			tableInit();						// 클릭시 테이블 초기화
 
 			 resetButton(tfBidAlarm);
 		     resetButton(tfKeyAlarm);
+		     
+		     
+		     
 		     
 		     
 			
@@ -459,7 +474,7 @@ public class Alarm {
 
 //			tfBidAlarm.setForeground(Color.GRAY); 					//클릭시 회색으로 변경		
 //			tfSellBuyAlarm.setForeground(Color.GRAY);				//	 ==	
-			
+		    //   contentPanel.add(innerTableButton);
 		}
 // 선택 행 삭제 버튼
 	private void deleteRow() {
