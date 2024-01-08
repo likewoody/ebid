@@ -1,5 +1,8 @@
 package com.javalec.function;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -28,7 +31,7 @@ public class Dao_MyPage {
 
 		Dto_MyPage dto = null;
 
-		String A = "select userid, pw, phone, email, nickname from user where userid = 'cici16'";
+		String A = "select userid, pw, phone, email, nickname, profile_image from user where userid = 'cici16'";
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection conn_mysql = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
@@ -42,6 +45,16 @@ public class Dao_MyPage {
 				String phone = rs.getString(3);
 				String email = rs.getString(4);
 				String nickname = rs.getString(5);
+
+				// file
+				Share.filename = Share.filename + 1;
+				File file = new File(Integer.toString(Share.filename));
+				FileOutputStream output = new FileOutputStream(file);
+				InputStream input = rs.getBinaryStream(6);
+				byte[] buffer = new byte[1024];
+				while (input.read(buffer) > 0) {
+					output.write(buffer);
+				}
 
 				dto = new Dto_MyPage(userid, pw, phone, email, nickname);
 			}

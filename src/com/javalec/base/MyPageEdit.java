@@ -10,6 +10,7 @@ import javax.swing.ImageIcon;
 import java.awt.Color;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 import com.javalec.function.*;
 
@@ -18,6 +19,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -409,6 +411,12 @@ public class MyPageEdit extends JFrame {
 		tfNick.setText(dto.getNickname());
 		tfPhone.setText(dto.getPhone());
 		tfEmail.setText(dto.getEmail());
+
+		String filePath = Integer.toString(Share.filename);
+		// 파일이 존재하는지 확인
+		File file = new File(filePath);
+		lblUserImage.setIcon(new ImageIcon(filePath));
+		lblUserImage.setHorizontalAlignment(SwingConstants.CENTER);
 	}
 
 	private void updateNick() {
