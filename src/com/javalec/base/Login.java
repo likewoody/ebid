@@ -15,6 +15,12 @@ import java.awt.Font;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
+
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class Login extends JDialog {
 
@@ -26,9 +32,9 @@ public class Login extends JDialog {
 	private JTextField tfId;
 	private JTextField tfPw;
 	private JButton btnLogin;
-	private JLabel lblNewLabel_1;
-	private JLabel lblNewLabel_1_1;
-	private JLabel lblNewLabel_1_1_1;
+	private JLabel lblSign;
+	private JLabel lblFindid;
+	private JLabel lblFindpw;
 	private JLabel lblNewLabel_1_2;
 	private JLabel lblNewLabel_1_3;
 
@@ -63,9 +69,9 @@ public class Login extends JDialog {
 		contentPanel.add(getBtnLogin());
 		contentPanel.add(getLblNewLabel_1_3());
 		contentPanel.add(getLblNewLabel_1_2());
-		contentPanel.add(getLblNewLabel_1());
-		contentPanel.add(getLblNewLabel_1_1());
-		contentPanel.add(getLblNewLabel_1_1_1());
+		contentPanel.add(getLblSign());
+		contentPanel.add(getLblFindid());
+		contentPanel.add(getLblFindpw());
 		contentPanel.add(getLoginBackground());
 	}
 	private JLabel getLoginBackground() {
@@ -111,33 +117,88 @@ public class Login extends JDialog {
 	private JButton getBtnLogin() {
 		if (btnLogin == null) {
 			btnLogin = new JButton("로그인");
+			btnLogin.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+										Login();
+				}
+			});
 			btnLogin.setFont(new Font("Lucida Grande", Font.BOLD, 14));
 			btnLogin.setBounds(155, 450, 130, 38);
-			
+			btnLogin.setBorder(new LineBorder(new Color(214, 203, 216), 2));
+			int red = 0xD6;
+	        int green = 0xCB;											//기준색 D6CBD8 에 대한 값
+	        int blue = 0xD8;
+
+	        Color BackColor = new Color(red, green, blue);				//색깔 적용	   
+	        btnLogin.setBackground(BackColor);
+	        btnLogin.setOpaque(true);
 //			btnLogin.setBorder(new LineBorder(new Color(214, 203, 216)));
 		}
 		return btnLogin;
 	}
-	private JLabel getLblNewLabel_1() {
-		if (lblNewLabel_1 == null) {
-			lblNewLabel_1 = new JLabel("회원가입");
-			lblNewLabel_1.setBounds(126, 500, 61, 16);
+	private JLabel getLblSign() {
+		if (lblSign == null) {
+			lblSign = new JLabel("회원가입");
+			lblSign.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+									clickSign();
+				}
+				@Override
+				public void mouseEntered(MouseEvent e) {
+									enterSign();
+				}
+				@Override
+				public void mouseExited(MouseEvent e) {
+									exitSign();
+					
+				}
+			});
+			lblSign.setBounds(126, 500, 61, 16);
 		}
-		return lblNewLabel_1;
+		return lblSign;
 	}
-	private JLabel getLblNewLabel_1_1() {
-		if (lblNewLabel_1_1 == null) {
-			lblNewLabel_1_1 = new JLabel("아이디 찾기");
-			lblNewLabel_1_1.setBounds(192, 500, 61, 16);
+	private JLabel getLblFindid() {
+		if (lblFindid == null) {
+			lblFindid = new JLabel("아이디 찾기");
+			lblFindid.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+									clickFindid();
+				}
+				@Override
+				public void mouseEntered(MouseEvent e) {
+									enterFindid();
+				}
+				@Override
+				public void mouseExited(MouseEvent e) {
+									exitFindid();
+				}
+			});
+			lblFindid.setBounds(192, 500, 61, 16);
 		}
-		return lblNewLabel_1_1;
+		return lblFindid;
 	}
-	private JLabel getLblNewLabel_1_1_1() {
-		if (lblNewLabel_1_1_1 == null) {
-			lblNewLabel_1_1_1 = new JLabel("비밀번호 찾기");
-			lblNewLabel_1_1_1.setBounds(270, 500, 72, 16);
+	private JLabel getLblFindpw() {
+		if (lblFindpw == null) {
+			lblFindpw = new JLabel("비밀번호 찾기");
+			lblFindpw.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+									clickFindpw();
+				}
+				@Override
+				public void mouseEntered(MouseEvent e) {
+									enterFindpw();
+				}
+				@Override
+				public void mouseExited(MouseEvent e) {
+									exitFindpw();
+				}
+			});
+			lblFindpw.setBounds(270, 500, 72, 16);
 		}
-		return lblNewLabel_1_1_1;
+		return lblFindpw;
 	}
 	private JLabel getLblNewLabel_1_2() {
 		if (lblNewLabel_1_2 == null) {
@@ -150,9 +211,86 @@ public class Login extends JDialog {
 	private JLabel getLblNewLabel_1_3() {
 		if (lblNewLabel_1_3 == null) {
 			lblNewLabel_1_3 = new JLabel("|");
+			lblNewLabel_1_3.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseExited(MouseEvent e) {
+				}
+			});
 			lblNewLabel_1_3.setHorizontalAlignment(SwingConstants.CENTER);
 			lblNewLabel_1_3.setBounds(152, 500, 61, 16);
 		}
 		return lblNewLabel_1_3;
 	}
+	
+	
+	
+	//---------Function---------
+	
+	
+	public void clickSign() {
+				Register register = new Register();			//회원가입 클릭
+				register.setVisible(true);
+				this.setVisible(false);
+				
+				
+		
+	}
+	public void enterSign() {					
+	
+	}
+	public void exitSign() {					
+		
+	}
+	public void clickFindid() {
+				FindId findId = new FindId();			  //아이디 찾기 클릭
+				findId.setVisible(true);
+				this.setVisible(false);
+			
+				
+	}
+	public void enterFindid() {
+		
+	}
+	public void exitFindid() {
+		
+	}
+	public void clickFindpw() {
+			FindPw findPw = new FindPw();				//패스워드 찾기 클릭
+			findPw.setVisible(true);
+			this.setVisible(false);
+			
+	}
+	public void enterFindpw() {
+		
+	}
+	public void exitFindpw() {
+		
+	}
+	
+	
+	
+	
+	
+	
+//	// 중복되는 코드 모아주는 매소드   ************************************************
+//	 private void setMouseOverEffect(JLabel lblSign2) {
+//	        lblSign2.setForeground(Color.BLACK);						//글씨 색깔
+//	        Font font = new Font("Arial Black", Font.ITALIC, 13);		//사용 폰트
+//	        lblSign2.setFont(font);									//폰트 적용
+//	    }
+//	
+//	 private void resetButton(JTextField textField) {
+//	        textField.setForeground(UIManager.getColor("TextField.foreground"));		//텍스트 색깔 되돌리기 
+//	        textField.setFont(null);													//폰트 초기화
+//	    }
+//	 // 중복되는 코드 모아주는 매소드   ************************************************
+	
+	public void Login() {
+				Home H = new Home();
+				H.setVisible(true);					//로그인 시 홈으로 이동
+				this.setVisible(false);
+				
+	}
+	
+	
 }

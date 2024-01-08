@@ -9,4 +9,6 @@ public class Share {
 	public static String pw = "cici127";
 	
 	public static int filename = 0;
+	
+	public static int[] postId = new int[1];	
 }
