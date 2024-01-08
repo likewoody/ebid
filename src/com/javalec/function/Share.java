@@ -6,4 +6,6 @@ public class Share {
 	public static String dbPass = "qwer1234";
 	
 	public static int filename = 0;
+	
+	public static int[] postId = new int[1];	
 }

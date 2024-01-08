@@ -45,6 +45,8 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class Home extends JDialog {
 
@@ -58,7 +60,7 @@ public class Home extends JDialog {
 	private JButton btnWrite;
 	private JTextField tfSearch;
 	private JScrollPane scrollPane;
-	private JComboBox cbOption;
+	private JComboBox cbSort;
 	private JButton btnSearch;
 	private JTable innerTable;
 	private final DefaultTableModel outerTable = new DefaultTableModel() ;
@@ -101,7 +103,7 @@ public class Home extends JDialog {
 		contentPanel.add(getBtnWrite());
 		contentPanel.add(getTfSearch());
 		contentPanel.add(getScrollPane());
-		contentPanel.add(getCbOption());
+		contentPanel.add(getCbSort());
 		contentPanel.add(getBtnSearch());
 		contentPanel.add(getHomeBackImage());
 	}
@@ -163,7 +165,7 @@ public class Home extends JDialog {
 	private JTextField getTfSearch() {
 		if (tfSearch == null) {
 			tfSearch = new JTextField();
-			tfSearch.setBounds(90, 640, 240, 35);
+			tfSearch.setBounds(95, 640, 240, 35);
 			tfSearch.setColumns(10);
 			tfSearch.setBorder(new LineBorder(new Color(214, 203, 216), 2));
 		}
@@ -172,8 +174,12 @@ public class Home extends JDialog {
 	private JButton getBtnSearch() {
 		if (btnSearch == null) {
 			btnSearch = new JButton("검색");
+			btnSearch.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					btnSearch();
+				}
+			});
 			btnSearch.setBounds(342, 642, 70, 34);
-			btnSearch.setBorder(new LineBorder(new Color(214, 203, 216), 2));
 			
 		}
 		return btnSearch;
@@ -193,6 +199,19 @@ public class Home extends JDialog {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					innerTable.setDefaultEditor(Object.class, null);
+					Dao_Home dao = new Dao_Home();
+					if (e.getClickCount() == 2) {
+						for (int i = 0; i < innerTable.getRowCount(); i++ ) {
+							System.out.println(Share.postId[i]);
+//							if(innerTable.getSelectedRow() == (Share.postId[i] - 7)) {
+//								dao.viewCount(Share.postId[i]);
+//							}
+						}
+//						getvalueat
+						Home_detail homeDetail = new Home_detail();
+						homeDetail.setVisible(true);
+						dispose();
+					}
 				}
 			});
 			innerTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -205,13 +224,13 @@ public class Home extends JDialog {
 		}
 		return innerTable;
 	}
-	private JComboBox getCbOption() {
-		if (cbOption == null) {
-			cbOption = new JComboBox();
-			cbOption.setBounds(10, 641, 80, 34);
-			cbOption.setModel(new DefaultComboBoxModel(new String[] {"기본", "판매", "경매"}));
+	private JComboBox getCbSort() {
+		if (cbSort == null) {
+			cbSort = new JComboBox();
+			cbSort.setBounds(5, 641, 90, 34);
+			cbSort.setModel(new DefaultComboBoxModel(new String[] {"제목", "닉네임"}));
 		}
-		return cbOption;
+		return cbSort;
 	}
 	
 	// ---- Fucntion ----
@@ -240,23 +259,19 @@ public class Home extends JDialog {
 		}
 	}
 	
+	
 	private void searchDB() {
 		Dao_Home dao = new Dao_Home();
-//		ArrayList<Dto_Home> dtoList = dao.searchDB();
-//		
-//		for (int i = 0; i < dtoList.size(); i++ ) {
-//			
-//		}
+		int count = 0;
 		for (Dto_Home dto : dao.searchDB()) {
-			outerTable.addRow(new Object[] {
-					dto.getPost_image(),
-					String.format("<html><b>[%s]</b><br>%s<br>시작금액 : %d<br>작성자 : %s<ul></html>",
-							dto.getSort(), dto.getTitle(), dto.getStart_price(), dto.getNickname()),
-					
-			});
+				outerTable.addRow(new Object[] {
+						dto.getPost_image(),
+						String.format("<html><b>[%s]</b><br><br>%s<br>판매금액 : %d<br>작성자 : %s</html>",
+							dto.getSort(), dto.getTitle(), dto.getStart_price(), dto.getNickname())
+				});
+				Share.postId[] = dto.getPostId();
+				count++;
 		}
-		
-		
 		// true값과 false값의 차이를 모르겠음 *******
 		innerTable.getTableHeader().setReorderingAllowed(false); // true값과 false값의 차이를 모르겠음 *******
 		// true값과 false값의 차이를 모르겠음 *******
@@ -290,5 +305,26 @@ public class Home extends JDialog {
 			return this;
 		}
 	}
+	
+	private void btnSearch() {
+		tableInit();
+		
+		Dao_Home dao = new Dao_Home();
+		
+		for (Dto_Home dto : dao.search(cbSort.getSelectedIndex(), tfSearch.getText())) {
+			outerTable.addRow(new Object[] {
+					dto.getPost_image(),
+					String.format("<html><b>[%s]</b><br><br>%s<br>판매금액 : %d<br>작성자 : %s</html>",
+							dto.getSort(), dto.getTitle(), dto.getStart_price(), dto.getNickname())
+			});
+		}
+		// true값과 false값의 차이를 모르겠음 *******
+		innerTable.getTableHeader().setReorderingAllowed(false); // true값과 false값의 차이를 모르겠음 *******
+		// true값과 false값의 차이를 모르겠음 *******
+		
+		// 1번째 이미지 컬럼을 새로 만든다.
+		innerTable.getColumnModel().getColumn(0).setCellRenderer(new ImageRender());
+		
+	}	
 	
 }
