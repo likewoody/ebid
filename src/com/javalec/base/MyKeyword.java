@@ -10,6 +10,8 @@ import javax.swing.JList;
 import javax.swing.JTextField;
 import javax.swing.JCheckBox;
 import javax.swing.JRadioButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class MyKeyword extends JFrame {
 
@@ -78,6 +80,7 @@ public class MyKeyword extends JFrame {
 		getContentPane().add(getLblImage());
 
 	}
+
 	private JButton getBtnHome() {
 		if (btnHome == null) {
 			btnHome = new JButton("홈");
@@ -85,6 +88,7 @@ public class MyKeyword extends JFrame {
 		}
 		return btnHome;
 	}
+
 	private JButton getBtnMy() {
 		if (btnMy == null) {
 			btnMy = new JButton("개인");
@@ -92,6 +96,7 @@ public class MyKeyword extends JFrame {
 		}
 		return btnMy;
 	}
+
 	private JButton getBtnAlarm() {
 		if (btnAlarm == null) {
 			btnAlarm = new JButton("알림");
@@ -99,6 +104,7 @@ public class MyKeyword extends JFrame {
 		}
 		return btnAlarm;
 	}
+
 	private JButton getBtnChat() {
 		if (btnChat == null) {
 			btnChat = new JButton("채팅");
@@ -106,6 +112,7 @@ public class MyKeyword extends JFrame {
 		}
 		return btnChat;
 	}
+
 	private JButton getBtnWrite() {
 		if (btnWrite == null) {
 			btnWrite = new JButton("글쓰기");
@@ -113,13 +120,22 @@ public class MyKeyword extends JFrame {
 		}
 		return btnWrite;
 	}
+
 	private JButton getBtnBack() {
 		if (btnBack == null) {
 			btnBack = new JButton("뒤로가기");
+			btnBack.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					dispose();
+					MyPage mp = new MyPage();
+					mp.setVisible(true);
+				}
+			});
 			btnBack.setBounds(150, 650, 117, 29);
 		}
 		return btnBack;
 	}
+
 	private JTextField getTfkeyword1() {
 		if (tfkeyword1 == null) {
 			tfkeyword1 = new JTextField();
@@ -128,6 +144,7 @@ public class MyKeyword extends JFrame {
 		}
 		return tfkeyword1;
 	}
+
 	private JCheckBox getCbKeyword1() {
 		if (cbKeyword1 == null) {
 			cbKeyword1 = new JCheckBox("");
@@ -135,6 +152,7 @@ public class MyKeyword extends JFrame {
 		}
 		return cbKeyword1;
 	}
+
 	private JCheckBox getCbKeyword2() {
 		if (cbKeyword2 == null) {
 			cbKeyword2 = new JCheckBox("");
@@ -142,6 +160,7 @@ public class MyKeyword extends JFrame {
 		}
 		return cbKeyword2;
 	}
+
 	private JTextField getTfkeyword2() {
 		if (tfkeyword2 == null) {
 			tfkeyword2 = new JTextField();
@@ -150,6 +169,7 @@ public class MyKeyword extends JFrame {
 		}
 		return tfkeyword2;
 	}
+
 	private JCheckBox getCbKeyword3() {
 		if (cbKeyword3 == null) {
 			cbKeyword3 = new JCheckBox("");
@@ -157,6 +177,7 @@ public class MyKeyword extends JFrame {
 		}
 		return cbKeyword3;
 	}
+
 	private JTextField getTfkeyword3() {
 		if (tfkeyword3 == null) {
 			tfkeyword3 = new JTextField();
@@ -165,6 +186,7 @@ public class MyKeyword extends JFrame {
 		}
 		return tfkeyword3;
 	}
+
 	private JCheckBox getCbKeyword4() {
 		if (cbKeyword4 == null) {
 			cbKeyword4 = new JCheckBox("");
@@ -172,6 +194,7 @@ public class MyKeyword extends JFrame {
 		}
 		return cbKeyword4;
 	}
+
 	private JTextField getTfkeyword4() {
 		if (tfkeyword4 == null) {
 			tfkeyword4 = new JTextField();
@@ -180,6 +203,7 @@ public class MyKeyword extends JFrame {
 		}
 		return tfkeyword4;
 	}
+
 	private JCheckBox getCbKeyword5() {
 		if (cbKeyword5 == null) {
 			cbKeyword5 = new JCheckBox("");
@@ -187,6 +211,7 @@ public class MyKeyword extends JFrame {
 		}
 		return cbKeyword5;
 	}
+
 	private JTextField getTfkeyword5() {
 		if (tfkeyword5 == null) {
 			tfkeyword5 = new JTextField();
@@ -195,6 +220,7 @@ public class MyKeyword extends JFrame {
 		}
 		return tfkeyword5;
 	}
+
 	private JButton getBtnDelete() {
 		if (btnDelete == null) {
 			btnDelete = new JButton("삭제하기");
@@ -202,6 +228,7 @@ public class MyKeyword extends JFrame {
 		}
 		return btnDelete;
 	}
+
 	private JButton getBtnEdit() {
 		if (btnEdit == null) {
 			btnEdit = new JButton("수정하기");
@@ -209,6 +236,7 @@ public class MyKeyword extends JFrame {
 		}
 		return btnEdit;
 	}
+
 	private JLabel getLblImage() {
 		if (lblImage == null) {
 			lblImage = new JLabel("");

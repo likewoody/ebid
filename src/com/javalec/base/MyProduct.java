@@ -12,6 +12,8 @@ import javax.swing.JCheckBox;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class MyProduct extends JFrame {
 
@@ -97,6 +99,13 @@ public class MyProduct extends JFrame {
 	private JButton getBtnBack() {
 		if (btnBack == null) {
 			btnBack = new JButton("뒤로가기");
+			btnBack.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					dispose();
+					MyPage mp = new MyPage();
+					mp.setVisible(true);
+				}
+			});
 			btnBack.setBounds(150, 650, 117, 29);
 		}
 		return btnBack;

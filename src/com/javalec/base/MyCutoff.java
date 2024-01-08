@@ -12,6 +12,8 @@ import javax.swing.JCheckBox;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class MyCutoff extends JFrame {
 
@@ -59,6 +61,7 @@ public class MyCutoff extends JFrame {
 		getContentPane().add(getLblImage());
 
 	}
+
 	private JButton getBtnHome() {
 		if (btnHome == null) {
 			btnHome = new JButton("홈");
@@ -66,6 +69,7 @@ public class MyCutoff extends JFrame {
 		}
 		return btnHome;
 	}
+
 	private JButton getBtnMy() {
 		if (btnMy == null) {
 			btnMy = new JButton("개인");
@@ -73,6 +77,7 @@ public class MyCutoff extends JFrame {
 		}
 		return btnMy;
 	}
+
 	private JButton getBtnAlarm() {
 		if (btnAlarm == null) {
 			btnAlarm = new JButton("알림");
@@ -80,6 +85,7 @@ public class MyCutoff extends JFrame {
 		}
 		return btnAlarm;
 	}
+
 	private JButton getBtnChat() {
 		if (btnChat == null) {
 			btnChat = new JButton("채팅");
@@ -87,6 +93,7 @@ public class MyCutoff extends JFrame {
 		}
 		return btnChat;
 	}
+
 	private JButton getBtnWrite() {
 		if (btnWrite == null) {
 			btnWrite = new JButton("글쓰기");
@@ -94,29 +101,40 @@ public class MyCutoff extends JFrame {
 		}
 		return btnWrite;
 	}
+
 	private JButton getBtnBack() {
 		if (btnBack == null) {
 			btnBack = new JButton("뒤로가기");
+			btnBack.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					dispose();
+					MyPage mp = new MyPage();
+					mp.setVisible(true);
+				}
+			});
 			btnBack.setBounds(150, 650, 117, 29);
 		}
 		return btnBack;
 	}
+
 	private JLabel getLblImage() {
 		if (lblImage == null) {
 			lblImage = new JLabel("");
-			lblImage.setIcon(new ImageIcon(MyCutoff.class.getResource("/com/javalec/images/mainFrame.png")));
+			lblImage.setIcon(new ImageIcon(MyCutoff.class.getResource("/com/javalec/images/MyCutoff.png")));
 			lblImage.setBounds(0, 0, 430, 704);
 		}
 		return lblImage;
 	}
+
 	private JScrollPane getScrollPane() {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
-			scrollPane.setBounds(20, 115, 380, 450);
+			scrollPane.setBounds(20, 150, 380, 450);
 			scrollPane.setViewportView(getInnertable());
 		}
 		return scrollPane;
 	}
+
 	private JTable getInnertable() {
 		if (innertable == null) {
 			innertable = new JTable();

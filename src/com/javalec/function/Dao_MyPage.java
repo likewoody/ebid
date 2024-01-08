@@ -31,7 +31,8 @@ public class Dao_MyPage {
 
 		Dto_MyPage dto = null;
 
-		String A = "select userid, pw, phone, email, nickname, profile_image from user where userid = 'cici16'";
+		String A = "select userid, pw, phone, email, nickname, profile_image from user where userid = '" + Share.id
+				+ "'";
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection conn_mysql = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);

@@ -8,9 +8,20 @@ import javax.swing.ImageIcon;
 import java.awt.SystemColor;
 import javax.swing.JButton;
 import javax.swing.JSeparator;
+import javax.swing.SwingConstants;
+
+import com.javalec.function.Dao_MyPage;
+import com.javalec.function.Dto_MyPage;
+import com.javalec.function.Share;
+
 import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.File;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class MyPage extends JDialog {
 
@@ -57,6 +68,12 @@ public class MyPage extends JDialog {
 	 * Create the dialog.
 	 */
 	public MyPage() {
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowActivated(WindowEvent e) {
+				insertInfo();
+			}
+		});
 		setTitle("개인");
 		setBackground(SystemColor.window);
 		setBounds(100, 100, 430, 732);
@@ -83,6 +100,7 @@ public class MyPage extends JDialog {
 		getContentPane().add(getLblImage());
 
 	}
+
 	private JButton getBtnHome() {
 		if (btnHome == null) {
 			btnHome = new JButton("홈");
@@ -90,6 +108,7 @@ public class MyPage extends JDialog {
 		}
 		return btnHome;
 	}
+
 	private JButton getBtnMy() {
 		if (btnMy == null) {
 			btnMy = new JButton("개인");
@@ -97,6 +116,7 @@ public class MyPage extends JDialog {
 		}
 		return btnMy;
 	}
+
 	private JButton getBtnAlarm() {
 		if (btnAlarm == null) {
 			btnAlarm = new JButton("알림");
@@ -104,6 +124,7 @@ public class MyPage extends JDialog {
 		}
 		return btnAlarm;
 	}
+
 	private JButton getBtnChat() {
 		if (btnChat == null) {
 			btnChat = new JButton("채팅");
@@ -111,6 +132,7 @@ public class MyPage extends JDialog {
 		}
 		return btnChat;
 	}
+
 	private JButton getBtnWrite() {
 		if (btnWrite == null) {
 			btnWrite = new JButton("글쓰기");
@@ -118,41 +140,87 @@ public class MyPage extends JDialog {
 		}
 		return btnWrite;
 	}
+
 	private JLabel getLblMyPurchase() {
 		if (lblMyPurchase == null) {
 			lblMyPurchase = new JLabel("- 나의 구매내역");
+			lblMyPurchase.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					MyPurchase mypurchase = new MyPurchase();
+					dispose();
+					mypurchase.setVisible(true);
+				}
+			});
 			lblMyPurchase.setBounds(20, 370, 400, 16);
 		}
 		return lblMyPurchase;
 	}
+
 	private JLabel getLblMyLike() {
 		if (lblMyLike == null) {
 			lblMyLike = new JLabel("- 나의 찜목록");
+			lblMyLike.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					MyLike mylike = new MyLike();
+					dispose();
+					mylike.setVisible(true);
+				}
+			});
 			lblMyLike.setBounds(20, 430, 400, 16);
 		}
 		return lblMyLike;
 	}
+
 	private JLabel getLblMyProduct() {
 		if (lblMyProduct == null) {
 			lblMyProduct = new JLabel("- 나의 게시글");
+			lblMyProduct.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					MyProduct myproduct = new MyProduct();
+					dispose();
+					myproduct.setVisible(true);
+				}
+			});
 			lblMyProduct.setBounds(20, 310, 400, 16);
 		}
 		return lblMyProduct;
 	}
+
 	private JLabel getLblMyKeyword() {
 		if (lblMyKeyword == null) {
 			lblMyKeyword = new JLabel("- 키워드 알림");
+			lblMyKeyword.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					MyKeyword mykeyword = new MyKeyword();
+					dispose();
+					mykeyword.setVisible(true);
+				}
+			});
 			lblMyKeyword.setBounds(20, 550, 400, 16);
 		}
 		return lblMyKeyword;
 	}
+
 	private JLabel getLblMyCutoff() {
 		if (lblMyCutoff == null) {
 			lblMyCutoff = new JLabel("- 차단 목록");
+			lblMyCutoff.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					MyCutoff mycutoff = new MyCutoff();
+					dispose();
+					mycutoff.setVisible(true);
+				}
+			});
 			lblMyCutoff.setBounds(20, 490, 400, 16);
 		}
 		return lblMyCutoff;
 	}
+
 	private JSeparator getSeparator_1() {
 		if (separator == null) {
 			separator = new JSeparator();
@@ -160,6 +228,7 @@ public class MyPage extends JDialog {
 		}
 		return separator;
 	}
+
 	private JLabel getLblUserImage() {
 		if (lblUserImage == null) {
 			lblUserImage = new JLabel("유저 이미지");
@@ -168,27 +237,30 @@ public class MyPage extends JDialog {
 		}
 		return lblUserImage;
 	}
+
 	private JLabel getLblUserNick() {
 		if (lblUserNick == null) {
 			lblUserNick = new JLabel("유저 닉네임");
-			lblUserNick.setBounds(211, 174, 61, 16);
+			lblUserNick.setBounds(211, 174, 200, 16);
 		}
 		return lblUserNick;
 	}
+
 	private JButton getBtnEdit() {
 		if (btnEdit == null) {
 			btnEdit = new JButton("개인정보 수정");
 			btnEdit.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-				dispose();
-				MyPageEdit mpe = new MyPageEdit();
-				mpe.setVisible(true);
+					dispose();
+					MyPageEdit mpe = new MyPageEdit();
+					mpe.setVisible(true);
 				}
 			});
 			btnEdit.setBounds(201, 211, 117, 29);
 		}
 		return btnEdit;
 	}
+
 	private JSeparator getSeparator_1_1() {
 		if (separator_1 == null) {
 			separator_1 = new JSeparator();
@@ -196,6 +268,7 @@ public class MyPage extends JDialog {
 		}
 		return separator_1;
 	}
+
 	private JSeparator getSeparator_1_1_1() {
 		if (separator_1_1 == null) {
 			separator_1_1 = new JSeparator();
@@ -203,6 +276,7 @@ public class MyPage extends JDialog {
 		}
 		return separator_1_1;
 	}
+
 	private JSeparator getSeparator_1_1_1_1() {
 		if (separator_1_1_1 == null) {
 			separator_1_1_1 = new JSeparator();
@@ -210,6 +284,7 @@ public class MyPage extends JDialog {
 		}
 		return separator_1_1_1;
 	}
+
 	private JSeparator getSeparator_1_1_1_1_1() {
 		if (separator_1_1_1_1 == null) {
 			separator_1_1_1_1 = new JSeparator();
@@ -217,6 +292,7 @@ public class MyPage extends JDialog {
 		}
 		return separator_1_1_1_1;
 	}
+
 	private JSeparator getSeparator_1_1_1_2() {
 		if (separator_1_1_1_2 == null) {
 			separator_1_1_1_2 = new JSeparator();
@@ -224,6 +300,7 @@ public class MyPage extends JDialog {
 		}
 		return separator_1_1_1_2;
 	}
+
 	private JLabel getLblImage() {
 		if (lblImage == null) {
 			lblImage = new JLabel("");
@@ -232,4 +309,19 @@ public class MyPage extends JDialog {
 		}
 		return lblImage;
 	}
-}
+
+	// ------------------function
+
+	private void insertInfo() {
+		Dao_MyPage dao = new Dao_MyPage();
+		Dto_MyPage dto = dao.insertInfo();
+
+		lblUserNick.setText(dto.getNickname() + "님 안녕하세요 :)");
+
+		String filePath = Integer.toString(Share.filename);
+		// 파일이 존재하는지 확인
+		File file = new File(filePath);
+		lblUserImage.setIcon(new ImageIcon(filePath));
+		lblUserImage.setHorizontalAlignment(SwingConstants.CENTER);
+	}
+} // End
