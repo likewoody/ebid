@@ -32,7 +32,7 @@ public class MyKeyword extends JFrame {
 	private JTextField tfkeyword5;
 	private JButton btnDelete;
 	private JButton btnEdit;
-	private JLabel lblMyBid;
+	private JLabel lblImage;
 
 	/**
 	 * Launch the application.
@@ -75,7 +75,7 @@ public class MyKeyword extends JFrame {
 		getContentPane().add(getTfkeyword5());
 		getContentPane().add(getBtnDelete());
 		getContentPane().add(getBtnEdit());
-		getContentPane().add(getLblMyBid());
+		getContentPane().add(getLblImage());
 
 	}
 	private JButton getBtnHome() {
@@ -209,12 +209,12 @@ public class MyKeyword extends JFrame {
 		}
 		return btnEdit;
 	}
-	private JLabel getLblMyBid() {
-		if (lblMyBid == null) {
-			lblMyBid = new JLabel("");
-			lblMyBid.setIcon(new ImageIcon(MyKeyword.class.getResource("/com/javalec/images/mainFrame.png")));
-			lblMyBid.setBounds(0, 0, 430, 704);
+	private JLabel getLblImage() {
+		if (lblImage == null) {
+			lblImage = new JLabel("");
+			lblImage.setIcon(new ImageIcon(MyKeyword.class.getResource("/com/javalec/images/mainFrame.png")));
+			lblImage.setBounds(0, 0, 430, 704);
 		}
-		return lblMyBid;
+		return lblImage;
 	}
 }

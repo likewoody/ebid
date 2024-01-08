@@ -104,7 +104,7 @@ public class MyProduct extends JFrame {
 	private JLabel getLblImage() {
 		if (lblImage == null) {
 			lblImage = new JLabel("");
-			lblImage.setIcon(new ImageIcon(MyProduct.class.getResource("/com/javalec/images/mainFrame.png")));
+			lblImage.setIcon(new ImageIcon(MyProduct.class.getResource("/com/javalec/images/MyProduct.png")));
 			lblImage.setBounds(0, 0, 430, 704);
 		}
 		return lblImage;

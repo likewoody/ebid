@@ -23,7 +23,6 @@ public class MyPage extends JDialog {
 	private JLabel lblMyPurchase;
 	private JLabel lblMyLike;
 	private JLabel lblMyProduct;
-	private JLabel lblNewLabel_1_1_1_1;
 	private JLabel lblMyKeyword;
 	private JLabel lblMyCutoff;
 	private JSeparator separator;
@@ -35,8 +34,7 @@ public class MyPage extends JDialog {
 	private JSeparator separator_1_1_1;
 	private JSeparator separator_1_1_1_1;
 	private JSeparator separator_1_1_1_2;
-	private JSeparator separator_1_1_1_3;
-	private JLabel lblMyBid;
+	private JLabel lblImage;
 
 	/**
 	 * Launch the application.
@@ -77,14 +75,12 @@ public class MyPage extends JDialog {
 		getContentPane().add(getLblMyPurchase());
 		getContentPane().add(getSeparator_1_1_1());
 		getContentPane().add(getLblMyLike());
-		getContentPane().add(getLblNewLabel_1_1_1_1());
 		getContentPane().add(getLblMyCutoff());
 		getContentPane().add(getLblMyKeyword());
 		getContentPane().add(getSeparator_1_1_1_1());
 		getContentPane().add(getSeparator_1_1_1_1_1());
 		getContentPane().add(getSeparator_1_1_1_2());
-		getContentPane().add(getSeparator_1_1_1_3());
-		getContentPane().add(getLblMyBid());
+		getContentPane().add(getLblImage());
 
 	}
 	private JButton getBtnHome() {
@@ -143,24 +139,17 @@ public class MyPage extends JDialog {
 		}
 		return lblMyProduct;
 	}
-	private JLabel getLblNewLabel_1_1_1_1() {
-		if (lblNewLabel_1_1_1_1 == null) {
-			lblNewLabel_1_1_1_1 = new JLabel("- 내가 입찰한 상품");
-			lblNewLabel_1_1_1_1.setBounds(20, 490, 400, 16);
-		}
-		return lblNewLabel_1_1_1_1;
-	}
 	private JLabel getLblMyKeyword() {
 		if (lblMyKeyword == null) {
 			lblMyKeyword = new JLabel("- 키워드 알림");
-			lblMyKeyword.setBounds(20, 610, 400, 16);
+			lblMyKeyword.setBounds(20, 550, 400, 16);
 		}
 		return lblMyKeyword;
 	}
 	private JLabel getLblMyCutoff() {
 		if (lblMyCutoff == null) {
 			lblMyCutoff = new JLabel("- 차단 목록");
-			lblMyCutoff.setBounds(20, 550, 400, 16);
+			lblMyCutoff.setBounds(20, 490, 400, 16);
 		}
 		return lblMyCutoff;
 	}
@@ -235,19 +224,12 @@ public class MyPage extends JDialog {
 		}
 		return separator_1_1_1_2;
 	}
-	private JSeparator getSeparator_1_1_1_3() {
-		if (separator_1_1_1_3 == null) {
-			separator_1_1_1_3 = new JSeparator();
-			separator_1_1_1_3.setBounds(0, 640, 430, 12);
+	private JLabel getLblImage() {
+		if (lblImage == null) {
+			lblImage = new JLabel("");
+			lblImage.setIcon(new ImageIcon(MyPage.class.getResource("/com/javalec/images/MyPageFrame.png")));
+			lblImage.setBounds(0, 0, 430, 704);
 		}
-		return separator_1_1_1_3;
-	}
-	private JLabel getLblMyBid() {
-		if (lblMyBid == null) {
-			lblMyBid = new JLabel("");
-			lblMyBid.setIcon(new ImageIcon(MyPage.class.getResource("/com/javalec/images/MyPageFrame.png")));
-			lblMyBid.setBounds(0, 0, 430, 704);
-		}
-		return lblMyBid;
+		return lblImage;
 	}
 }

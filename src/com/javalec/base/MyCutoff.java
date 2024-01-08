@@ -11,6 +11,7 @@ import javax.swing.JTextField;
 import javax.swing.JCheckBox;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 
 public class MyCutoff extends JFrame {
 
@@ -21,8 +22,9 @@ public class MyCutoff extends JFrame {
 	private JButton btnChat;
 	private JButton btnWrite;
 	private JButton btnBack;
-	private JLabel lblMyBid;
+	private JLabel lblImage;
 	private JScrollPane scrollPane;
+	private JTable innertable;
 
 	/**
 	 * Launch the application.
@@ -54,7 +56,7 @@ public class MyCutoff extends JFrame {
 		getContentPane().add(getBtnWrite());
 		getContentPane().add(getBtnBack());
 		getContentPane().add(getScrollPane());
-		getContentPane().add(getLblMyBid());
+		getContentPane().add(getLblImage());
 
 	}
 	private JButton getBtnHome() {
@@ -99,19 +101,26 @@ public class MyCutoff extends JFrame {
 		}
 		return btnBack;
 	}
-	private JLabel getLblMyBid() {
-		if (lblMyBid == null) {
-			lblMyBid = new JLabel("");
-			lblMyBid.setIcon(new ImageIcon(MyCutoff.class.getResource("/com/javalec/images/mainFrame.png")));
-			lblMyBid.setBounds(0, 0, 430, 704);
+	private JLabel getLblImage() {
+		if (lblImage == null) {
+			lblImage = new JLabel("");
+			lblImage.setIcon(new ImageIcon(MyCutoff.class.getResource("/com/javalec/images/mainFrame.png")));
+			lblImage.setBounds(0, 0, 430, 704);
 		}
-		return lblMyBid;
+		return lblImage;
 	}
 	private JScrollPane getScrollPane() {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
 			scrollPane.setBounds(20, 115, 380, 450);
+			scrollPane.setViewportView(getInnertable());
 		}
 		return scrollPane;
+	}
+	private JTable getInnertable() {
+		if (innertable == null) {
+			innertable = new JTable();
+		}
+		return innertable;
 	}
 }

@@ -5,13 +5,21 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.ImageIcon;
 import java.awt.Color;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
+
+import com.javalec.function.*;
+
 import javax.swing.JComboBox;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class MyPageEdit extends JFrame {
 
@@ -25,16 +33,13 @@ public class MyPageEdit extends JFrame {
 	private JLabel lblUserImage;
 	private JLabel lblUserNick;
 	private JButton btnEditImage;
-	private JLabel lblNewLabel_1;
 	private JTextField tfNick;
-	private JLabel lblUserNick_1;
-	private JTextField tfName;
 	private JLabel lblId;
 	private JTextField tfId;
 	private JLabel lblUserNick_3;
 	private JTextField tfPw;
 	private JLabel lblUserNick_4;
-	private JTextField tfTelno;
+	private JTextField tfEmail;
 	private JLabel lblUserNick_5;
 	private JComboBox cbAddress1;
 	private JComboBox cbAddress2;
@@ -42,9 +47,17 @@ public class MyPageEdit extends JFrame {
 	private JLabel lblUserNick_3_1;
 	private JButton btnEditNick;
 	private JButton btnEditPw;
-	private JButton btnEditTelno;
+	private JButton btnEditEmail;
 	private JButton btnEditAddress;
-	private JLabel lblMyBid;
+	private JLabel lblUserNick_4_1;
+	private JTextField tfPhone;
+
+	public final String url_mysql = Share.dbName;
+	public final String id_mysql = Share.dbUser;
+	public final String pw_mysql = Share.dbPass;
+	private JLabel lblPw;
+	private JButton btnEditNick_1;
+	private JLabel lblImage;
 
 	/**
 	 * Launch the application.
@@ -66,6 +79,12 @@ public class MyPageEdit extends JFrame {
 	 * Create the frame.
 	 */
 	public MyPageEdit() {
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowActivated(WindowEvent e) {
+				insertInfo();
+			}
+		});
 		setTitle("내 정보 수정");
 		setBounds(100, 100, 430, 732);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -79,16 +98,13 @@ public class MyPageEdit extends JFrame {
 		getContentPane().add(getLblUserImage());
 		getContentPane().add(getLblUserNick());
 		getContentPane().add(getTfNick());
-		getContentPane().add(getLblNewLabel_1());
 		getContentPane().add(getBtnEditImage());
-		getContentPane().add(getLblUserNick_1());
-		getContentPane().add(getTfName());
 		getContentPane().add(getLblId());
 		getContentPane().add(getTfId());
 		getContentPane().add(getLblUserNick_3());
 		getContentPane().add(getTfPw());
 		getContentPane().add(getLblUserNick_4());
-		getContentPane().add(getTfTelno());
+		getContentPane().add(getTfEmail());
 		getContentPane().add(getLblUserNick_5());
 		getContentPane().add(getCbAddress1());
 		getContentPane().add(getCbAddress2());
@@ -96,11 +112,16 @@ public class MyPageEdit extends JFrame {
 		getContentPane().add(getLblUserNick_3_1());
 		getContentPane().add(getBtnEditNick());
 		getContentPane().add(getBtnEditPw());
-		getContentPane().add(getBtnEditTelno());
+		getContentPane().add(getBtnEditEmail());
 		getContentPane().add(getBtnEditAddress());
-		getContentPane().add(getLblMyBid());
+		getContentPane().add(getLblUserNick_4_1());
+		getContentPane().add(getTfPhone());
+		getContentPane().add(getLblPw());
+		getContentPane().add(getBtnEditNick_1());
+		getContentPane().add(getLblImage());
 
 	}
+
 	private JButton getBtnHome() {
 		if (btnHome == null) {
 			btnHome = new JButton("홈");
@@ -108,6 +129,7 @@ public class MyPageEdit extends JFrame {
 		}
 		return btnHome;
 	}
+
 	private JButton getBtnWrite() {
 		if (btnWrite == null) {
 			btnWrite = new JButton("글쓰기");
@@ -115,6 +137,7 @@ public class MyPageEdit extends JFrame {
 		}
 		return btnWrite;
 	}
+
 	private JButton getBtnMy() {
 		if (btnMy == null) {
 			btnMy = new JButton("개인");
@@ -122,6 +145,7 @@ public class MyPageEdit extends JFrame {
 		}
 		return btnMy;
 	}
+
 	private JButton getBtnAlarm() {
 		if (btnAlarm == null) {
 			btnAlarm = new JButton("알림");
@@ -129,6 +153,7 @@ public class MyPageEdit extends JFrame {
 		}
 		return btnAlarm;
 	}
+
 	private JButton getBtnChat() {
 		if (btnChat == null) {
 			btnChat = new JButton("채팅");
@@ -136,6 +161,7 @@ public class MyPageEdit extends JFrame {
 		}
 		return btnChat;
 	}
+
 	private JButton getBtnBack() {
 		if (btnBack == null) {
 			btnBack = new JButton("뒤로가기");
@@ -150,175 +176,273 @@ public class MyPageEdit extends JFrame {
 		}
 		return btnBack;
 	}
+
 	private JLabel getLblUserImage() {
 		if (lblUserImage == null) {
 			lblUserImage = new JLabel("유저 이미지");
 			lblUserImage.setBackground(Color.WHITE);
-			lblUserImage.setBounds(163, 141, 100, 100);
+			lblUserImage.setBounds(163, 120, 100, 100);
 		}
 		return lblUserImage;
 	}
+
 	private JLabel getLblUserNick() {
 		if (lblUserNick == null) {
 			lblUserNick = new JLabel("닉네임 : ");
-			lblUserNick.setBounds(42, 280, 61, 16);
+			lblUserNick.setBounds(42, 300, 61, 16);
 		}
 		return lblUserNick;
 	}
+
 	private JButton getBtnEditImage() {
 		if (btnEditImage == null) {
 			btnEditImage = new JButton("사진수정");
-			btnEditImage.setBounds(267, 212, 88, 29);
+			btnEditImage.setBounds(267, 190, 88, 29);
 		}
 		return btnEditImage;
 	}
-	private JLabel getLblNewLabel_1() {
-		if (lblNewLabel_1 == null) {
-			lblNewLabel_1 = new JLabel("개인 정보 수정");
-			lblNewLabel_1.setBounds(176, 113, 74, 16);
-		}
-		return lblNewLabel_1;
-	}
+
 	private JTextField getTfNick() {
 		if (tfNick == null) {
 			tfNick = new JTextField();
-			tfNick.setBounds(115, 280, 200, 30);
+			tfNick.setBounds(115, 300, 200, 30);
 			tfNick.setColumns(10);
 		}
 		return tfNick;
 	}
-	private JLabel getLblUserNick_1() {
-		if (lblUserNick_1 == null) {
-			lblUserNick_1 = new JLabel("이름 : ");
-			lblUserNick_1.setBounds(42, 330, 61, 16);
-		}
-		return lblUserNick_1;
-	}
-	private JTextField getTfName() {
-		if (tfName == null) {
-			tfName = new JTextField();
-			tfName.setEditable(false);
-			tfName.setColumns(10);
-			tfName.setBounds(115, 330, 200, 30);
-		}
-		return tfName;
-	}
+
 	private JLabel getLblId() {
 		if (lblId == null) {
 			lblId = new JLabel("ID : ");
-			lblId.setBounds(42, 380, 61, 16);
+			lblId.setBounds(42, 250, 61, 16);
 		}
 		return lblId;
 	}
+
 	private JTextField getTfId() {
 		if (tfId == null) {
 			tfId = new JTextField();
 			tfId.setEditable(false);
 			tfId.setColumns(10);
-			tfId.setBounds(115, 380, 200, 30);
+			tfId.setBounds(115, 250, 200, 30);
 		}
 		return tfId;
 	}
+
 	private JLabel getLblUserNick_3() {
 		if (lblUserNick_3 == null) {
 			lblUserNick_3 = new JLabel("현재 PW : ");
-			lblUserNick_3.setBounds(42, 430, 61, 16);
+			lblUserNick_3.setBounds(42, 350, 61, 16);
 		}
 		return lblUserNick_3;
 	}
+
 	private JTextField getTfPw() {
 		if (tfPw == null) {
 			tfPw = new JTextField();
 			tfPw.setColumns(10);
-			tfPw.setBounds(115, 430, 200, 30);
+			tfPw.setBounds(115, 350, 200, 30);
 		}
 		return tfPw;
 	}
+
 	private JLabel getLblUserNick_4() {
 		if (lblUserNick_4 == null) {
-			lblUserNick_4 = new JLabel("전화번호 : ");
-			lblUserNick_4.setBounds(42, 530, 61, 16);
+			lblUserNick_4 = new JLabel("이메일 : ");
+			lblUserNick_4.setBounds(42, 500, 61, 16);
 		}
 		return lblUserNick_4;
 	}
-	private JTextField getTfTelno() {
-		if (tfTelno == null) {
-			tfTelno = new JTextField();
-			tfTelno.setColumns(10);
-			tfTelno.setBounds(115, 530, 200, 30);
+
+	private JTextField getTfEmail() {
+		if (tfEmail == null) {
+			tfEmail = new JTextField();
+			tfEmail.setColumns(10);
+			tfEmail.setBounds(115, 500, 200, 30);
 		}
-		return tfTelno;
+		return tfEmail;
 	}
+
 	private JLabel getLblUserNick_5() {
 		if (lblUserNick_5 == null) {
 			lblUserNick_5 = new JLabel("주소 : ");
-			lblUserNick_5.setBounds(42, 580, 61, 16);
+			lblUserNick_5.setBounds(42, 550, 61, 16);
 		}
 		return lblUserNick_5;
 	}
+
 	private JComboBox getCbAddress1() {
 		if (cbAddress1 == null) {
 			cbAddress1 = new JComboBox();
-			cbAddress1.setBounds(115, 580, 100, 30);
+			cbAddress1.setBounds(115, 550, 100, 30);
 		}
 		return cbAddress1;
 	}
+
 	private JComboBox getCbAddress2() {
 		if (cbAddress2 == null) {
 			cbAddress2 = new JComboBox();
-			cbAddress2.setBounds(220, 580, 100, 30);
+			cbAddress2.setBounds(220, 550, 100, 30);
 		}
 		return cbAddress2;
 	}
+
 	private JTextField getTextField_5_1() {
 		if (tfEditPw == null) {
 			tfEditPw = new JTextField();
+			tfEditPw.setEditable(false);
 			tfEditPw.setColumns(10);
-			tfEditPw.setBounds(115, 480, 200, 30);
+			tfEditPw.setBounds(115, 400, 200, 30);
 		}
 		return tfEditPw;
 	}
+
 	private JLabel getLblUserNick_3_1() {
 		if (lblUserNick_3_1 == null) {
 			lblUserNick_3_1 = new JLabel("바꿀 PW : ");
-			lblUserNick_3_1.setBounds(42, 480, 80, 16);
+			lblUserNick_3_1.setBounds(42, 400, 80, 16);
 		}
 		return lblUserNick_3_1;
 	}
+
 	private JButton getBtnEditNick() {
 		if (btnEditNick == null) {
 			btnEditNick = new JButton("수정");
-			btnEditNick.setBounds(324, 280, 100, 30);
+			btnEditNick.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					updateNick();
+				}
+			});
+			btnEditNick.setBounds(324, 300, 100, 30);
 		}
 		return btnEditNick;
 	}
+
 	private JButton getBtnEditPw() {
 		if (btnEditPw == null) {
 			btnEditPw = new JButton("수정");
-			btnEditPw.setBounds(324, 480, 100, 30);
+			btnEditPw.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					updatePw();
+				}
+			});
+			btnEditPw.setBounds(324, 400, 100, 30);
 		}
 		return btnEditPw;
 	}
-	private JButton getBtnEditTelno() {
-		if (btnEditTelno == null) {
-			btnEditTelno = new JButton("수정");
-			btnEditTelno.setBounds(324, 530, 100, 30);
+
+	private JButton getBtnEditEmail() {
+		if (btnEditEmail == null) {
+			btnEditEmail = new JButton("수정");
+			btnEditEmail.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					updateEmail();
+				}
+			});
+			btnEditEmail.setBounds(324, 500, 100, 30);
 		}
-		return btnEditTelno;
+		return btnEditEmail;
 	}
+
 	private JButton getBtnEditAddress() {
 		if (btnEditAddress == null) {
 			btnEditAddress = new JButton("수정");
-			btnEditAddress.setBounds(324, 580, 100, 30);
+			btnEditAddress.setBounds(324, 550, 100, 30);
 		}
 		return btnEditAddress;
 	}
-	private JLabel getLblMyBid() {
-		if (lblMyBid == null) {
-			lblMyBid = new JLabel("");
-			lblMyBid.setIcon(new ImageIcon(MyPageEdit.class.getResource("/com/javalec/images/mainFrame.png")));
-			lblMyBid.setBounds(0, 0, 430, 704);
+
+	private JLabel getLblUserNick_4_1() {
+		if (lblUserNick_4_1 == null) {
+			lblUserNick_4_1 = new JLabel("전화번호 : ");
+			lblUserNick_4_1.setBounds(42, 450, 61, 16);
 		}
-		return lblMyBid;
+		return lblUserNick_4_1;
 	}
-}
+
+	private JTextField getTfPhone() {
+		if (tfPhone == null) {
+			tfPhone = new JTextField();
+			tfPhone.setEditable(false);
+			tfPhone.setColumns(10);
+			tfPhone.setBounds(115, 450, 200, 30);
+		}
+		return tfPhone;
+	}
+
+	private JLabel getLblPw() {
+		if (lblPw == null) {
+			lblPw = new JLabel("현재 비밀번호와 틀립니다.");
+			lblPw.setBounds(120, 381, 190, 16);
+		}
+		return lblPw;
+	}
+
+	private JButton getBtnEditNick_1() {
+		if (btnEditNick_1 == null) {
+			btnEditNick_1 = new JButton("확인");
+			btnEditNick_1.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					comparePw();
+				}
+			});
+			btnEditNick_1.setBounds(324, 350, 100, 30);
+		}
+		return btnEditNick_1;
+	}
+
+	private JLabel getLblImage() {
+		if (lblImage == null) {
+			lblImage = new JLabel("");
+			lblImage.setIcon(new ImageIcon(MyPageEdit.class.getResource("/com/javalec/images/mainFrame.png")));
+			lblImage.setBounds(0, 0, 430, 704);
+		}
+		return lblImage;
+	}
+	// -------------- function
+
+	private void insertInfo() {
+		Dao_MyPage dao = new Dao_MyPage();
+		Dto_MyPage dto = dao.insertInfo();
+
+		tfId.setText(dto.getUserid());
+		tfNick.setText(dto.getNickname());
+		tfPhone.setText(dto.getPhone());
+		tfEmail.setText(dto.getEmail());
+	}
+
+	private void updateNick() {
+		Dao_MyPage dao = new Dao_MyPage();
+		dao.updateNick(tfNick.getText());
+		JOptionPane.showMessageDialog(null, "닉네임이 수정되었습니다.");
+		insertInfo();
+	}
+
+	private void updateEmail() {
+		Dao_MyPage dao = new Dao_MyPage();
+		dao.updateEmail(tfEmail.getText());
+		JOptionPane.showMessageDialog(null, "이메일이 수정되었습니다.");
+		insertInfo();
+	}
+
+	private void comparePw() {
+		if (tfPw.getText().equals(Share.pw)) {
+			tfEditPw.setEditable(true);
+			lblPw.setText("");
+		} else {
+			tfEditPw.setEditable(false);
+			lblPw.setText("현재 비밀번호와 틀립니다.");
+		}
+	}
+
+	private void updatePw() {
+		Dao_MyPage dao = new Dao_MyPage();
+		dao.updatePw(tfEditPw.getText());
+		JOptionPane.showMessageDialog(null, "비밀번호가 수정되었습니다.");
+		tfPw.setText("");
+		tfEditPw.setText("");
+		insertInfo();
+		tfEditPw.setEditable(false);
+	}
+
+}// End
