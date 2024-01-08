@@ -10,5 +10,4 @@ public class Share {
 	
 	public static int filename = 0;
 	
-	public static int[] postId = new int[1];	
 }

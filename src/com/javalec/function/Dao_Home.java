@@ -161,11 +161,11 @@ public class Dao_Home {
 			Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
 			Statement st = con.createStatement();
 			
-			String query = "select postid, view_count from post p where postid = " + pId;
+			String query = "select view_count from post p where postid = " + pId;
 			
 			ResultSet rs = st.executeQuery(query);
 			
-			count = rs.getInt(2);
+			count = rs.getInt(1);
 			count ++;
 			
 			ps = con.prepareStatement("update post set view_count = ? where postid = " + pId);

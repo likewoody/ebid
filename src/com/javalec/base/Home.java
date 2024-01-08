@@ -201,13 +201,8 @@ public class Home extends JDialog {
 					innerTable.setDefaultEditor(Object.class, null);
 					Dao_Home dao = new Dao_Home();
 					if (e.getClickCount() == 2) {
-						for (int i = 0; i < innerTable.getRowCount(); i++ ) {
-							System.out.println(Share.postId[i]);
-//							if(innerTable.getSelectedRow() == (Share.postId[i] - 7)) {
-//								dao.viewCount(Share.postId[i]);
-//							}
-						}
-//						getvalueat
+						// postid가 7부터 시작이기에 viewcount에 선택된 row번호에 +7을 객체로 넣어준다.
+						dao.viewCount(innerTable.getSelectedRowCount() + 7);
 						Home_detail homeDetail = new Home_detail();
 						homeDetail.setVisible(true);
 						dispose();
@@ -262,15 +257,12 @@ public class Home extends JDialog {
 	
 	private void searchDB() {
 		Dao_Home dao = new Dao_Home();
-		int count = 0;
 		for (Dto_Home dto : dao.searchDB()) {
 				outerTable.addRow(new Object[] {
 						dto.getPost_image(),
 						String.format("<html><b>[%s]</b><br><br>%s<br>판매금액 : %d<br>작성자 : %s</html>",
 							dto.getSort(), dto.getTitle(), dto.getStart_price(), dto.getNickname())
 				});
-				Share.postId[] = dto.getPostId();
-				count++;
 		}
 		// true값과 false값의 차이를 모르겠음 *******
 		innerTable.getTableHeader().setReorderingAllowed(false); // true값과 false값의 차이를 모르겠음 *******
@@ -278,32 +270,6 @@ public class Home extends JDialog {
 		
 		// 1번째 이미지 컬럼을 새로 만든다.
 		innerTable.getColumnModel().getColumn(0).setCellRenderer(new ImageRender());
-	}
-	
-	// ImageRender는 그냥 class 이름 DefaultTableCellRenderer로 상속받는다.
-	private class ImageRender extends DefaultTableCellRenderer {
-
-		@Override
-		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
-				int row, int column) {
-			
-			// innerTable.getColumnModel().getColumn(0)로부터 데이터 받아오기
-			byte[] bytes = (byte[]) value;
-			
-			// 이미지 객체로 전환 및 이미지 사이즈 설정
-			ImageIcon imageIcon = new ImageIcon(bytes);
-			Image img = imageIcon.getImage();
-			Image setImg = img.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
-			ImageIcon image = new ImageIcon(setImg);
-			
-			// 이미지 아이콘으로 세팅, 보더, 수직 수평, 배경 설정
-			setIcon(image);
-//			setBorder(UIManager.getBorder("TableHeader.cellBorder"));
-			setHorizontalAlignment(JLabel.CENTER);
-			setBackground(getBackground());
-			
-			return this;
-		}
 	}
 	
 	private void btnSearch() {
@@ -326,5 +292,31 @@ public class Home extends JDialog {
 		innerTable.getColumnModel().getColumn(0).setCellRenderer(new ImageRender());
 		
 	}	
+	
+	// ImageRender는 그냥 class 이름 DefaultTableCellRenderer로 상속받는다.
+		private class ImageRender extends DefaultTableCellRenderer {
+
+			@Override
+			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+					int row, int column) {
+				
+				// innerTable.getColumnModel().getColumn(0)로부터 데이터 받아오기
+				byte[] bytes = (byte[]) value;
+				
+				// 이미지 객체로 전환 및 이미지 사이즈 설정
+				ImageIcon imageIcon = new ImageIcon(bytes);
+				Image img = imageIcon.getImage();
+				Image setImg = img.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+				ImageIcon image = new ImageIcon(setImg);
+				
+				// 이미지 아이콘으로 세팅, 보더, 수직 수평, 배경 설정
+				setIcon(image);
+//				setBorder(UIManager.getBorder("TableHeader.cellBorder"));
+				setHorizontalAlignment(JLabel.CENTER);
+				setBackground(getBackground());
+				
+				return this;
+			}
+		}
 	
 }
