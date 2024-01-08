@@ -2,26 +2,44 @@ package com.javalec.function;
 
 import javax.swing.ImageIcon;
 
-import com.mysql.cj.jdbc.Blob;
-
 public class Dto_Home {
 	
+	int postId;
 	byte[] post_image;
 	String title; // 포스트 제목
 	int start_price;
 	String nickname;
 	String sort;
+	int max_price;
 	
 	public Dto_Home() {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public Dto_Home(byte[] post_image, String title, int start_price, String nickname, String sort) {
+	
+	public Dto_Home(byte[] post_image, String title, int start_price, String sort, String nickname) {
+		this.post_image = post_image;
+		this.title = title;
+		this.start_price = start_price;
+		this.sort = sort;
+		this.nickname = nickname;
+	}
+
+	public Dto_Home(byte[] post_image, String title, int start_price, String nickname, String sort, int postId) {
 		this.post_image = post_image;
 		this.title = title;
 		this.start_price = start_price;
 		this.nickname = nickname;
 		this.sort = sort;
+		this.postId = postId;
+	}
+	
+	public int getPostId() {
+		return postId;
+	}
+
+	public void setPostId(int postId) {
+		this.postId = postId;
 	}
 
 	public byte[] getPost_image() {
@@ -62,6 +80,14 @@ public class Dto_Home {
 
 	public void setSort(String sort) {
 		this.sort = sort;
+	}
+	
+	public int getMax_price() {
+		return max_price;
+	}
+
+	public void setMax_price(int Max_price) {
+		this.max_price = Max_price;
 	}
 
 }

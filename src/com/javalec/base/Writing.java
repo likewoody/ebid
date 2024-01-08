@@ -27,10 +27,11 @@ public class Writing {
 	private JButton btnAlram;
 	private JButton btnChat;
 	private JButton btnWrite;
-	private JComboBox comboBox;
 	private JLabel lblNewLabel_2;
 	private JTextField tfTitle;
 	private JTextField tfPrice;
+	private JLabel lblNewLabel_3;
+	private JButton btnNewButton;
 
 	/**
 	 * Launch the application.
@@ -68,11 +69,11 @@ public class Writing {
 		frame.getContentPane().add(getBtnAlram());
 		frame.getContentPane().add(getBtnChat());
 		frame.getContentPane().add(getBtnWrite());
-		frame.getContentPane().add(getComboBox());
+		frame.getContentPane().add(getLblNewLabel_3());
 		
 		tfTitle = new JTextField();
 		tfTitle.setFont(new Font("Dialog", Font.PLAIN, 14));
-		tfTitle.setText("제목을 입력하세요.");
+		tfTitle.setText(" 제목을 입력하세요.");
 		tfTitle.setBounds(150, 119, 240, 28);
 		frame.getContentPane().add(tfTitle);
 		tfTitle.setColumns(10);
@@ -81,14 +82,14 @@ public class Writing {
 		tfPrice = new JTextField();
 		tfPrice.setHorizontalAlignment(SwingConstants.TRAILING);
 		tfPrice.setFont(new Font("Dialog", Font.PLAIN, 14));
-		tfPrice.setBounds(150, 156, 221, 24);
+		tfPrice.setBounds(150, 156, 240, 24);
 		frame.getContentPane().add(tfPrice);
 		tfPrice.setColumns(10);
 		
 		JLabel lblNewLabel_1 = new JLabel("원");
 		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_1.setFont(new Font("Dialog", Font.PLAIN, 14));
-		lblNewLabel_1.setBounds(370, 156, 34, 25);
+		lblNewLabel_1.setBounds(379, 159, 34, 25);
 		frame.getContentPane().add(lblNewLabel_1);
 		
 		JTextArea taWriting = new JTextArea();
@@ -97,26 +98,22 @@ public class Writing {
 		taWriting.setBounds(39, 219, 351, 288);
 		frame.getContentPane().add(taWriting);
 		
-		JLabel lbladdimage = new JLabel("addimage");
+		JLabel lbladdimage = new JLabel("");
+		lbladdimage.setHorizontalAlignment(SwingConstants.CENTER);
 		lbladdimage.setBounds(37, 548, 64, 59);
 		frame.getContentPane().add(lbladdimage);
 		
-		JLabel lblimage = new JLabel("image");
+		JLabel lblimage = new JLabel("");
 		lblimage.setBounds(127, 548, 64, 59);
 		frame.getContentPane().add(lblimage);
-		
-		JLabel lblPosting = new JLabel("게시하기");
-		lblPosting.setFont(new Font("Dialog", Font.PLAIN, 14));
-		lblPosting.setHorizontalAlignment(SwingConstants.CENTER);
-		lblPosting.setBounds(116, 640, 201, 34);
-		frame.getContentPane().add(lblPosting);
+		frame.getContentPane().add(getBtnNewButton());
 		frame.getContentPane().add(getLblNewLabel());
 	}
 
 	private JLabel getLblNewLabel() {
 		if (lblNewLabel == null) {
 			lblNewLabel = new JLabel("");
-			lblNewLabel.setIcon(new ImageIcon(Writing.class.getResource("/com/javalec/images/writingBackgroud.png")));
+			lblNewLabel.setIcon(new ImageIcon(Writing.class.getResource("/com/javalec/images/writingBackgroundnew.png")));
 			lblNewLabel.setBounds(0, 0, 430, 704);
 		}
 		return lblNewLabel;
@@ -169,23 +166,30 @@ public class Writing {
 		}
 		return btnWrite;
 	}
-	private JComboBox getComboBox() {
-		if (comboBox == null) {
-			comboBox = new JComboBox();
-			comboBox.setModel(new DefaultComboBoxModel(new String[] {"판매", "경매"}));
-			comboBox.setFont(new Font("Helvetica", Font.PLAIN, 14));
-			comboBox.setEditable(true);
-			comboBox.setToolTipText("");
-			comboBox.setBounds(37, 116, 70, 34);
-		}
-		return comboBox;
-	}
 	private JLabel getLblNewLabel_2() {
 		if (lblNewLabel_2 == null) {
 			lblNewLabel_2 = new JLabel("판매금액");
+			lblNewLabel_2.setHorizontalAlignment(SwingConstants.CENTER);
 			lblNewLabel_2.setFont(new Font("Dialog", Font.PLAIN, 14));
 			lblNewLabel_2.setBounds(37, 156, 70, 25);
 		}
 		return lblNewLabel_2;
+	}
+	private JLabel getLblNewLabel_3() {
+		if (lblNewLabel_3 == null) {
+			lblNewLabel_3 = new JLabel("판매제목");
+			lblNewLabel_3.setHorizontalAlignment(SwingConstants.CENTER);
+			lblNewLabel_3.setFont(new Font("Dialog", Font.PLAIN, 14));
+			lblNewLabel_3.setBounds(37, 119, 70, 30);
+		}
+		return lblNewLabel_3;
+	}
+	private JButton getBtnNewButton() {
+		if (btnNewButton == null) {
+			btnNewButton = new JButton("게시하기");
+			btnNewButton.setFont(new Font("Dialog", Font.PLAIN, 14));
+			btnNewButton.setBounds(111, 640, 210, 40);
+		}
+		return btnNewButton;
 	}
 }

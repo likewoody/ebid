@@ -16,22 +16,19 @@ import java.util.Scanner;
 
 import javax.swing.ImageIcon;
 
-import com.mysql.cj.jdbc.Blob;
-
-
 public class Dao_Home {
 	
 	private final String url_mysql = Share.dbName;
 	private final String id_mysql = Share.dbUser;
 	private final String pw_mysql = Share.dbPass;
 	
-	int imageid;
-	int postid;
+	int postId;
 	byte[] post_image;
-	String post_title; // 포스트 제목
+	String title; // 포스트 제목
 	int start_price;
 	String nickname;
-	ImageIcon imageIcon;
+	String sort;
+	int max_price;
 	
 	// Constructor
 	public Dao_Home() {
@@ -50,51 +47,29 @@ public class Dao_Home {
 			Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
 			Statement st = con.createStatement();
 			
-			String query = "SELECT"
-					+ "    max_image.post_image, "
-					+ "    p.title, "
-					+ "    p.price, "
-					+ "    u.nickname, "
-					+ "	p.sort "
-					+ "FROM "
-					+ "    ( "
-					+ "        SELECT "
-					+ "            MAX(i.post_image) AS post_image, "
-					+ "            p.postid "
-					+ "        FROM "
-					+ "            image i "
-					+ "        JOIN post p ON p.postid = i.postid "
-					+ "        LEFT JOIN bid b ON b.postid = p.postid "
-					+ "        LEFT JOIN sell s ON s.postid = p.postid "
-					+ "        GROUP BY "
-					+ "            p.postid "
-					+ "    ) max_image "
-					+ "JOIN post p ON max_image.postid = p.postid "
-					+ "JOIN user u ON u.userid = ( "
-					+ "    SELECT "
-					+ "        CASE "
-					+ "            WHEN MAX(b.userid) IS NOT NULL THEN MAX(b.userid) "
-					+ "            WHEN MAX(s.userid) IS NOT NULL THEN MAX(s.userid) "
-					+ "        END "
-					+ "    FROM "
-					+ "        bid b "
-					+ "    LEFT JOIN sell s ON s.postid = p.postid "
-					+ "    WHERE "
-					+ "        b.postid = p.postid OR s.postid = p.postid "
-					+ ")"
-					+ "ORDER BY "
-					+ "    p.update_date DESC";
+			String query = "SELECT max_image.post_image, p.title, p.price, p.sort, u.nickname, p.postid "
+					+ "from ( "
+					+ "SELECT MAX(i.post_image) AS post_image, p.postid "
+					+ "FROM image i "
+					+ "JOIN post p ON p.postid = i.postid "
+					+ "LEFT JOIN sell s ON s.postid = p.postid "
+					+ "GROUP BY p.postid) max_image "
+					+ "left join post p on max_image.postid = p.postid "
+					+ "left join user u on u.userid = "
+					+ "(select s.userid "
+					+ "from sell s "
+					+ "where s.postid = p.postid)";
 			
 			ResultSet rs = st.executeQuery(query);
 			while (rs.next()) {
 				
-				if (rs.getString(5).equals("판매")) {
-					dto = new Dto_Home(rs.getBytes(1), rs.getString(2), rs.getInt(3), rs.getString(4), rs.getString(5));
-				}
+//				if (rs.getString(4).equals("판매")) {
+				dto = new Dto_Home(rs.getBytes(1), rs.getString(2), rs.getInt(3), rs.getString(4), rs.getString(5), rs.getInt(6));
+//				}
 				
-				if (rs.getString(5).equals("경매")) {
-					dto = new Dto_Home(rs.getBytes(1), rs.getString(2), rs.getInt(3), rs.getString(4), rs.getString(5));
-				}
+//				if (rs.getString(4).equals("경매")) {
+//					dto = new Dto_Home(rs.getBytes(1), rs.getString(2), rs.getInt(3), rs.getString(4), rs.getString(5), rs.getInt(6));
+//				}
 				
 				dtoList.add(dto);
 				
@@ -105,6 +80,105 @@ public class Dao_Home {
 			e.printStackTrace();
 		}
 		return dtoList;
+	}
+	
+	public ArrayList<Dto_Home> search(int index, String searchText) {
+		ArrayList<Dto_Home> dtoList = new ArrayList<Dto_Home>(); // Dto_Product라는 타입을 가진 ArrayList 생성
+		PreparedStatement ps = null;
+
+		// SQL 구문
+		String A = "SELECT max_image.post_image, p.title, p.price, p.sort, u.nickname "
+				+ "from ( "
+				+ "SELECT MAX(i.post_image) AS post_image, p.postid "
+				+ "FROM image i "
+				+ "JOIN post p ON p.postid = i.postid "
+				+ "LEFT JOIN sell s ON s.postid = p.postid "
+				+ "GROUP BY p.postid) max_image "
+				+ "left join post p on max_image.postid = p.postid "
+				+ "left join user u on u.userid = "
+				+ "(select s.userid "
+				+ "from sell s "
+				+ "where s.postid = p.postid) "
+				+ "where p.title like '" + searchText + "%'";
+		
+		String B = "SELECT max_image.post_image, p.title, p.price, p.sort, u.nickname "
+				+ "from ( "
+				+ "SELECT MAX(i.post_image) AS post_image, p.postid "
+				+ "FROM image i "
+				+ "JOIN post p ON p.postid = i.postid "
+				+ "LEFT JOIN sell s ON s.postid = p.postid "
+				+ "GROUP BY p.postid) max_image "
+				+ "left join post p on max_image.postid = p.postid "
+				+ "left join user u on u.userid = "
+				+ "(select s.userid "
+				+ "from sell s "
+				+ "where s.postid = p.postid) "
+				+ "where u.nickname like '" + searchText + "%'";
+		
+		String C = "select seq,name,price from product where name like " + searchText + "%' order by price desc";
+
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+			Statement st = con.createStatement();
+
+			if (index == 0) {
+				ResultSet rs = st.executeQuery(A); // asc구문 삽입
+
+				while (rs.next()) {
+
+					Dto_Home dto = new Dto_Home(rs.getBytes(1), rs.getString(2), rs.getInt(3), rs.getString(4), rs.getString(5));
+					dtoList.add(dto);
+				}
+			}
+
+			if (index == 1) {
+				ResultSet rs = st.executeQuery(B); // asc구문 삽입
+
+				while (rs.next()) {
+
+					Dto_Home dto = new Dto_Home(rs.getBytes(1), rs.getString(2), rs.getInt(3), rs.getString(4), rs.getString(5));
+					dtoList.add(dto);
+				}
+			}
+
+			con.close();
+
+		} catch (Exception e) {
+			e.printStackTrace(); // 어디서 오류가 났는지 출력
+		}
+
+		return dtoList; // 불러온 데이터가 입력 된 dtoList 리턴
+	}
+	
+	
+	// 수정 필요 ********
+	public int viewCount(int pId) {
+		int count = 0;
+		PreparedStatement ps = null;
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+			Statement st = con.createStatement();
+			
+			String query = "select postid, view_count from post p where postid = " + pId;
+			
+			ResultSet rs = st.executeQuery(query);
+			
+			count = rs.getInt(2);
+			count ++;
+			
+			ps = con.prepareStatement("update post set view_count = ? where postid = " + pId);
+			
+			ps.setInt(1, count);
+			ps.executeUpdate();
+			
+			con.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return count;
 	}
 	
 	// looking for image
@@ -137,6 +211,6 @@ public class Dao_Home {
 //			e.printStackTrace();
 //		}
 //		return dtoList;
-//	}
+//		}	
 	
 }
