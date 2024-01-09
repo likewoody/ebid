@@ -9,6 +9,7 @@ import javax.swing.BorderFactory;
 import javax.swing.DefaultCellEditor;
 import javax.swing.ImageIcon;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -178,11 +179,11 @@ public class MyCutoff extends JFrame {
 			btnDelete.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					deleteblockuser();
-					}
 				}
 			});
 			btnDelete.setBounds(150, 572, 117, 29);
-		}return btnDelete;
+		}
+		return btnDelete;
 
 	}
 
@@ -208,8 +209,9 @@ public class MyCutoff extends JFrame {
 
 		// Coulmn명 초기화
 		outertable.addColumn("프로필 이미지");
+		outertable.addColumn("차단한 아이디");
 		outertable.addColumn("차단한 닉네임");
-		outertable.setColumnCount(2);
+		outertable.setColumnCount(3);
 
 		int colNo = 0;
 		TableColumn col = innertable.getColumnModel().getColumn(colNo);
@@ -218,7 +220,12 @@ public class MyCutoff extends JFrame {
 
 		colNo = 1;
 		col = innertable.getColumnModel().getColumn(colNo);
-		width = 290;
+		width = 140;
+		col.setPreferredWidth(width);
+		
+		colNo = 2;
+		col = innertable.getColumnModel().getColumn(colNo);
+		width = 140;
 		col.setPreferredWidth(width);
 
 		int i = outertable.getRowCount();
@@ -237,13 +244,23 @@ public class MyCutoff extends JFrame {
 
 		for (int i = 0; i < listCount; i++) {
 
-			String[] qTxt = { null, dtolist.get(i).getName() };
+			String[] qTxt = { null, dtolist.get(i).getId(),dtolist.get(i).getNick()};
 			outertable.addRow(qTxt);
 			innertable.setRowHeight(i, 150);
 		}
 	}
 
 	private void deleteblockuser() {
+		Dao_MyCutoff dao = new Dao_MyCutoff();
+
+		int i = innertable.getSelectedRow();
+		String blockuser = (String) innertable.getValueAt(i, 1);
+		dao.deleteBlockuser(blockuser);
+
+		JOptionPane.showMessageDialog(null, (String) innertable.getValueAt(i, 2) + "님이 차단 해제 되었습니다.");
+
+		tableInit();
+		searchAction();
 	}
 
 } // End

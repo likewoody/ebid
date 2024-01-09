@@ -2,32 +2,35 @@ package com.javalec.function;
 
 public class Dto_MyCutoff {
 	
-	String name;
-	int status;
+	String id;
+	String nick;
 	
 	public Dto_MyCutoff() {
 		
 	}
 
-	public Dto_MyCutoff(String name) {
-		this.name = name;
+	public Dto_MyCutoff(String id, String nick) {
+		this.id = id;
+		this.nick = nick;
 	}
 
-	public String getName() {
-		return name;
+	public String getId() {
+		return id;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setName(String id) {
+		this.id = id;
 	}
 
-	public int getStatus() {
-		return status;
+	public String getNick() {
+		return nick;
 	}
 
-	public void setStatus(int status) {
-		this.status = status;
+	public void setNick(String nick) {
+		this.nick = nick;
 	}
+
+
 	
 	
 	
