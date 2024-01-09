@@ -11,8 +11,12 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
+import com.javalec.function.Dao_Login;
+import com.javalec.function.Share;
+
 import java.awt.Font;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
@@ -21,6 +25,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JPasswordField;
 
 public class Login extends JDialog {
 
@@ -30,13 +35,13 @@ public class Login extends JDialog {
 	private JLabel lblNewLabel;
 	private JLabel lblPw;
 	private JTextField tfId;
-	private JTextField tfPw;
 	private JButton btnLogin;
 	private JLabel lblSign;
 	private JLabel lblFindid;
 	private JLabel lblFindpw;
 	private JLabel lblNewLabel_1_2;
 	private JLabel lblNewLabel_1_3;
+	private JPasswordField tfpw;
 
 	/**
 	 * Launch the application.
@@ -65,13 +70,16 @@ public class Login extends JDialog {
 		contentPanel.add(getLblNewLabel());
 		contentPanel.add(getLblPw());
 		contentPanel.add(getTfId());
-		contentPanel.add(getTfPw());
 		contentPanel.add(getBtnLogin());
 		contentPanel.add(getLblNewLabel_1_3());
 		contentPanel.add(getLblNewLabel_1_2());
 		contentPanel.add(getLblSign());
 		contentPanel.add(getLblFindid());
 		contentPanel.add(getLblFindpw());
+		
+		tfpw = new JPasswordField();
+		tfpw.setBounds(96, 370, 280, 26);
+		contentPanel.add(tfpw);
 		contentPanel.add(getLoginBackground());
 	}
 	private JLabel getLoginBackground() {
@@ -104,15 +112,6 @@ public class Login extends JDialog {
 			tfId.setBorder(new LineBorder(new Color(214, 203, 216)));
 		}
 		return tfId;
-	}
-	private JTextField getTfPw() {
-		if (tfPw == null) {
-			tfPw = new JTextField();
-			tfPw.setColumns(10);
-			tfPw.setBounds(96, 366, 280, 26);
-			tfPw.setBorder(new LineBorder(new Color(214, 203, 216)));
-		}
-		return tfPw;
 	}
 	private JButton getBtnLogin() {
 		if (btnLogin == null) {
@@ -154,7 +153,7 @@ public class Login extends JDialog {
 					
 				}
 			});
-			lblSign.setBounds(126, 500, 61, 16);
+			lblSign.setBounds(100, 500, 61, 16);
 		}
 		return lblSign;
 	}
@@ -175,7 +174,7 @@ public class Login extends JDialog {
 									exitFindid();
 				}
 			});
-			lblFindid.setBounds(192, 500, 61, 16);
+			lblFindid.setBounds(180, 500, 65, 16);
 		}
 		return lblFindid;
 	}
@@ -196,7 +195,7 @@ public class Login extends JDialog {
 									exitFindpw();
 				}
 			});
-			lblFindpw.setBounds(270, 500, 72, 16);
+			lblFindpw.setBounds(270, 500, 80, 16);
 		}
 		return lblFindpw;
 	}
@@ -217,7 +216,7 @@ public class Login extends JDialog {
 				}
 			});
 			lblNewLabel_1_3.setHorizontalAlignment(SwingConstants.CENTER);
-			lblNewLabel_1_3.setBounds(152, 500, 61, 16);
+			lblNewLabel_1_3.setBounds(134, 500, 61, 16);
 		}
 		return lblNewLabel_1_3;
 	}
@@ -230,7 +229,7 @@ public class Login extends JDialog {
 	public void clickSign() {
 				Register register = new Register();			//회원가입 클릭
 				register.setVisible(true);
-				this.setVisible(false);
+			//	this.setVisible(false);
 				
 				
 		
@@ -244,7 +243,7 @@ public class Login extends JDialog {
 	public void clickFindid() {
 				FindId findId = new FindId();			  //아이디 찾기 클릭
 				findId.setVisible(true);
-				this.setVisible(false);
+	//			this.setVisible(false);
 			
 				
 	}
@@ -257,7 +256,7 @@ public class Login extends JDialog {
 	public void clickFindpw() {
 			FindPw findPw = new FindPw();				//패스워드 찾기 클릭
 			findPw.setVisible(true);
-			this.setVisible(false);
+	//		this.setVisible(false);
 			
 	}
 	public void enterFindpw() {
@@ -286,11 +285,48 @@ public class Login extends JDialog {
 //	 // 중복되는 코드 모아주는 매소드   ************************************************
 	
 	public void Login() {
-				Home H = new Home();
-				H.setVisible(true);					//로그인 시 홈으로 이동
-				this.setVisible(false);
+		
+		
+		
+		 String inputid = tfId.getText().trim();
+		    String inputPw = new String(tfpw.getPassword()).trim();
+		    			
+
+		    if (inputid.isEmpty() && inputPw.isEmpty()) {
+		        JOptionPane.showMessageDialog(null, "아이디와 비밀번호를 입력하세요", "알림", JOptionPane.ERROR_MESSAGE);
+		        return;
+		    } else if (inputid.isEmpty()) {
+		        JOptionPane.showMessageDialog(null, "아이디를 입력하세요", "알림", JOptionPane.ERROR_MESSAGE);
+		        return;
+		    } else if (inputPw.isEmpty()) {
+		        JOptionPane.showMessageDialog(null, "비밀번호를 입력하세요", "알림", JOptionPane.ERROR_MESSAGE);
+		        return;
+		    }
+		    	 
+		    
+		    	 Dao_Login dao = new Dao_Login(inputid, inputPw);
+		    	 
+		    	
+		    	 if (dao.LoginAction()) {
+		    	        JOptionPane.showMessageDialog(null, "환영합니다.", "알림", JOptionPane.INFORMATION_MESSAGE);
+
+		    	        // 로그인 성공 시 홈 화면으로 이동
+		    	        Home home = new Home();
+		    	        home.setVisible(true);
+
+		    	        // 현재 로그인 창은 닫음
+		    	        this.setVisible(false);
+		    	    } else {
+		    	        JOptionPane.showMessageDialog(null, "아이디 또는 비밀번호가 올바르지 않습니다", "알림", JOptionPane.ERROR_MESSAGE);
+
+		    	        // 로그인 실패 시 패스워드 클리어와 포커스 설정
+		    	        tfpw.setText("");
+		    	        tfId.setText("");
+		    	        tfId.requestFocus();
+		    	    }
+		    	 
+		
 				
 	}
-	
 	
 }

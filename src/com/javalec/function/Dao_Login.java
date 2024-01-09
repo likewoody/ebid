@@ -2,6 +2,7 @@ package com.javalec.function;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
@@ -24,7 +25,7 @@ public class Dao_Login {
      private String email;
      private String nickname;
      private String join_date;
-     private String delete_date;
+     private int delete_date;
      private String profile_image;
      private String address;
      private String name;
@@ -36,7 +37,7 @@ public class Dao_Login {
 	}
 
 	public Dao_Login(String userid, String pw, String phone, String email, String nickname, String join_date,
-			String delete_date, String profile_image, String address, String name) {
+			int delete_date, String profile_image, String address, String name) {
 		super();
 		this.userid = userid;
 		this.pw = pw;
@@ -51,12 +52,32 @@ public class Dao_Login {
 		
 	}
 	
+	 public Dao_Login(String userid, String pw) {
+	        this.userid = userid;
+	        this.pw = pw;
+	    }
 	
 	
 	
+	    public void setNickname(String nickname) {
+	        this.nickname = nickname;
+	    }
+
+	 
+	    public void setPhone(String phone) {
+	        this.phone = phone;
+	    }
+
 	
-	
-	
+
+
+	public Dao_Login(String userid) {
+		super();
+		this.userid = userid;
+	}
+	public String getPw() {
+        return pw;
+    }
 	//Method
 	
 	//	로그인 실행
@@ -64,7 +85,7 @@ public class Dao_Login {
 	
 	public boolean LoginAction() {
 	     boolean yesLogin = false;
-		String A = "select pw from user where userid + '"+ userid + "'";
+		String A = "SELECT pw FROM user WHERE userid = '" + userid + "'";
 		
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -72,15 +93,23 @@ public class Dao_Login {
 			Statement st = conn.createStatement();
 			ResultSet rs = st.executeQuery(A);
 			
-			
-				if (rs.next()) {
-					if (rs.getString(1).equals(pw)) {
-								yesLogin = true;
-				conn.close();
+						
+			 if (rs.next()) {
+		            String storedPw = rs.getString("pw"); // pw 컬럼의 값을 가져옴
+		            if (storedPw.equals(pw)) {
+		                yesLogin = true;
+		            }
+						
+
 				}
-			}
+					
+			conn.close();
+				
+			
 		}
 		catch (Exception e) {
+		    e.printStackTrace();
+
 			yesLogin = false;
 		}
 		return yesLogin;
@@ -115,43 +144,71 @@ public class Dao_Login {
 	//id 찾기
 	public boolean findId() {
 			boolean searchId = false;
-			String C = "select userid from user where userid = '" + userid + "' and phone = '" + phone + "'";
+			String C = "SELECT userid FROM user WHERE nickname = ? AND phone = ?";
 				
 			try {
 				Class.forName("com.mysql.cj.jdbc.Driver");
 				Connection conn = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
-				Statement st = conn.createStatement();
-				ResultSet rs = st.executeQuery(C);
-				
-				 if( rs.next()) {
-					 	searchId = true;
-				 }else { 
-					 searchId = false;
-				 }
-			conn.close();
-			
-	}
-	catch( Exception e) {
-		e.printStackTrace();
-	}
-	return searchId;
-	}
+//				Statement st = conn.createStatement();
+//				ResultSet rs = st.executeQuery(C);
+				 PreparedStatement pstmt = conn.prepareStatement(C);
+				 pstmt.setString(1, this.nickname);
+		         pstmt.setString(2, this.phone);
+		            
+		         ResultSet rs = pstmt.executeQuery();
+//		            
+//				 if( rs.next()) {
+//					 	searchId = true;
+//				 }else { 
+//					 searchId = false;
+//				 }
+//			conn.close();
+//			
+//	}
+//	catch( Exception e) {
+//		e.printStackTrace();
+//	}
+//	return searchId;
+//	}
+		         if (rs.next()) {
+		                searchId = true;
+		                userid = rs.getString("userid");
+		            }
+
+		            conn.close();
+		        } catch (Exception e) {
+		            e.printStackTrace();
+		        }
+		        return searchId;
+		    }
+
+		    public String getUserid() {
+		        return userid;
+		    }
 	
+
 	//pw 찾기
 	
 	public boolean findPw() {
 		boolean searchPw = false;
-		String D = "SELECT pw FROM user WHERE userid = ? AND name = ? AND phone = ?";
+		String D = "SELECT pw FROM user WHERE userid = ? AND nickname = ? AND phone = ?";
 		try {
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		Connection conn = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
-		Statement st = conn.createStatement();
-		ResultSet rs = st.executeQuery(D);
+//		Statement st = conn.createStatement();
+//		RPreparedStatement pstmt = conn.prepareStatement(D);
+		 PreparedStatement pstmt = conn.prepareStatement(D);
+        pstmt.setString(1, this.userid);
+        pstmt.setString(2, this.nickname);
+        pstmt.setString(3, this.phone);
+
+        ResultSet rs = pstmt.executeQuery();
+//        		esultSet rs = st.executeQuery(D);
 			
 		if ( rs.next()) {
 				searchPw = true;
-		}else {
-				searchPw = false;
+				 pw = rs.getString("pw");
+		
 		}
 		conn.close();
 		

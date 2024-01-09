@@ -34,21 +34,21 @@ public class Register extends JDialog {
 	private JLabel lblname;
 	private JLabel lblphone;
 	private JLabel lbladdress;
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_3;
-	private JTextField textField_4;
-	private JTextField textField_5;
-	private JTextField textField_6;
-	private JTextField textField_7;
-	private JComboBox cbState;
-	private JButton btnidchek;
+	private JTextField tfnickname;
+	private JTextField tfphone1;
+	private JTextField tfpw;
+	private JTextField tfid;
+	private JTextField tfname;
+	private JTextField tfpwRe;
+	private JTextField tfaddress2;
+	private JTextField tfaddress1;
+	private JComboBox cbaddress;
+	private JButton btnIdchek;
 	private JButton btnnickNamechek;
 	private JButton btnsignIn;
 	private JCheckBox ckbagree;
-	private JTextField textField_8;
-	private JTextField textField_9;
+	private JTextField tfphone2;
+	private JTextField tfphone3;
 	private JLabel lblNewLabel_1;
 	private JLabel lblNewLabel_1_1;
 
@@ -77,7 +77,7 @@ public class Register extends JDialog {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		contentPanel.add(getLblNewLabel());
-		contentPanel.add(getTextField_3());
+		contentPanel.add(getTfid());
 		contentPanel.add(getLblid());
 		contentPanel.add(getLblpw());
 		contentPanel.add(getLblpwRe());
@@ -85,20 +85,20 @@ public class Register extends JDialog {
 		contentPanel.add(getLblname());
 		contentPanel.add(getLblphone());
 		contentPanel.add(getLbladdress());
-		contentPanel.add(getTextField());
-		contentPanel.add(getTextField_1());
-		contentPanel.add(getTextField_2());
-		contentPanel.add(getTextField_4());
-		contentPanel.add(getTextField_5());
-		contentPanel.add(getTextField_6());
-		contentPanel.add(getTextField_7());
-		contentPanel.add(getCbState());
-		contentPanel.add(getBtnidchek());
+		contentPanel.add(getTfnickname());
+		contentPanel.add(getTfphone1());
+		contentPanel.add(getTfpw());
+		contentPanel.add(getTfname());
+		contentPanel.add(getTfpwRe());
+		contentPanel.add(getTfaddress2());
+		contentPanel.add(getTfaddress1());
+		contentPanel.add(getCbaddress());
+		contentPanel.add(getBtnIdchek());
 		contentPanel.add(getBtnnickNamechek());
 		contentPanel.add(getBtnsignIn());
 		contentPanel.add(getCkbagree());
-		contentPanel.add(getTextField_8());
-		contentPanel.add(getTextField_9());
+		contentPanel.add(getTfphone2());
+		contentPanel.add(getTfphone3());
 		contentPanel.add(getLblNewLabel_1());
 		contentPanel.add(getLblNewLabel_1_1());
 		contentPanel.add(getReBackground());
@@ -170,84 +170,84 @@ public class Register extends JDialog {
 		}
 		return lbladdress;
 	}
-	private JTextField getTextField() {
-		if (textField == null) {
-			textField = new JTextField();
-			textField.setBounds(130, 354, 200, 26);
-			textField.setColumns(10);
+	private JTextField getTfnickname() {
+		if (tfnickname == null) {
+			tfnickname = new JTextField();
+			tfnickname.setBounds(130, 354, 200, 26);
+			tfnickname.setColumns(10);
 		}
-		return textField;
+		return tfnickname;
 	}
-	private JTextField getTextField_1() {
-		if (textField_1 == null) {
-			textField_1 = new JTextField();
-			textField_1.setColumns(10);
-			textField_1.setBounds(130, 445, 65, 26);
+	private JTextField getTfphone1() {
+		if (tfphone1 == null) {
+			tfphone1 = new JTextField();
+			tfphone1.setColumns(10);
+			tfphone1.setBounds(130, 445, 65, 26);
 		}
-		return textField_1;
+		return tfphone1;
 	}
-	private JTextField getTextField_2() {
-		if (textField_2 == null) {
-			textField_2 = new JTextField();
-			textField_2.setColumns(10);
-			textField_2.setBounds(130, 270, 290, 26);
+	private JTextField getTfpw() {
+		if (tfpw == null) {
+			tfpw = new JTextField();
+			tfpw.setColumns(10);
+			tfpw.setBounds(130, 270, 290, 26);
 		}
-		return textField_2;
+		return tfpw;
 	}
-	private JTextField getTextField_3() {
-		if (textField_3 == null) {
-			textField_3 = new JTextField();
-			textField_3.setColumns(10);
-			textField_3.setBounds(130, 227, 200, 26);
+	private JTextField getTfid() {
+		if (tfid == null) {
+			tfid = new JTextField();
+			tfid.setColumns(10);
+			tfid.setBounds(130, 227, 200, 26);
 		}
-		return textField_3;
+		return tfid;
 	}
-	private JTextField getTextField_4() {
-		if (textField_4 == null) {
-			textField_4 = new JTextField();
-			textField_4.setColumns(10);
-			textField_4.setBounds(130, 402, 290, 26);
+	private JTextField getTfname() {
+		if (tfname == null) {
+			tfname = new JTextField();
+			tfname.setColumns(10);
+			tfname.setBounds(130, 402, 290, 26);
 		}
-		return textField_4;
+		return tfname;
 	}
-	private JTextField getTextField_5() {
-		if (textField_5 == null) {
-			textField_5 = new JTextField();
-			textField_5.setColumns(10);
-			textField_5.setBounds(130, 312, 290, 26);
+	private JTextField getTfpwRe() {
+		if (tfpwRe == null) {
+			tfpwRe = new JTextField();
+			tfpwRe.setColumns(10);
+			tfpwRe.setBounds(130, 312, 290, 26);
 		}
-		return textField_5;
+		return tfpwRe;
 	}
-	private JTextField getTextField_6() {
-		if (textField_6 == null) {
-			textField_6 = new JTextField();
-			textField_6.setColumns(10);
-			textField_6.setBounds(325, 487, 100, 26);
+	private JTextField getTfaddress2() {
+		if (tfaddress2 == null) {
+			tfaddress2 = new JTextField();
+			tfaddress2.setColumns(10);
+			tfaddress2.setBounds(325, 487, 100, 26);
 		}
-		return textField_6;
+		return tfaddress2;
 	}
-	private JTextField getTextField_7() {
-		if (textField_7 == null) {
-			textField_7 = new JTextField();
-			textField_7.setColumns(10);
-			textField_7.setBounds(225, 487, 100, 26);
+	private JTextField getTfaddress1() {
+		if (tfaddress1 == null) {
+			tfaddress1 = new JTextField();
+			tfaddress1.setColumns(10);
+			tfaddress1.setBounds(225, 487, 100, 26);
 		}
-		return textField_7;
+		return tfaddress1;
 	}
-	private JComboBox getCbState() {
-		if (cbState == null) {
-			cbState = new JComboBox();
-			cbState.setModel(new DefaultComboBoxModel(new String[] {"서울특별시", "인천광역시", "대전광역시", "대구광역시", "울산광역시", "부산광역시", "광주광역시", "세종특별자치시", "경기도", "강원도", "충청남도", "충청북도", "경상북도", "전라북도", "전라남도", "경상남도", "제주특별자치도"}));
-			cbState.setBounds(85, 488, 135, 27);
+	private JComboBox getCbaddress() {
+		if (cbaddress == null) {
+			cbaddress = new JComboBox();
+			cbaddress.setModel(new DefaultComboBoxModel(new String[] {"서울특별시", "인천광역시", "대전광역시", "대구광역시", "울산광역시", "부산광역시", "광주광역시", "세종특별자치시", "경기도", "강원도", "충청남도", "충청북도", "경상북도", "전라북도", "전라남도", "경상남도", "제주특별자치도"}));
+			cbaddress.setBounds(85, 488, 135, 27);
 		}
-		return cbState;
+		return cbaddress;
 	}
-	private JButton getBtnidchek() {
-		if (btnidchek == null) {
-			btnidchek = new JButton("중복확인");
-			btnidchek.setBounds(330, 227, 80, 26);
+	private JButton getBtnIdchek() {
+		if (btnIdchek == null) {
+			btnIdchek = new JButton("중복확인");
+			btnIdchek.setBounds(330, 227, 80, 26);
 		}
-		return btnidchek;
+		return btnIdchek;
 	}
 	private JButton getBtnnickNamechek() {
 		if (btnnickNamechek == null) {
@@ -296,21 +296,21 @@ public class Register extends JDialog {
 	public void signIn() {
 		
 	}
-	private JTextField getTextField_8() {
-		if (textField_8 == null) {
-			textField_8 = new JTextField();
-			textField_8.setColumns(10);
-			textField_8.setBounds(221, 445, 80, 26);
+	private JTextField getTfphone2() {
+		if (tfphone2 == null) {
+			tfphone2 = new JTextField();
+			tfphone2.setColumns(10);
+			tfphone2.setBounds(221, 445, 80, 26);
 		}
-		return textField_8;
+		return tfphone2;
 	}
-	private JTextField getTextField_9() {
-		if (textField_9 == null) {
-			textField_9 = new JTextField();
-			textField_9.setColumns(10);
-			textField_9.setBounds(340, 445, 80, 26);
+	private JTextField getTfphone3() {
+		if (tfphone3 == null) {
+			tfphone3 = new JTextField();
+			tfphone3.setColumns(10);
+			tfphone3.setBounds(340, 445, 80, 26);
 		}
-		return textField_9;
+		return tfphone3;
 	}
 	private JLabel getLblNewLabel_1() {
 		if (lblNewLabel_1 == null) {
