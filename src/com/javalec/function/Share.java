@@ -10,4 +10,10 @@ public class Share {
 	
 	public static int filename = 0;
 	
+	// Home에서 detail 상세페이지로 진입 시 필요한 postid
+	public static int postId = 0;
+	
+	// User profile Image를 가져오기 위함
+	public static int sellId = 0;
+	
 }

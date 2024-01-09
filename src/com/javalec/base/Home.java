@@ -199,10 +199,14 @@ public class Home extends JDialog {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					innerTable.setDefaultEditor(Object.class, null);
-					Dao_Home dao = new Dao_Home();
+					
 					if (e.getClickCount() == 2) {
 						// postid가 7부터 시작이기에 viewcount에 선택된 row번호에 +7을 객체로 넣어준다.
-						dao.viewCount(innerTable.getSelectedRowCount() + 7);
+						Dao_Home dao = new Dao_Home(innerTable.getSelectedRow() + 7);
+						//detail에서 사용하기 위해 static으로 저장해둔다.
+						Share.postId = innerTable.getSelectedRow() + 7;
+						Share.sellId = innerTable.getSelectedRow() + 3;
+						dao.viewCount();
 						Home_detail homeDetail = new Home_detail();
 						homeDetail.setVisible(true);
 						dispose();
@@ -229,20 +233,19 @@ public class Home extends JDialog {
 	}
 	
 	// ---- Fucntion ----
+	
+	// 테이블 초기화 안할 시 데이터 쌓인다.
 	private void tableInit() {
 		outerTable.addColumn("이미지");
 		outerTable.addColumn("상세정보");
 		outerTable.setColumnCount(2);
 		
-		int colNo = 0;
-		TableColumn col = innerTable.getColumnModel().getColumn(colNo);
-//		TableColumn col = innerTable.getColumnModel().getColumn(colNo).setCellRenderer(new ImageRender());
+		TableColumn col = innerTable.getColumnModel().getColumn(0);
 		int width = 140;
 		col.setPreferredWidth(width);
 		
-		colNo = 1;
-		col = innerTable.getColumnModel().getColumn(colNo);
-		width = 290;
+		col = innerTable.getColumnModel().getColumn(1);
+		width = 330;
 		col.setPreferredWidth(width);
 		
 		// 화면 자동 조절 오프, 오프시 화면 스크롤바가 나오게 한다.
@@ -260,8 +263,14 @@ public class Home extends JDialog {
 		for (Dto_Home dto : dao.searchDB()) {
 				outerTable.addRow(new Object[] {
 						dto.getPost_image(),
-						String.format("<html><b>[%s]</b><br><br>%s<br>판매금액 : %d<br>작성자 : %s</html>",
-							dto.getSort(), dto.getTitle(), dto.getStart_price(), dto.getNickname())
+						String.format("<html>[%s]"
+								+ "<br><br>"
+								+ "%s"
+								+ "<br>판매금액 : %d원"
+								+ "<br>작성자 : %s"
+								+ "<br><h3 style = 'font-weight:normal;text-align:right;'>채팅 : %d&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;찜 : %d</html>",
+							dto.getSort(), dto.getTitle(), dto.getStart_price(), dto.getNickname(), dto.getChatCount(), dto.getWishListCount())
+						
 				});
 		}
 		// true값과 false값의 차이를 모르겠음 *******
@@ -273,6 +282,7 @@ public class Home extends JDialog {
 	}
 	
 	private void btnSearch() {
+		// 테이블 초기화 안하면 데이터들이 쌓인다.
 		tableInit();
 		
 		Dao_Home dao = new Dao_Home();
@@ -280,8 +290,14 @@ public class Home extends JDialog {
 		for (Dto_Home dto : dao.search(cbSort.getSelectedIndex(), tfSearch.getText())) {
 			outerTable.addRow(new Object[] {
 					dto.getPost_image(),
-					String.format("<html><b>[%s]</b><br><br>%s<br>판매금액 : %d<br>작성자 : %s</html>",
-							dto.getSort(), dto.getTitle(), dto.getStart_price(), dto.getNickname())
+					String.format("<html><b>[%s]</b>"
+							+ "<br><br>"
+							+ "%s"
+							+ "<br>판매금액 : %d원"
+							+ "<br>작성자 : %s"
+							+ "<br><h3 style = 'font-weight:normal;text-align:right;'>채팅 : %d&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;찜 : %d</html>",
+						dto.getSort(), dto.getTitle(), dto.getStart_price(), dto.getNickname(), dto.getChatCount(), dto.getWishListCount())
+						
 			});
 		}
 		// true값과 false값의 차이를 모르겠음 *******
@@ -294,29 +310,29 @@ public class Home extends JDialog {
 	}	
 	
 	// ImageRender는 그냥 class 이름 DefaultTableCellRenderer로 상속받는다.
-		private class ImageRender extends DefaultTableCellRenderer {
+	private class ImageRender extends DefaultTableCellRenderer {
 
-			@Override
-			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
-					int row, int column) {
-				
-				// innerTable.getColumnModel().getColumn(0)로부터 데이터 받아오기
-				byte[] bytes = (byte[]) value;
-				
-				// 이미지 객체로 전환 및 이미지 사이즈 설정
-				ImageIcon imageIcon = new ImageIcon(bytes);
-				Image img = imageIcon.getImage();
-				Image setImg = img.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
-				ImageIcon image = new ImageIcon(setImg);
-				
-				// 이미지 아이콘으로 세팅, 보더, 수직 수평, 배경 설정
-				setIcon(image);
+		@Override
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+				int row, int column) {
+			
+			// innerTable.getColumnModel().getColumn(0)로부터 데이터 받아오기
+			byte[] bytes = (byte[]) value;
+			
+			// 이미지 객체로 전환 및 이미지 사이즈 설정
+			ImageIcon imageIcon = new ImageIcon(bytes);
+			Image img = imageIcon.getImage();
+			Image setImg = img.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+			ImageIcon image = new ImageIcon(setImg);
+			
+			// 이미지 아이콘으로 세팅, 보더, 수직 수평, 배경 설정
+			setIcon(image);
 //				setBorder(UIManager.getBorder("TableHeader.cellBorder"));
-				setHorizontalAlignment(JLabel.CENTER);
-				setBackground(getBackground());
-				
-				return this;
-			}
+			setHorizontalAlignment(JLabel.CENTER);
+			setBackground(getBackground());
+			
+			return this;
 		}
+	}
 	
 }
