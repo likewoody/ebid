@@ -7,6 +7,7 @@ public class Dto_MyPage {
 	String phone;
 	String email;
 	String nickname;
+	String address;
 	String join_date;
 	String delect_date;
 	
@@ -14,12 +15,13 @@ public class Dto_MyPage {
 		
 	}
 
-	public Dto_MyPage(String userid, String pw, String phone, String email, String nickname) {
+	public Dto_MyPage(String userid, String pw, String phone, String email, String nickname, String address) {
 		this.userid = userid;
 		this.pw = pw;
 		this.phone = phone;
 		this.email = email;
 		this.nickname = nickname;
+		this.address = address;
 	}
 
 	public String getUserid() {
@@ -77,6 +79,16 @@ public class Dto_MyPage {
 	public void setDelect_date(String delect_date) {
 		this.delect_date = delect_date;
 	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	
+	
 	
 	
 

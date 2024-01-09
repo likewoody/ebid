@@ -31,10 +31,8 @@ public class MyPage extends JDialog {
 	private JButton btnAlarm;
 	private JButton btnChat;
 	private JButton btnWrite;
-	private JLabel lblMyPurchase;
 	private JLabel lblMyLike;
 	private JLabel lblMyProduct;
-	private JLabel lblMyKeyword;
 	private JLabel lblMyCutoff;
 	private JSeparator separator;
 	private JLabel lblUserImage;
@@ -43,8 +41,6 @@ public class MyPage extends JDialog {
 	private JSeparator separator_1;
 	private JSeparator separator_1_1;
 	private JSeparator separator_1_1_1;
-	private JSeparator separator_1_1_1_1;
-	private JSeparator separator_1_1_1_2;
 	private JLabel lblImage;
 
 	/**
@@ -89,14 +85,10 @@ public class MyPage extends JDialog {
 		getContentPane().add(getSeparator_1());
 		getContentPane().add(getLblMyProduct());
 		getContentPane().add(getSeparator_1_1());
-		getContentPane().add(getLblMyPurchase());
 		getContentPane().add(getSeparator_1_1_1());
 		getContentPane().add(getLblMyLike());
 		getContentPane().add(getLblMyCutoff());
-		getContentPane().add(getLblMyKeyword());
 		getContentPane().add(getSeparator_1_1_1_1());
-		getContentPane().add(getSeparator_1_1_1_1_1());
-		getContentPane().add(getSeparator_1_1_1_2());
 		getContentPane().add(getLblImage());
 
 	}
@@ -141,22 +133,6 @@ public class MyPage extends JDialog {
 		return btnWrite;
 	}
 
-	private JLabel getLblMyPurchase() {
-		if (lblMyPurchase == null) {
-			lblMyPurchase = new JLabel("- 나의 구매내역");
-			lblMyPurchase.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					MyPurchase mypurchase = new MyPurchase();
-					dispose();
-					mypurchase.setVisible(true);
-				}
-			});
-			lblMyPurchase.setBounds(20, 370, 400, 16);
-		}
-		return lblMyPurchase;
-	}
-
 	private JLabel getLblMyLike() {
 		if (lblMyLike == null) {
 			lblMyLike = new JLabel("- 나의 찜목록");
@@ -168,7 +144,7 @@ public class MyPage extends JDialog {
 					mylike.setVisible(true);
 				}
 			});
-			lblMyLike.setBounds(20, 430, 400, 16);
+			lblMyLike.setBounds(20, 370, 400, 16);
 		}
 		return lblMyLike;
 	}
@@ -189,22 +165,6 @@ public class MyPage extends JDialog {
 		return lblMyProduct;
 	}
 
-	private JLabel getLblMyKeyword() {
-		if (lblMyKeyword == null) {
-			lblMyKeyword = new JLabel("- 키워드 알림");
-			lblMyKeyword.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					MyKeyword mykeyword = new MyKeyword();
-					dispose();
-					mykeyword.setVisible(true);
-				}
-			});
-			lblMyKeyword.setBounds(20, 550, 400, 16);
-		}
-		return lblMyKeyword;
-	}
-
 	private JLabel getLblMyCutoff() {
 		if (lblMyCutoff == null) {
 			lblMyCutoff = new JLabel("- 차단 목록");
@@ -216,7 +176,7 @@ public class MyPage extends JDialog {
 					mycutoff.setVisible(true);
 				}
 			});
-			lblMyCutoff.setBounds(20, 490, 400, 16);
+			lblMyCutoff.setBounds(20, 430, 400, 16);
 		}
 		return lblMyCutoff;
 	}
@@ -283,22 +243,6 @@ public class MyPage extends JDialog {
 			separator_1_1_1.setBounds(0, 460, 430, 12);
 		}
 		return separator_1_1_1;
-	}
-
-	private JSeparator getSeparator_1_1_1_1_1() {
-		if (separator_1_1_1_1 == null) {
-			separator_1_1_1_1 = new JSeparator();
-			separator_1_1_1_1.setBounds(0, 520, 430, 12);
-		}
-		return separator_1_1_1_1;
-	}
-
-	private JSeparator getSeparator_1_1_1_2() {
-		if (separator_1_1_1_2 == null) {
-			separator_1_1_1_2 = new JSeparator();
-			separator_1_1_1_2.setBounds(0, 580, 430, 12);
-		}
-		return separator_1_1_1_2;
 	}
 
 	private JLabel getLblImage() {

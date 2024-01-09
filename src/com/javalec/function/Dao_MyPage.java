@@ -31,7 +31,7 @@ public class Dao_MyPage {
 
 		Dto_MyPage dto = null;
 
-		String A = "select userid, pw, phone, email, nickname, profile_image from user where userid = '" + Share.id
+		String A = "select userid, pw, phone, email, nickname, address,profile_image from user where userid = '" + Share.id
 				+ "'";
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -46,18 +46,19 @@ public class Dao_MyPage {
 				String phone = rs.getString(3);
 				String email = rs.getString(4);
 				String nickname = rs.getString(5);
+				String address = rs.getString(6);
 
 				// file
 				Share.filename = Share.filename + 1;
 				File file = new File(Integer.toString(Share.filename));
 				FileOutputStream output = new FileOutputStream(file);
-				InputStream input = rs.getBinaryStream(6);
+				InputStream input = rs.getBinaryStream(7);
 				byte[] buffer = new byte[1024];
 				while (input.read(buffer) > 0) {
 					output.write(buffer);
 				}
 
-				dto = new Dto_MyPage(userid, pw, phone, email, nickname);
+				dto = new Dto_MyPage(userid, pw, phone, email, nickname,address);
 			}
 			conn_mysql.close();
 
@@ -125,6 +126,28 @@ public class Dao_MyPage {
 
 			ps = conn_mysql.prepareStatement(A + B);
 			ps.setString(1, pw);
+			ps.executeUpdate();
+
+			conn_mysql.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void updateAddress(String address) {
+		PreparedStatement ps = null;
+
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection conn_mysql = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+			Statement stmt_mysql = conn_mysql.createStatement();
+
+			String A = "update user set address = ? ";
+			String B = "where userid = '" + Share.id + "'";
+
+			ps = conn_mysql.prepareStatement(A + B);
+			ps.setString(1, address);
 			ps.executeUpdate();
 
 			conn_mysql.close();

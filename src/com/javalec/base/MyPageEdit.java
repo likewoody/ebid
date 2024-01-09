@@ -22,6 +22,7 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import javax.swing.DefaultComboBoxModel;
 
 public class MyPageEdit extends JFrame {
 
@@ -59,6 +60,7 @@ public class MyPageEdit extends JFrame {
 	public final String pw_mysql = Share.dbPass;
 	private JLabel lblPw;
 	private JButton btnEditNick_1;
+	private JTextField tfprintadd;
 	private JLabel lblImage;
 
 	/**
@@ -120,7 +122,8 @@ public class MyPageEdit extends JFrame {
 		getContentPane().add(getTfPhone());
 		getContentPane().add(getLblPw());
 		getContentPane().add(getBtnEditNick_1());
-		getContentPane().add(getLblImage());
+		getContentPane().add(getTfprintadd());
+		getContentPane().add(getLblImage_1());
 
 	}
 
@@ -199,6 +202,11 @@ public class MyPageEdit extends JFrame {
 	private JButton getBtnEditImage() {
 		if (btnEditImage == null) {
 			btnEditImage = new JButton("사진수정");
+			btnEditImage.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					editImage();
+				}
+			});
 			btnEditImage.setBounds(267, 190, 88, 29);
 		}
 		return btnEditImage;
@@ -268,7 +276,7 @@ public class MyPageEdit extends JFrame {
 	private JLabel getLblUserNick_5() {
 		if (lblUserNick_5 == null) {
 			lblUserNick_5 = new JLabel("주소 : ");
-			lblUserNick_5.setBounds(42, 550, 61, 16);
+			lblUserNick_5.setBounds(42, 570, 61, 16);
 		}
 		return lblUserNick_5;
 	}
@@ -276,7 +284,14 @@ public class MyPageEdit extends JFrame {
 	private JComboBox getCbAddress1() {
 		if (cbAddress1 == null) {
 			cbAddress1 = new JComboBox();
-			cbAddress1.setBounds(115, 550, 100, 30);
+			cbAddress1.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					updatecbAddress2();
+				}
+			});
+			cbAddress1.setModel(new DefaultComboBoxModel(new String[] {"-", "서울시", "경기도"}));
+
+			cbAddress1.setBounds(115, 580, 100, 30);
 		}
 		return cbAddress1;
 	}
@@ -284,7 +299,9 @@ public class MyPageEdit extends JFrame {
 	private JComboBox getCbAddress2() {
 		if (cbAddress2 == null) {
 			cbAddress2 = new JComboBox();
-			cbAddress2.setBounds(220, 550, 100, 30);
+			cbAddress2.setModel(new DefaultComboBoxModel(new String[] { "강남구", "동작구" }));
+			cbAddress2.setBounds(220, 580, 100, 30);
+			updatecbAddress2();
 		}
 		return cbAddress2;
 	}
@@ -349,7 +366,12 @@ public class MyPageEdit extends JFrame {
 	private JButton getBtnEditAddress() {
 		if (btnEditAddress == null) {
 			btnEditAddress = new JButton("수정");
-			btnEditAddress.setBounds(324, 550, 100, 30);
+			btnEditAddress.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					updateAddress();
+				}
+			});
+			btnEditAddress.setBounds(324, 580, 100, 30);
 		}
 		return btnEditAddress;
 	}
@@ -393,7 +415,17 @@ public class MyPageEdit extends JFrame {
 		return btnEditNick_1;
 	}
 
-	private JLabel getLblImage() {
+	private JTextField getTfprintadd() {
+		if (tfprintadd == null) {
+			tfprintadd = new JTextField();
+			tfprintadd.setEditable(false);
+			tfprintadd.setColumns(10);
+			tfprintadd.setBounds(115, 550, 200, 30);
+		}
+		return tfprintadd;
+	}
+
+	private JLabel getLblImage_1() {
 		if (lblImage == null) {
 			lblImage = new JLabel("");
 			lblImage.setIcon(new ImageIcon(MyPageEdit.class.getResource("/com/javalec/images/mainFrame.png")));
@@ -411,6 +443,7 @@ public class MyPageEdit extends JFrame {
 		tfNick.setText(dto.getNickname());
 		tfPhone.setText(dto.getPhone());
 		tfEmail.setText(dto.getEmail());
+		tfprintadd.setText(dto.getAddress().substring(0, 3) + " " + dto.getAddress().substring(3));
 
 		String filePath = Integer.toString(Share.filename);
 		// 파일이 존재하는지 확인
@@ -451,6 +484,40 @@ public class MyPageEdit extends JFrame {
 		tfEditPw.setText("");
 		insertInfo();
 		tfEditPw.setEditable(false);
+	}
+
+	private void editImage() {
+
+	}
+
+	private void updatecbAddress2() {
+		String selectedAddress1 = (String) cbAddress1.getSelectedItem();
+		DefaultComboBoxModel<String> address2Model = new DefaultComboBoxModel<>();
+
+		if ("서울시".equals(selectedAddress1)) {
+			address2Model.addElement("강남구");
+			address2Model.addElement("동작구");
+			address2Model.addElement("강서구");
+			address2Model.addElement("강동구");
+			address2Model.addElement("강북구");
+		} else if ("경기도".equals(selectedAddress1)) {
+			address2Model.addElement("하남시");
+			address2Model.addElement("구리시");
+			address2Model.addElement("성남시");
+			address2Model.addElement("용인시");
+			address2Model.addElement("고양시");
+		}
+
+		cbAddress2.setModel(address2Model);
+	}
+
+	private void updateAddress() {
+		Dao_MyPage dao = new Dao_MyPage();
+		String add1 = (String) cbAddress1.getSelectedItem();
+		String add2 = (String) cbAddress2.getSelectedItem();
+		String address = add1.trim().concat(add2.trim());
+		dao.updateAddress(address);
+		JOptionPane.showMessageDialog(null, "주소가 수정되었습니다.");
 	}
 
 }// End
