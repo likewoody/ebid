@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JButton;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JList;
 import javax.swing.JTextField;
@@ -14,6 +15,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import javax.swing.JSeparator;
 
 public class MyProduct extends JFrame {
 
@@ -27,6 +34,10 @@ public class MyProduct extends JFrame {
 	private JLabel lblImage;
 	private JScrollPane scrollPane;
 	private JTable innertable;
+	
+	// Table
+		private final DefaultTableModel outertable = new DefaultTableModel();
+		private JSeparator separator;
 
 	/**
 	 * Launch the application.
@@ -48,6 +59,12 @@ public class MyProduct extends JFrame {
 	 * Create the frame.
 	 */
 	public MyProduct() {
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowActivated(WindowEvent e) {
+				tableInit();
+			}
+		});
 		setBounds(100, 100, 430, 732);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
@@ -58,6 +75,7 @@ public class MyProduct extends JFrame {
 		getContentPane().add(getBtnWrite());
 		getContentPane().add(getBtnBack());
 		getContentPane().add(getScrollPane());
+		getContentPane().add(getSeparator());
 		getContentPane().add(getLblImage());
 
 	}
@@ -121,7 +139,8 @@ public class MyProduct extends JFrame {
 	private JScrollPane getScrollPane() {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
-			scrollPane.setBounds(20, 150, 380, 450);
+			scrollPane.setBorder(BorderFactory.createEmptyBorder());
+			scrollPane.setBounds(0, 150, 430, 470);
 			scrollPane.setViewportView(getInnertable());
 		}
 		return scrollPane;
@@ -129,7 +148,46 @@ public class MyProduct extends JFrame {
 	private JTable getInnertable() {
 		if (innertable == null) {
 			innertable = new JTable();
+			innertable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			innertable.setModel(outertable);
 		}
 		return innertable;
 	}
-}
+	private JSeparator getSeparator() {
+		if (separator == null) {
+			separator = new JSeparator();
+			separator.setBounds(0, 139, 430, 12);
+		}
+		return separator;
+	}
+	
+	// -------------function
+	
+	private void tableInit() {
+
+		// Coulmn명 초기화
+		outertable.addColumn("상품 이미지");
+		outertable.addColumn("상품 정보");
+		outertable.setColumnCount(2);
+
+		int colNo = 0;
+		TableColumn col = innertable.getColumnModel().getColumn(colNo);
+		int width = 150;
+		col.setPreferredWidth(width);
+
+		colNo = 1;
+		col = innertable.getColumnModel().getColumn(colNo);
+		width = 280;
+		col.setPreferredWidth(width);
+		
+		int i = outertable.getRowCount();
+
+		for (int j = 0; j < i; j++) {
+			outertable.removeRow(0);
+		}
+
+		
+	}
+	
+	
+} //End
