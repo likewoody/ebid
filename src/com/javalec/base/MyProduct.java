@@ -18,8 +18,13 @@ import java.awt.event.ActionEvent;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+
+import com.javalec.function.*;
+
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+
 import javax.swing.JSeparator;
 
 public class MyProduct extends JFrame {
@@ -34,10 +39,10 @@ public class MyProduct extends JFrame {
 	private JLabel lblImage;
 	private JScrollPane scrollPane;
 	private JTable innertable;
-	
+
 	// Table
-		private final DefaultTableModel outertable = new DefaultTableModel();
-		private JSeparator separator;
+	private final DefaultTableModel outertable = new DefaultTableModel();
+	private JSeparator separator;
 
 	/**
 	 * Launch the application.
@@ -63,6 +68,7 @@ public class MyProduct extends JFrame {
 			@Override
 			public void windowActivated(WindowEvent e) {
 				tableInit();
+				searchAction();
 			}
 		});
 		setBounds(100, 100, 430, 732);
@@ -79,6 +85,7 @@ public class MyProduct extends JFrame {
 		getContentPane().add(getLblImage());
 
 	}
+
 	private JButton getBtnHome() {
 		if (btnHome == null) {
 			btnHome = new JButton("홈");
@@ -86,6 +93,7 @@ public class MyProduct extends JFrame {
 		}
 		return btnHome;
 	}
+
 	private JButton getBtnMy() {
 		if (btnMy == null) {
 			btnMy = new JButton("개인");
@@ -93,6 +101,7 @@ public class MyProduct extends JFrame {
 		}
 		return btnMy;
 	}
+
 	private JButton getBtnAlarm() {
 		if (btnAlarm == null) {
 			btnAlarm = new JButton("알림");
@@ -100,6 +109,7 @@ public class MyProduct extends JFrame {
 		}
 		return btnAlarm;
 	}
+
 	private JButton getBtnChat() {
 		if (btnChat == null) {
 			btnChat = new JButton("채팅");
@@ -107,6 +117,7 @@ public class MyProduct extends JFrame {
 		}
 		return btnChat;
 	}
+
 	private JButton getBtnWrite() {
 		if (btnWrite == null) {
 			btnWrite = new JButton("글쓰기");
@@ -114,6 +125,7 @@ public class MyProduct extends JFrame {
 		}
 		return btnWrite;
 	}
+
 	private JButton getBtnBack() {
 		if (btnBack == null) {
 			btnBack = new JButton("뒤로가기");
@@ -128,6 +140,7 @@ public class MyProduct extends JFrame {
 		}
 		return btnBack;
 	}
+
 	private JLabel getLblImage() {
 		if (lblImage == null) {
 			lblImage = new JLabel("");
@@ -136,6 +149,7 @@ public class MyProduct extends JFrame {
 		}
 		return lblImage;
 	}
+
 	private JScrollPane getScrollPane() {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
@@ -145,6 +159,7 @@ public class MyProduct extends JFrame {
 		}
 		return scrollPane;
 	}
+
 	private JTable getInnertable() {
 		if (innertable == null) {
 			innertable = new JTable();
@@ -153,6 +168,7 @@ public class MyProduct extends JFrame {
 		}
 		return innertable;
 	}
+
 	private JSeparator getSeparator() {
 		if (separator == null) {
 			separator = new JSeparator();
@@ -160,9 +176,9 @@ public class MyProduct extends JFrame {
 		}
 		return separator;
 	}
-	
+
 	// -------------function
-	
+
 	private void tableInit() {
 
 		// Coulmn명 초기화
@@ -179,15 +195,33 @@ public class MyProduct extends JFrame {
 		col = innertable.getColumnModel().getColumn(colNo);
 		width = 280;
 		col.setPreferredWidth(width);
-		
+
 		int i = outertable.getRowCount();
 
 		for (int j = 0; j < i; j++) {
 			outertable.removeRow(0);
 		}
 
-		
 	}
-	
-	
-} //End
+
+	private void searchAction() {
+		Dao_MyProduct dao = new Dao_MyProduct();
+		ArrayList<Dto_MyProduct> dtolist = dao.searchDB();
+
+		int listCount = dtolist.size();
+
+		for (int i = 0; i < listCount; i++) {
+
+			String[] qTxt = { null,
+					String.format("<html><b>[%s]</b>"
+							+ "<br><br>"
+							+ "%s<br>"
+							+ "가격 : %s<br>"
+							+ "판매자 : %s </html>", dtolist.get(i).getPost_status(), dtolist.get(i).getTitle(),
+							Integer.toString(dtolist.get(i).getPrice()), dtolist.get(i).getNickname()) };
+			outertable.addRow(qTxt);
+			innertable.setRowHeight(i, 150);
+		}
+	}
+
+} // End
