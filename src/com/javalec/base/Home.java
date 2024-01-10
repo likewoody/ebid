@@ -55,7 +55,6 @@ public class Home extends JDialog {
 	private JLabel homeBackImage;
 	private JButton btnHome;
 	private JButton btnMypage;
-	private JButton btnAlarm;
 	private JButton btnChat;
 	private JButton btnWrite;
 	private JTextField tfSearch;
@@ -64,6 +63,8 @@ public class Home extends JDialog {
 	private JButton btnSearch;
 	private JTable innerTable;
 	private final DefaultTableModel outerTable = new DefaultTableModel() ;
+	private JTextField tfSe;
+	private JButton btnSe;
 
 	/**
 	 * Launch the application.
@@ -98,13 +99,12 @@ public class Home extends JDialog {
 		contentPanel.setLayout(null);
 		contentPanel.add(getBtnHome());
 		contentPanel.add(getBtnMypage());
-		contentPanel.add(getBtnAlarm());
 		contentPanel.add(getBtnChat());
 		contentPanel.add(getBtnWrite());
-		contentPanel.add(getTfSearch());
 		contentPanel.add(getScrollPane());
 		contentPanel.add(getCbSort());
-		contentPanel.add(getBtnSearch());
+		contentPanel.add(getTfSe());
+		contentPanel.add(getBtnSe());
 		contentPanel.add(getHomeBackImage());
 	}
 	
@@ -119,8 +119,15 @@ public class Home extends JDialog {
 	private JButton getBtnHome() {
 		if (btnHome == null) {
 			btnHome = new JButton("홈");
-			btnHome.setBounds(20, 55, 70, 34);
+			btnHome.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Home home = new Home();
+					home.setVisible(true);
+					dispose();
+				}
+			});
 			btnHome.setFont(new Font("Helvetica", Font.PLAIN, 14));
+			btnHome.setBounds(30, 55, 70, 34);
 			
 //			btnHome.setBorder(new LineBorder(new Color(214, 203, 216), 2));
 		}
@@ -129,26 +136,24 @@ public class Home extends JDialog {
 	private JButton getBtnMypage() {
 		if (btnMypage == null) {
 			btnMypage = new JButton("개인");
-			btnMypage.setBounds(100, 55, 70, 34);
+			btnMypage.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					MyPage mypage = new MyPage();
+					mypage.setVisible(true);
+					dispose();
+				}
+			});
 			btnMypage.setFont(new Font("Helvetica", Font.PLAIN, 14));
+			btnMypage.setBounds(130, 55, 70, 34);
 //			btnMypage.setBorder(new LineBorder(new Color(214, 203, 216), 2));
 		}
 		return btnMypage;
 	}
-	private JButton getBtnAlarm() {
-		if (btnAlarm == null) {
-			btnAlarm = new JButton("알림");
-			btnAlarm.setBounds(180, 55, 70, 34);
-			btnAlarm.setFont(new Font("Helvetica", Font.PLAIN, 14));
-//			btnAlarm.setBorder(new LineBorder(new Color(214, 203, 216), 2));
-		}
-		return btnAlarm;
-	}
 	private JButton getBtnChat() {
 		if (btnChat == null) {
 			btnChat = new JButton("채팅");
-			btnChat.setBounds(260, 55, 70, 34);
 			btnChat.setFont(new Font("Helvetica", Font.PLAIN, 14));
+			btnChat.setBounds(230, 55, 70, 34);
 //			btnChat.setBorder(new LineBorder(new Color(214, 203, 216), 2));
 		}
 		return btnChat;
@@ -156,33 +161,16 @@ public class Home extends JDialog {
 	private JButton getBtnWrite() {
 		if (btnWrite == null) {
 			btnWrite = new JButton("글쓰기");
-			btnWrite.setBounds(340, 55, 70, 34);
+			btnWrite.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Writing wrt = new Writing();
+				}
+			});
 			btnWrite.setFont(new Font("Helvetica", Font.PLAIN, 14));
+			btnWrite.setBounds(330, 55, 70, 34);
 //			btnWrite.setBorder(new LineBorder(new Color(214, 203, 216), 2));
 		}
 		return btnWrite;
-	}
-	private JTextField getTfSearch() {
-		if (tfSearch == null) {
-			tfSearch = new JTextField();
-			tfSearch.setBounds(95, 640, 240, 35);
-			tfSearch.setColumns(10);
-			tfSearch.setBorder(new LineBorder(new Color(214, 203, 216), 2));
-		}
-		return tfSearch;
-	}
-	private JButton getBtnSearch() {
-		if (btnSearch == null) {
-			btnSearch = new JButton("검색");
-			btnSearch.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					btnSearch();
-				}
-			});
-			btnSearch.setBounds(342, 642, 70, 34);
-			
-		}
-		return btnSearch;
 	}
 	private JScrollPane getScrollPane() {
 		if (scrollPane == null) {
@@ -192,6 +180,30 @@ public class Home extends JDialog {
 		}
 		return scrollPane;
 	}
+	
+	private JTextField getTfSe() {
+		if (tfSe == null) {
+			tfSe = new JTextField();
+			tfSe.setBounds(99, 642, 220, 30);
+			tfSe.setColumns(10);
+			tfSe.setBorder(new LineBorder(new Color(214, 203, 216), 2));
+		}
+		return tfSe;
+	}
+	private JButton getBtnSe() {
+		if (btnSe == null) {
+			btnSe = new JButton("검색");
+			btnSe.setFont(new Font("Lucida Grande", Font.BOLD, 14));
+			btnSe.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					btnSearch();
+				}
+			});
+			btnSe.setBounds(330, 641, 90, 34);
+		}
+		return btnSe;
+	}
+	
 	private JTable getInnerTable() {
 		if (innerTable == null) {
 			innerTable = new JTable();
@@ -236,8 +248,8 @@ public class Home extends JDialog {
 	
 	// 테이블 초기화 안할 시 데이터 쌓인다.
 	private void tableInit() {
-		outerTable.addColumn("이미지");
-		outerTable.addColumn("상세정보");
+		outerTable.addColumn("");
+		outerTable.addColumn("");
 		outerTable.setColumnCount(2);
 		
 		TableColumn col = innerTable.getColumnModel().getColumn(0);
@@ -266,8 +278,9 @@ public class Home extends JDialog {
 						String.format("<html>[%s]"
 								+ "<br><br>"
 								+ "%s"
-								+ "<br>판매금액 : %d원"
-								+ "<br>작성자 : %s"
+								+ "<br>"
+								+ "<br>판매금액 : %,d원"
+								+ "<br>작성자 &nbsp;&nbsp;&nbsp;: %s"
 								+ "<br><h3 style = 'font-weight:normal;text-align:right;'>채팅 : %d&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;찜 : %d</html>",
 							dto.getSort(), dto.getTitle(), dto.getStart_price(), dto.getNickname(), dto.getChatCount(), dto.getWishListCount())
 						
@@ -287,14 +300,15 @@ public class Home extends JDialog {
 		
 		Dao_Home dao = new Dao_Home();
 		
-		for (Dto_Home dto : dao.search(cbSort.getSelectedIndex(), tfSearch.getText())) {
+		for (Dto_Home dto : dao.search(cbSort.getSelectedIndex(), tfSe.getText())) {
 			outerTable.addRow(new Object[] {
 					dto.getPost_image(),
 					String.format("<html><b>[%s]</b>"
 							+ "<br><br>"
 							+ "%s"
-							+ "<br>판매금액 : %d원"
-							+ "<br>작성자 : %s"
+							+ "<br>"
+							+ "<br>판매금액 : %,d원"
+							+ "<br>작성자 &nbsp;&nbsp;&nbsp;: %s"
 							+ "<br><h3 style = 'font-weight:normal;text-align:right;'>채팅 : %d&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;찜 : %d</html>",
 						dto.getSort(), dto.getTitle(), dto.getStart_price(), dto.getNickname(), dto.getChatCount(), dto.getWishListCount())
 						

@@ -44,7 +44,6 @@ public class Home_detail extends JDialog {
 	private JLabel homeBackImage;
 	private JButton btnMypage;
 	private JButton btnHome;
-	private JButton btnAlarm;
 	private JButton btnChat;
 	private JButton btnWrite;
 	private JTextField tfOption;
@@ -60,7 +59,6 @@ public class Home_detail extends JDialog {
 	private JLabel lbUserRating;
 	private JLabel lbPrice;
 	private JLabel lbClickWish;
-	private JLabel lbChangeWish_1;
 
 	/**
 	 * Launch the application.
@@ -96,7 +94,6 @@ public class Home_detail extends JDialog {
 		contentPanel.setLayout(null);
 		contentPanel.add(getBtnHome());
 		contentPanel.add(getBtnMypage());
-		contentPanel.add(getBtnAlarm());
 		contentPanel.add(getBtnChat());
 		contentPanel.add(getBtnWrite());
 		contentPanel.add(getTfOption());
@@ -107,7 +104,6 @@ public class Home_detail extends JDialog {
 		contentPanel.add(getLbPrice());
 		contentPanel.add(getLbUserRating());
 		contentPanel.add(getLbDescription());
-		contentPanel.add(getLbChangeWish_1());
 		contentPanel.add(getSeparator());
 		contentPanel.add(getScrollPane());
 		contentPanel.add(getLbClickWish());
@@ -117,7 +113,11 @@ public class Home_detail extends JDialog {
 		if (homeBackImage == null) {
 			homeBackImage = new JLabel("");
 			homeBackImage.setBounds(0, 0, 430, 704);
-			homeBackImage.setIcon(new ImageIcon(Main.class.getResource("/com/javalec/images/HomeDetailBackground.png")));
+			
+			Dao_Home dao = new Dao_Home();		
+			// 불러온 wish_status가 1이라면 초기 배경값 설정
+			if (dao.findWishStatus() == 1) homeBackImage.setIcon(new ImageIcon(Main.class.getResource("/com/javalec/images/changeWishListColor.png")));
+			else homeBackImage.setIcon(new ImageIcon(Main.class.getResource("/com/javalec/images/HomeDetailBackground.png")));
 		}
 		return homeBackImage;
 	}
@@ -132,7 +132,7 @@ public class Home_detail extends JDialog {
 				}
 			});
 			btnHome.setFont(new Font("Helvetica", Font.PLAIN, 14));
-			btnHome.setBounds(20, 55, 70, 34);
+			btnHome.setBounds(30, 55, 70, 34);
 			
 //			btnHome.setBorder(new LineBorder(new Color(214, 203, 216), 2));
 		}
@@ -141,26 +141,24 @@ public class Home_detail extends JDialog {
 	private JButton getBtnMypage() {
 		if (btnMypage == null) {
 			btnMypage = new JButton("개인");
+			btnMypage.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					MyPage mypage = new MyPage();
+					mypage.setVisible(true);
+					dispose();
+				}
+			});
 			btnMypage.setFont(new Font("Helvetica", Font.PLAIN, 14));
-			btnMypage.setBounds(100, 55, 70, 34);
+			btnMypage.setBounds(130, 55, 70, 34);
 //			btnMypage.setBorder(new LineBorder(new Color(214, 203, 216), 2));
 		}
 		return btnMypage;
-	}
-	private JButton getBtnAlarm() {
-		if (btnAlarm == null) {
-			btnAlarm = new JButton("알림");
-			btnAlarm.setFont(new Font("Helvetica", Font.PLAIN, 14));
-			btnAlarm.setBounds(180, 55, 70, 34);
-//			btnAlarm.setBorder(new LineBorder(new Color(214, 203, 216), 2));
-		}
-		return btnAlarm;
 	}
 	private JButton getBtnChat() {
 		if (btnChat == null) {
 			btnChat = new JButton("채팅");
 			btnChat.setFont(new Font("Helvetica", Font.PLAIN, 14));
-			btnChat.setBounds(260, 55, 70, 34);
+			btnChat.setBounds(230, 55, 70, 34);
 //			btnChat.setBorder(new LineBorder(new Color(214, 203, 216), 2));
 		}
 		return btnChat;
@@ -168,8 +166,13 @@ public class Home_detail extends JDialog {
 	private JButton getBtnWrite() {
 		if (btnWrite == null) {
 			btnWrite = new JButton("글쓰기");
+			btnWrite.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Writing wrt = new Writing();
+				}
+			});
 			btnWrite.setFont(new Font("Helvetica", Font.PLAIN, 14));
-			btnWrite.setBounds(340, 55, 70, 34);
+			btnWrite.setBounds(330, 55, 70, 34);
 //			btnWrite.setBorder(new LineBorder(new Color(214, 203, 216), 2));
 		}
 		return btnWrite;
@@ -239,7 +242,7 @@ public class Home_detail extends JDialog {
 	private JLabel getLbUserNick() {
 		if (lbUserNick == null) {
 			lbUserNick = new JLabel("");
-			lbUserNick.setFont(new Font("Lucida Grande", Font.BOLD, 13));
+			lbUserNick.setFont(new Font("Lucida Grande", Font.BOLD, 14));
 			lbUserNick.setBounds(105, 303, 132, 16);
 		}
 		return lbUserNick;
@@ -255,7 +258,7 @@ public class Home_detail extends JDialog {
 	}
 	private JLabel getLbBid() {
 		if (lbBid == null) {
-			lbBid = new JLabel("입찰하기");
+			lbBid = new JLabel("채팅");
 			lbBid.setHorizontalAlignment(SwingConstants.CENTER);
 			lbBid.setBounds(247, 643, 160, 37);
 		}
@@ -288,17 +291,29 @@ public class Home_detail extends JDialog {
 	}
 	private JLabel getLbClickWish() {
 		if (lbClickWish == null) {
-			lbClickWish = new JLabel("New label");
-			lbClickWish.setBounds(22, 643, 54, 34);
+			lbClickWish = new JLabel("");
+			lbClickWish.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					Dao_Home dao = new Dao_Home();
+					
+					// findWishStatus가 0이라면 1로 바꿔주면서 이미지를 바꿔준다.
+					// 그리고 데이터가 없다면 데이터를 생성해준다.
+					if (dao.findWishStatus() == 0) {
+						dao.updateWishStatus();
+						dao.insertWish();
+						homeBackImage.setIcon(new ImageIcon(Main.class.getResource("/com/javalec/images/changeWishListColor.png")));
+					}
+					else {
+						dao.updateWishStatus();
+						homeBackImage.setIcon(new ImageIcon(Main.class.getResource("/com/javalec/images/homedetailBackground.png")));
+					}
+					
+				}
+			});
+			lbClickWish.setBounds(20, 641, 56, 36);
 		}
 		return lbClickWish;
-	}
-	private JLabel getLbChangeWish_1() {
-		if (lbChangeWish_1 == null) {
-			lbChangeWish_1 = new JLabel("New label");
-			lbChangeWish_1.setBounds(0, 0, 54, 34);
-		}
-		return lbChangeWish_1;
 	}
 	
 	// ---- Function ----
@@ -390,6 +405,11 @@ public class Home_detail extends JDialog {
 		
 		// 별점 설정
 		lbUserRating.setText(dao.findUserRating());
+		
+	}
+	
+	private void clickHeart() {
+		
 		
 	}
 	
