@@ -31,8 +31,8 @@ public class Dao_MyPage {
 
 		Dto_MyPage dto = null;
 
-		String A = "select userid, pw, phone, email, nickname, address,profile_image from user where userid = '" + Share.id
-				+ "'";
+		String A = "select userid, pw, phone, email, nickname, address,profile_image from user where userid = '"
+				+ Share.id + "'";
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection conn_mysql = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
@@ -50,7 +50,7 @@ public class Dao_MyPage {
 
 				// file
 				Share.filename = Share.filename + 1;
-				File file = new File(Integer.toString(Share.filename));
+				File file = new File("./" + Share.filename);
 				FileOutputStream output = new FileOutputStream(file);
 				InputStream input = rs.getBinaryStream(7);
 				byte[] buffer = new byte[1024];
@@ -58,7 +58,7 @@ public class Dao_MyPage {
 					output.write(buffer);
 				}
 
-				dto = new Dto_MyPage(userid, pw, phone, email, nickname,address);
+				dto = new Dto_MyPage(userid, pw, phone, email, nickname, address);
 			}
 			conn_mysql.close();
 

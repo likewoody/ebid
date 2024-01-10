@@ -44,6 +44,8 @@ public class MyLike extends JFrame {
 	private JLabel lblImage;
 	private JTable innertable;
 
+	ArrayList<Dto_Like> dtolist = null;
+
 	// Table
 	private final DefaultTableModel outertable = new DefaultTableModel();
 
@@ -222,12 +224,12 @@ public class MyLike extends JFrame {
 
 	private void searchAction() {
 		Dao_Like dao = new Dao_Like();
-		ArrayList<Dto_Like> dtolist = dao.searchDB();
+
+		dtolist = dao.searchDB();
 
 		int listCount = dtolist.size();
 
 		for (int i = 0; i < listCount; i++) {
-
 			String[] qTxt = { null,
 					String.format("<html><b>[%s]</b>" + "<br><br>" + "%s<br>" + "가격 : %s<br>" + "판매자 : %s </html>",
 							dtolist.get(i).getPost_status(), dtolist.get(i).getTitle(),
@@ -241,7 +243,7 @@ public class MyLike extends JFrame {
 		Dao_Like dao = new Dao_Like();
 
 		int i = innertable.getSelectedRow();
-		String like = (String) innertable.getValueAt(i, 1);
+		int like = dtolist.get(i).getPostid();
 		dao.deleteLike(like);
 
 		JOptionPane.showMessageDialog(null, "상품이 찜목록에서 삭제 되었습니다.");
