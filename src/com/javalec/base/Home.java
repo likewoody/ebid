@@ -14,6 +14,7 @@ import java.awt.geom.RoundRectangle2D;
 import java.io.File;
 import java.util.ArrayList;
 
+import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -65,6 +66,8 @@ public class Home extends JDialog {
 	private final DefaultTableModel outerTable = new DefaultTableModel() ;
 	private JTextField tfSe;
 	private JButton btnSe;
+	// btn change color를 위함
+	private JButton activeButton;
 
 	/**
 	 * Launch the application.
@@ -152,6 +155,13 @@ public class Home extends JDialog {
 	private JButton getBtnChat() {
 		if (btnChat == null) {
 			btnChat = new JButton("채팅");
+			btnChat.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Chat chat = new Chat();
+					chat.setVisible(true);
+					dispose();
+				}
+			});
 			btnChat.setFont(new Font("Helvetica", Font.PLAIN, 14));
 			btnChat.setBounds(230, 55, 70, 34);
 //			btnChat.setBorder(new LineBorder(new Color(214, 203, 216), 2));
@@ -177,6 +187,7 @@ public class Home extends JDialog {
 			scrollPane = new JScrollPane();
 			scrollPane.setBounds(0, 97, 430, 531);
 			scrollPane.setViewportView(getInnerTable());
+			scrollPane.setBorder(BorderFactory.createEmptyBorder());
 		}
 		return scrollPane;
 	}
@@ -215,9 +226,12 @@ public class Home extends JDialog {
 					if (e.getClickCount() == 2) {
 						// postid가 7부터 시작이기에 viewcount에 선택된 row번호에 +7을 객체로 넣어준다.
 						Dao_Home dao = new Dao_Home(innerTable.getSelectedRow() + 7);
-						//detail에서 사용하기 위해 static으로 저장해둔다.
+						
+						// detail에서 사용하기 위함
 						Share.postId = innerTable.getSelectedRow() + 7;
 						Share.sellId = innerTable.getSelectedRow() + 3;
+						Share.post_status = dao.findPostStatus();
+						
 						dao.viewCount();
 						Home_detail homeDetail = new Home_detail();
 						homeDetail.setVisible(true);
@@ -348,5 +362,4 @@ public class Home extends JDialog {
 			return this;
 		}
 	}
-	
 }

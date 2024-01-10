@@ -16,4 +16,7 @@ public class Share {
 	// User profile Image를 가져오기 위함
 	public static int sellId = 0;
 	
+	// post_status 저장
+	public static String post_status;
+	
 }
