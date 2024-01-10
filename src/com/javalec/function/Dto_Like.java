@@ -77,6 +77,7 @@ public class Dto_Like {
 	public void setPostid(int postid) {
 		this.postid = postid;
 	}
+
 	
 	
 
