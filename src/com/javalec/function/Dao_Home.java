@@ -27,7 +27,7 @@ public class Dao_Home {
 	String title; // 포스트 제목
 	int start_price;
 	String nickname;
-	String sort;
+	String post_status;
 	int max_price;
 	int viewCount;
 	String desc;
@@ -40,6 +40,7 @@ public class Dao_Home {
 	public Dao_Home(int postId) {
 		this.postId = postId;
 	}
+	
 	
 //	public Dao_Home(byte[] post_image, String title, String nickname, String desc, int start_price) {
 //		this.post_image = post_image;
@@ -61,7 +62,7 @@ public class Dao_Home {
 			Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
 			Statement st = con.createStatement();
 			
-			String query = "SELECT max_image.post_image, p.title, p.price, u.nickname, p.sort, p.postid, "
+			String query = "SELECT max_image.post_image, p.title, p.price, u.nickname, p.post_status, p.postid, "
 					+ "    ( "
 					+ "        SELECT COUNT(DISTINCT w.postid) "
 					+ "        FROM wish_list w "
@@ -111,7 +112,7 @@ public class Dao_Home {
 		
 		// SQL 구문
 		// 타이틀로 검색
-		String A = "SELECT max_image.post_image, p.title, p.price, u.nickname, p.sort, p.postid, "
+		String A = "SELECT max_image.post_image, p.title, p.price, u.nickname, p.post_status, p.postid, "
 				+ "    ( "
 				+ "        SELECT COUNT(DISTINCT w.postid) "
 				+ "        FROM wish_list w "
@@ -139,7 +140,7 @@ public class Dao_Home {
 				+ "where p.title like '%" + searchText + "%'";
 		
 		// 닉네임으로 검색
-		String B = "SELECT max_image.post_image, p.title, p.price, u.nickname, p.sort, p.postid, "
+		String B = "SELECT max_image.post_image, p.title, p.price, u.nickname, p.post_status, p.postid, "
 				+ "    ( "
 				+ "        SELECT COUNT(DISTINCT w.postid) "
 				+ "        FROM wish_list w "
@@ -202,6 +203,7 @@ public class Dao_Home {
 
 		return dtoList; // 불러온 데이터가 입력 된 dtoList 리턴
 	}
+	
 	// serach image for detail class
 	public ArrayList<Dto_Home> findPostImage() {
 		ArrayList<Dto_Home> dtoList = new ArrayList<Dto_Home>();
@@ -259,6 +261,80 @@ public class Dao_Home {
 			e.printStackTrace();
 		}
 		return dtoList;
+	}
+	
+	
+	// 데이터가 없다면 wish_list에 입력
+	public void insertWish() {
+		PreparedStatement ps = null;
+		
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+			
+			String query = "INSERT INTO wish_list (userid, postid, wish_status) VALUES (?, ?, ?)";
+
+			ps = con.prepareStatement(query);
+			ps.setString(1, Share.id);
+			ps.setInt(2, Share.postId);
+			ps.setInt(3, 1);
+			
+			ps.executeUpdate();
+			con.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	// 데이터가 있다면 update를 통해 데이터 수정
+	public void updateWishStatus() {
+		
+		PreparedStatement ps = null;
+		
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+			
+			String query = "update wish_list set wish_status = "
+					+ "					case "
+					+ "					when wish_status = 0 then 1 "
+					+ "					when wish_status = 1 then 0 end "
+					+ "					where userid = '" + Share.id + "' and postid = " + Share.postId;
+			
+			ps = con.prepareStatement(query);
+			
+			ps.executeUpdate();
+			
+			con.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	// 클릭한 wish_list의 status를 불러온다.
+	public int findWishStatus() {
+		int Flag = 0;
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+			Statement st = con.createStatement();
+			
+			String query = "select w.wish_status from wish_list w, user u where w.userid = u.userid and w.userid = '" + Share.id + "' and w.postid = " + Share.postId;
+			
+			ResultSet rs = st.executeQuery(query);
+			
+			if (rs.next()) {
+				Flag = rs.getInt(1);
+			}
+			con.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return Flag;
 	}
 	
 	// 유저의 image를 가져온다
@@ -363,6 +439,33 @@ public class Dao_Home {
 		}
 		return boolFlag;
 	}
+	
+	// detail로 들어온 제품을 위시리스트로 찜을 했는지 체크
+		public String findPostStatus() {
+			String str = "";
+			try {
+				Class.forName("com.mysql.cj.jdbc.Driver");
+				Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+				Statement st = con.createStatement();
+				
+				String query = "select post_status from post "
+						+ "where postid = " + Share.postId;
+				
+				ResultSet rs = st.executeQuery(query);
+				
+				if (rs.next()) {
+					str = rs.getString(1);
+				}
+				
+				con.close();
+				
+				
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+			return str;
+		}
 	
 
 	// 고객이 클릭 시 제품 카운트를 센다
