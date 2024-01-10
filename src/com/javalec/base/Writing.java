@@ -24,7 +24,6 @@ public class Writing {
 	private JLabel lblNewLabel;
 	private JButton btnHome;
 	private JButton btnMypage;
-	private JButton btnAlram;
 	private JButton btnChat;
 	private JButton btnWrite;
 	private JLabel lblNewLabel_2;
@@ -66,14 +65,12 @@ public class Writing {
 		frame.getContentPane().setLayout(null);
 		frame.getContentPane().add(getBtnHome());
 		frame.getContentPane().add(getBtnMypage());
-		frame.getContentPane().add(getBtnAlram());
 		frame.getContentPane().add(getBtnChat());
 		frame.getContentPane().add(getBtnWrite());
 		frame.getContentPane().add(getLblNewLabel_3());
 		
 		tfTitle = new JTextField();
 		tfTitle.setFont(new Font("Dialog", Font.PLAIN, 14));
-		tfTitle.setText(" 제목을 입력하세요.");
 		tfTitle.setBounds(150, 119, 240, 28);
 		frame.getContentPane().add(tfTitle);
 		tfTitle.setColumns(10);
@@ -122,7 +119,7 @@ public class Writing {
 		if (btnHome == null) {
 			btnHome = new JButton("홈");
 			btnHome.setFont(new Font("Helvetica", Font.PLAIN, 14));
-			btnHome.setBounds(20, 55, 70, 34);
+			btnHome.setBounds(30, 55, 70, 34);
 		}
 		return btnHome;
 	}
@@ -134,17 +131,9 @@ public class Writing {
 				}
 			});
 			btnMypage.setFont(new Font("Helvetica", Font.PLAIN, 14));
-			btnMypage.setBounds(98, 55, 70, 34);
+			btnMypage.setBounds(130, 55, 70, 34);
 		}
 		return btnMypage;
-	}
-	private JButton getBtnAlram() {
-		if (btnAlram == null) {
-			btnAlram = new JButton("알림");
-			btnAlram.setFont(new Font("Helvetica", Font.PLAIN, 14));
-			btnAlram.setBounds(180, 55, 70, 34);
-		}
-		return btnAlram;
 	}
 	private JButton getBtnChat() {
 		if (btnChat == null) {
@@ -154,7 +143,7 @@ public class Writing {
 				}
 			});
 			btnChat.setFont(new Font("Helvetica", Font.PLAIN, 14));
-			btnChat.setBounds(262, 55, 70, 34);
+			btnChat.setBounds(230, 55, 70, 34);
 		}
 		return btnChat;
 	}
@@ -162,7 +151,7 @@ public class Writing {
 		if (btnWrite == null) {
 			btnWrite = new JButton("글쓰기");
 			btnWrite.setFont(new Font("Helvetica", Font.PLAIN, 14));
-			btnWrite.setBounds(343, 55, 70, 34);
+			btnWrite.setBounds(330, 55, 70, 34);
 		}
 		return btnWrite;
 	}
@@ -177,7 +166,7 @@ public class Writing {
 	}
 	private JLabel getLblNewLabel_3() {
 		if (lblNewLabel_3 == null) {
-			lblNewLabel_3 = new JLabel("판매제목");
+			lblNewLabel_3 = new JLabel("제목");
 			lblNewLabel_3.setHorizontalAlignment(SwingConstants.CENTER);
 			lblNewLabel_3.setFont(new Font("Dialog", Font.PLAIN, 14));
 			lblNewLabel_3.setBounds(37, 119, 70, 30);
