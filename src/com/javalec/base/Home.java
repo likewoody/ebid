@@ -173,7 +173,9 @@ public class Home extends JDialog {
 			btnWrite = new JButton("글쓰기");
 			btnWrite.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					Writing wrt = new Writing();
+					Write wrt = new Write();
+					wrt.setVisible(true);
+					dispose();
 				}
 			});
 			btnWrite.setFont(new Font("Helvetica", Font.PLAIN, 14));
@@ -291,7 +293,7 @@ public class Home extends JDialog {
 		for (Dto_Home dto : dao.searchDB()) {
 				outerTable.addRow(new Object[] {
 						dto.getPost_image(),
-						String.format("<html>[%s]"
+						String.format("<html><b>[%s]</b>"
 								+ "<br><br>"
 								+ "%s"
 								+ "<br>"
