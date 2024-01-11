@@ -313,7 +313,6 @@ public class Dao_Home {
 		}
 	}
 	
-	
 	// 클릭한 wish_list의 status를 불러온다.
 	public int findWishStatus() {
 		int Flag = 0;
