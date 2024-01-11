@@ -20,6 +20,7 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
 import com.javalec.function.Dao_Chat;
 import com.javalec.function.Dto_Chat;
@@ -49,12 +50,12 @@ public class ChatDetail extends JDialog {
 	private JLabel lbEnterMessage;
 	private JScrollPane scrollPane;
 	private JPanel innerPanel;
-	private ArrayList<Dto_Chat> chatHistory;
-	private JPanel panel_1;
 	private JButton btnInsert;
 	private JTextField tfText;
 	private JButton btnCb;
 	private JButton btnRating;
+	private JTable innerTable;
+	private DefaultTableModel outerTable = new DefaultTableModel();
 
 	/**
 	 * Launch the application.
@@ -208,18 +209,19 @@ public class ChatDetail extends JDialog {
 			scrollPane = new JScrollPane();
 			scrollPane.setBounds(0, 97, 430, 450);
 			scrollPane.setBorder(BorderFactory.createEmptyBorder());
-			scrollPane.setViewportView(getInnerPanel());
+			scrollPane.setViewportView(getInnerTable());
+//			scrollPane.setViewportView(getInnerPanel());
 		}
 		return scrollPane;
 	}
 	
-	private JPanel getInnerPanel() {
-		if (innerPanel == null) {
-			innerPanel = new JPanel();
-			innerPanel.setBackground(Color.WHITE);
-		}
-		return innerPanel;
-	}
+//	private JPanel getInnerPanel() {
+//		if (innerPanel == null) {
+//			innerPanel = new JPanel();
+//			innerPanel.setBackground(Color.WHITE);
+//		}
+//		return innerPanel;
+//	}
 	private JButton getBtnInsert() {
 		if (btnInsert == null) {
 			btnInsert = new JButton("전송");
@@ -260,28 +262,48 @@ public class ChatDetail extends JDialog {
 		}
 		return btnRating;
 	}
+	private JTable getInnerTable() {
+		if (innerTable == null) {
+			innerTable = new JTable();
+			innerTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			innerTable.setModel(outerTable);
+		}
+		return innerTable;
+	}
 	
 	// ---- Fucntion ----
 	
 	private void tableInit() {
+		outerTable.addColumn("왼쪽유저");
+		outerTable.addColumn("오른쪽유저");
+		outerTable.setColumnCount(2);
 		
+		TableColumn col = innerTable.getColumnModel().getColumn(0);
+		int width = 215;
+		col.setPreferredWidth(width);
 		
+		col = innerTable.getColumnModel().getColumn(1);
+		col.setPreferredWidth(width);
+		
+		int i = innerTable.getRowCount();
+		for (int j = 0; j < i; i++) {
+			outerTable.removeRow(0);
+		}
+	}
 	
-	}
 	private void getUserInfo() {
-	    Dao_Chat dao = new Dao_Chat();
-	    ArrayList<Dto_Chat> dtoList = dao.findChatDeatil();
-	    
-	    SwingUtilities.invokeLater(() -> {
-        	new ArrayPanelExample(dtoList);
-        	});
-
-//	    for (Dto_Chat dto : dtoList) {
-//	    	System.out.println(dto.getDetailtext());
-//	    	System.out.println(dto.getDetailuserid());
-//	        addChatDetailToPanel(dto);
-//	    }
+		Dao_Chat dao = new Dao_Chat();
+		
+		for (Dto_Chat dto : dao.findChatDeatil()) {
+			outerTable.addColumn(new Object[] {
+					dto.getDetailtext(),
+					dto.getDetailuserid(),
+					dto.getDetailDate()
+			});
+		}
+		innerTable.getTableHeader().setReorderingAllowed(false); // true값과 false값의 차이를 모르겠음 *******
 	}
+	
 
 //	private void addChatDetailToPanel(Dto_Chat dto) {
 //	    String detailText = dto.getDetailtext();
@@ -320,22 +342,21 @@ public class ChatDetail extends JDialog {
 //		return panel;
 //	}
 	
-	public class ArrayPanelExample extends JFrame {
-
-	    public ArrayPanelExample(ArrayList<Dto_Chat> dtoList) {
-	        // Create an array of data
-	        ArrayList<Dto_Chat> dataArray = dtoList;
-
-	        // Create a JPanel to hold the array data
-	        JPanel panel = new JPanel();
-	        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-
-	        // Populate the panel with JLabels using the array data
-	        for (Dto_Chat item : dataArray) {
-	            JLabel label = new JLabel(item.getDetailtext());
-	            panel.add(label);
-	        }
-	    }
-
-	}
+//	public class ArrayPanelExample extends JFrame {
+//
+//	    public ArrayPanelExample(ArrayList<Dto_Chat> dtoList) {
+//	        // Create an array of data
+//	        ArrayList<Dto_Chat> dataArray = dtoList;
+//
+//	        // Create a JPanel to hold the array data
+//	        JPanel panel = new JPanel();
+//	        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+//
+//	        // Populate the panel with JLabels using the array data
+//	        for (Dto_Chat item : dataArray) {
+//	            JLabel label = new JLabel(item.getDetailtext());
+//	            panel.add(label);
+//	        }
+//	    }
+//	}
 }

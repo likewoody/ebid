@@ -117,6 +117,39 @@ public class Dao_Chat {
 		}
 	}
 	
+	
+	// chat detail 유저 정보 찾기
+	// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+	public void findChatDetailUserId() {
+		ArrayList<Dto_Chat> dtoList = new ArrayList<Dto_Chat>();
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+			Statement st = con.createStatement();
+			
+			String query = "select distinct(cd.userid) "
+					+ "from chat_text_detail cd "
+					+ "left join chat c on cd.chatid = c.chatid "
+					+ "left join sell s on s.sellid = c.sellid "
+					+ "where cd.chatid = " + Share.chatid;
+			
+			ResultSet rs = st.executeQuery(query);
+			
+			while(rs.next()) {
+				Dto_Chat dto = new Dto_Chat(rs.getString(1));
+				dtoList.add(dto);
+				System.out.println(dtoList);
+			}
+			
+			con.close();
+			
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+	
 	// 클릭한 wish_list의 status를 불러온다.
 //	public int findChatUserId() {
 //		int Flag = 0;
