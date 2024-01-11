@@ -8,7 +8,6 @@ import java.util.ArrayList;
 
 public class Dao_MyProduct {
 
-
 	private final String url_mysql = Share.dbName;
 	private final String id_mysql = Share.dbUser;
 	private final String pw_mysql = Share.dbPass;
@@ -26,88 +25,24 @@ public class Dao_MyProduct {
 			Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
 			Statement st = con.createStatement();
 
-			String query = "SELECT p.postid, p.post_status, p.title, p.price, u.nickname, MAX(i.imageid) AS max_imageid, "
-					+ "(SELECT post_image FROM image WHERE imageid = MAX(i.imageid)) AS max_post_image "
-					+ "FROM  post AS p\n" + "JOIN wish_list AS w ON w.postid = p.postid "
-					+ "JOIN sell AS s ON s.postid = p.postid\n" + "JOIN user AS u ON s.userid = u.userid "
-					+ "JOIN image AS i ON i.postid = p.postid\n" + "WHERE w.userid = '" + Share.id + "' "
-					+ "GROUP BY p.postid, p.post_status, p.title, p.price, u.nickname;";
+			String query = "SELECT max_image.post_image, p.title, p.price, u.nickname, p.post_status, p.postid, "
+					+ "(SELECT COUNT(w.postid) " + "FROM wish_list w "
+					+ "WHERE w.postid = p.postid) AS wish_list_count, " + "(SELECT COUNT(c.sellid) " + "FROM chat c "
+					+ "JOIN sell s ON c.sellid = s.sellid " + "JOIN post p ON s.postid = p.postid "
+					+ "WHERE p.postid = max_image.postid ) AS chat_count "
+					+ "FROM (SELECT MAX(i.post_image) AS post_image, p.postid " + "FROM image i "
+					+ "JOIN post p ON p.postid = i.postid " + "LEFT JOIN sell s ON s.postid = p.postid "
+					+ "GROUP BY p.postid ) max_image " + "LEFT JOIN post p ON max_image.postid = p.postid "
+					+ "LEFT JOIN user u ON u.userid = (SELECT s.userid FROM sell s WHERE s.postid = p.postid)"
+					+ "WHERE u.userid = '" + Share.id + "'";
 
 			ResultSet rs = st.executeQuery(query);
 			while (rs.next()) {
 
-				int postid = rs.getInt(1);
-				String post_status = rs.getString(2);
-				String title = rs.getString(3);
-				int price = rs.getInt(4);
-				String nickname = rs.getString(5);
-
-				dto = new Dto_MyProduct(postid, post_status, title, price, nickname);
+				dto = new Dto_MyProduct(rs.getBytes(1), rs.getString(2), rs.getInt(3), rs.getString(4), rs.getString(5),
+						rs.getInt(6), rs.getInt(7), rs.getInt(8));
 
 				dtoList.add(dto);
-			}
-			con.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return dtoList;
-	}
-	
-	public ArrayList<Dto_MyProduct> LikeDB() {
-		ArrayList<Dto_MyProduct> dtoList = new ArrayList<Dto_MyProduct>();
-		Dto_MyProduct dto = null;
-
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
-			Statement st = con.createStatement();
-
-			String query = "select count(w.wish_status) "
-					+ "from post as p, wish_list as w , sell as s , user as u "
-					+ "where s.userid = '" + Share.id + "'"
-					+ "and w.postid = p.postid "
-					+ "and s.userid = u.userid  "
-					+ "and s.postid = p.postid  "
-					+ "group by p.postid, p.title;";
-
-			ResultSet rs = st.executeQuery(query);
-			while (rs.next()) {
-
-				dto = new Dto_MyProduct(rs.getInt(1));
-
-				dtoList.add(dto);
-
-			}
-			con.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return dtoList;
-	}
-	
-	public ArrayList<Dto_MyProduct> ChatDB() {
-		ArrayList<Dto_MyProduct> dtoList = new ArrayList<Dto_MyProduct>();
-		Dto_MyProduct dto = null;
-
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
-			Statement st = con.createStatement();
-
-			String query = "SELECT count(c.sellid) as sell_count "
-					+ "FROM post AS p "
-					+ "JOIN sell AS s ON s.postid = p.postid "
-					+ "JOIN user AS u ON s.userid = u.userid "
-					+ "JOIN chat AS c ON s.sellid = c.sellid "
-					+ "WHERE s.userid = '" + Share.id + "'";
-
-			ResultSet rs = st.executeQuery(query);
-			while (rs.next()) {
-
-				dto = new Dto_MyProduct(rs.getInt(1));
-
-				dtoList.add(dto);
-
 			}
 			con.close();
 		} catch (Exception e) {

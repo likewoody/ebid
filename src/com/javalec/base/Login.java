@@ -325,7 +325,8 @@ public class Login extends JDialog {
 		    	        home.setVisible(true);
 
 		    	        // 현재 로그인 창은 닫음
-		    	        this.setVisible(false);
+		    	        dispose();
+//		    	        this.setVisible(false);
 		    	    } else {
 		    	        JOptionPane.showMessageDialog(null, "아이디 또는 비밀번호가 올바르지 않습니다", "알림", JOptionPane.ERROR_MESSAGE);
 

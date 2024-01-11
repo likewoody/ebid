@@ -2,44 +2,29 @@ package com.javalec.function;
 
 public class Dto_MyProduct {
 
-	int price;
-	int postid;
-	String nickname;
 	String title;
-	String post_status;
-	int count;
+	int price;
+	String nick;
+	String status;
+	int postid;
+	int wish;
+	int chat;
+	byte[] postimage;
 
 	public Dto_MyProduct() {
 
 	}
-	
-	public Dto_MyProduct(int count) {
-		this.count = count;
-	}
-	
-	public Dto_MyProduct(int postid, String post_status, String title, int price, String nickname) {
-		this.postid = postid;
-		this.post_status = post_status;
+
+	public Dto_MyProduct(byte[] postimage, String title, int price, String nick, String status, int postid, int wish,
+			int chat) {
+		this.postimage = postimage;
 		this.title = title;
 		this.price = price;
-		this.nickname = nickname;
-	}
-
-
-	public int getPrice() {
-		return price;
-	}
-
-	public void setPrice(int price) {
-		this.price = price;
-	}
-
-	public String getNickname() {
-		return nickname;
-	}
-
-	public void setNickname(String nickname) {
-		this.nickname = nickname;
+		this.nick = nick;
+		this.status = status;
+		this.postid = postid;
+		this.wish = wish;
+		this.chat = chat;
 	}
 
 	public String getTitle() {
@@ -50,26 +35,61 @@ public class Dto_MyProduct {
 		this.title = title;
 	}
 
-	public String getPost_status() {
-		return post_status;
+	public int getPrice() {
+		return price;
 	}
 
-	public void setPost_status(String post_status) {
-		this.post_status = post_status;
+	public void setPrice(int price) {
+		this.price = price;
 	}
 
-	public int getCount() {
-		return count;
+	public String getNick() {
+		return nick;
 	}
 
-	public void setCount(int count) {
-		this.count = count;
+	public void setNick(String nick) {
+		this.nick = nick;
 	}
 
-	
-	
-	
-	
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public int getPostid() {
+		return postid;
+	}
+
+	public void setPostid(int postid) {
+		this.postid = postid;
+	}
+
+	public int getWish() {
+		return wish;
+	}
+
+	public void setWish(int wish) {
+		this.wish = wish;
+	}
+
+	public int getChat() {
+		return chat;
+	}
+
+	public void setChat(int chat) {
+		this.chat = chat;
+	}
+
+	public byte[] getPostimage() {
+		return postimage;
+	}
+
+	public void setPostimage(byte[] postimage) {
+		this.postimage = postimage;
+	}
 	
 
 }

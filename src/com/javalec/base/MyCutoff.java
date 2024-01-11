@@ -41,7 +41,8 @@ public class MyCutoff extends JFrame {
 	private JButton btnBack;
 	private JScrollPane scrollPane;
 	private JTable innertable;
-
+	ArrayList<Dto_MyCutoff> dtolist = null;
+	
 	// Table
 	private final DefaultTableModel outertable = new DefaultTableModel();
 	private JButton btnDelete;
@@ -224,26 +225,9 @@ public class MyCutoff extends JFrame {
 	private void tableInit() {
 
 		// Coulmn명 초기화
-		outertable.addColumn("프로필 이미지");
-		outertable.addColumn("차단한 아이디");
-		outertable.addColumn("차단한 닉네임");
-		outertable.setColumnCount(3);
-
-		int colNo = 0;
-		TableColumn col = innertable.getColumnModel().getColumn(colNo);
-		int width = 150;
-		col.setPreferredWidth(width);
-
-		colNo = 1;
-		col = innertable.getColumnModel().getColumn(colNo);
-		width = 140;
-		col.setPreferredWidth(width);
+		outertable.addColumn("");
+		outertable.setColumnCount(1);
 		
-		colNo = 2;
-		col = innertable.getColumnModel().getColumn(colNo);
-		width = 140;
-		col.setPreferredWidth(width);
-
 		int i = outertable.getRowCount();
 
 		for (int j = 0; j < i; j++) {
@@ -254,15 +238,15 @@ public class MyCutoff extends JFrame {
 
 	private void searchAction() {
 		Dao_MyCutoff dao = new Dao_MyCutoff();
-		ArrayList<Dto_MyCutoff> dtolist = dao.selectList();
+		dtolist = dao.selectList();
 
 		int listCount = dtolist.size();
 
 		for (int i = 0; i < listCount; i++) {
 
-			String[] qTxt = { null, dtolist.get(i).getId(),dtolist.get(i).getNick()};
+			String[] qTxt = { "       "+dtolist.get(i).getId()+" ( "+dtolist.get(i).getNick()+" )"};
 			outertable.addRow(qTxt);
-			innertable.setRowHeight(i, 150);
+			innertable.setRowHeight(i, 100);
 		}
 	}
 
@@ -270,10 +254,10 @@ public class MyCutoff extends JFrame {
 		Dao_MyCutoff dao = new Dao_MyCutoff();
 
 		int i = innertable.getSelectedRow();
-		String blockuser = (String) innertable.getValueAt(i, 1);
+		String blockuser = dtolist.get(i).getId();
 		dao.deleteBlockuser(blockuser);
 
-		JOptionPane.showMessageDialog(null, (String) innertable.getValueAt(i, 2) + "님이 차단 해제 되었습니다.");
+		JOptionPane.showMessageDialog(null, dtolist.get(i).getNick() + "님이 차단 해제 되었습니다.");
 
 		tableInit();
 		searchAction();
