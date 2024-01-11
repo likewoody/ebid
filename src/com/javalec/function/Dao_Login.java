@@ -33,7 +33,7 @@ public class Dao_Login {
      private String profile_image;
      private String address;
      private String name;
-     private boolean passableNickname = true;
+     public boolean passableNickname = true;
 	//Constructor
 	
 	public Dao_Login() {
@@ -56,7 +56,16 @@ public class Dao_Login {
 		
 	}
 	
-	 public Dao_Login(String userid, String pw) {
+	 public Dao_Login(String userid, String pw, String phone, String nickname, String address) {
+		super();
+		this.userid = userid;
+		this.pw = pw;
+		this.phone = phone;
+		this.nickname = nickname;
+		this.address = address;
+	}
+
+	public Dao_Login(String userid, String pw) {
 	        this.userid = userid;
 	        this.pw = pw;
 	    }
@@ -196,7 +205,25 @@ public class Dao_Login {
 	    }
 
 
-		
+		public void registerWithNickNameCheck() {
+	        if (nickNameCheck()) {
+	            try {
+	                String updateQuery = "update user set nickname = ? where userid = ?";
+	                try (Connection conn = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+	                     PreparedStatement updatePstmt = conn.prepareStatement(updateQuery)) {
+
+	                    updatePstmt.setString(1, this.nickname);
+	                    updatePstmt.setString(2, this.userid);
+	                    updatePstmt.executeUpdate();
+	                }
+	            } catch (SQLException e) {
+	                e.printStackTrace();
+	                passableNickname = false;
+	                
+	            }     
+	            	
+	    }}
+	
 			
 	//id 찾기
 	public boolean findId() {
@@ -284,28 +311,33 @@ public class Dao_Login {
 //	}
 //	}
 	public void signUpdate() {
-					String A = "update user set pw = ?, phone = ?, nickname = ?, address = ? where userid = ? ";
-					try {
-						Class.forName("com.mysql.cj.jdbc.Driver");
-						Connection conn = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
-						 PreparedStatement pstmt = conn.prepareStatement(A);
-					
-						pstmt.setString(1, pw);
-						pstmt.setString(2, phone);
-						pstmt.setString(3, nickname);
-						pstmt.setString(4, address);
-						pstmt.setString(5, userid);
-						
-						pstmt.executeUpdate();
-							
-						conn.close();
-						
-					}
-					catch( Exception e ) {
-						e.printStackTrace();
-					}
-	
-	
+		   // 회원 정보 업데이트 쿼리
+	    String A = "update user set pw = ?, phone = ?, nickname = ?, address = ? where userid = ?";
+	   
+	    try {
+	        Class.forName("com.mysql.cj.jdbc.Driver");
+	        Connection conn = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+	        
+	        
+	        		
+	        
+	        
+	        
+	        //업데이트 실행
+	        PreparedStatement pstmt = conn.prepareStatement(A);
+	        pstmt.setString(1, userid);
+	        pstmt.setString(2, pw);
+	        pstmt.setString(3, nickname);
+	        pstmt.setString(4, phone);
+	        pstmt.setString(5, address);
+
+	        // 업데이트 실행
+	        pstmt.executeUpdate();
+
+	        conn.close();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+//		return passableNickname;
 	}
-	
 }
