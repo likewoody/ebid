@@ -64,7 +64,6 @@ public class Main {
 	}
 
 	private JLabel getHomeBackImage() {
-		int count = 0;
 		if (homeBackImage == null) {
 			homeBackImage = new JLabel("");
 			homeBackImage.addMouseListener(new MouseAdapter() {
