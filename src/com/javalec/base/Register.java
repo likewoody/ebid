@@ -10,9 +10,14 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
+import com.javalec.function.Dao_Login;
+
 import java.awt.Font;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
+
 import java.awt.Color;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
@@ -20,6 +25,12 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JCheckBox;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 public class Register extends JDialog {
 
@@ -35,7 +46,7 @@ public class Register extends JDialog {
 	private JLabel lblphone;
 	private JLabel lbladdress;
 	private JTextField tfnickname;
-	private JTextField tfphone1;
+	private JTextField tfphone;
 	private JTextField tfpw;
 	private JTextField tfid;
 	private JTextField tfname;
@@ -47,10 +58,10 @@ public class Register extends JDialog {
 	private JButton btnnickNamechek;
 	private JButton btnsignIn;
 	private JCheckBox ckbagree;
-	private JTextField tfphone2;
-	private JTextField tfphone3;
-	private JLabel lblNewLabel_1;
-	private JLabel lblNewLabel_1_1;
+	private JTextField tfPinfo;
+	private JButton btnBack;
+	private JTextField tfpwmatch;
+	private Dao_Login daoLogin;
 
 	/**
 	 * Launch the application.
@@ -86,7 +97,7 @@ public class Register extends JDialog {
 		contentPanel.add(getLblphone());
 		contentPanel.add(getLbladdress());
 		contentPanel.add(getTfnickname());
-		contentPanel.add(getTfphone1());
+		contentPanel.add(getTfphone());
 		contentPanel.add(getTfpw());
 		contentPanel.add(getTfname());
 		contentPanel.add(getTfpwRe());
@@ -97,10 +108,19 @@ public class Register extends JDialog {
 		contentPanel.add(getBtnnickNamechek());
 		contentPanel.add(getBtnsignIn());
 		contentPanel.add(getCkbagree());
-		contentPanel.add(getTfphone2());
-		contentPanel.add(getTfphone3());
-		contentPanel.add(getLblNewLabel_1());
-		contentPanel.add(getLblNewLabel_1_1());
+		contentPanel.add(getTfPinfo());
+		contentPanel.add(getBtnBack());
+		
+		tfpwmatch = new JTextField();
+		tfpwmatch.setBackground(Color.WHITE);
+		tfpwmatch.setEditable(false);
+		tfpwmatch.setText("비밀번호가 일치하지않습니다.");
+		 tfpwmatch.setBorder(null);
+		tfpwmatch.setBounds(135, 360, 260, 20);
+		tfpwmatch.setForeground(Color.RED);
+		contentPanel.add(tfpwmatch);
+		tfpwmatch.setVisible(false);
+		tfpwmatch.setColumns(10);
 		contentPanel.add(getReBackground());
 	}
 	private JLabel getReBackground() {
@@ -124,73 +144,73 @@ public class Register extends JDialog {
 	private JLabel getLblid() {
 		if (lblid == null) {
 			lblid = new JLabel("ID :");
-			lblid.setBounds(52, 232, 40, 16);
+			lblid.setBounds(52, 262, 40, 16);
 		}
 		return lblid;
 	}
 	private JLabel getLblpw() {
 		if (lblpw == null) {
 			lblpw = new JLabel("PW :");
-			lblpw.setBounds(52, 277, 61, 16);
+			lblpw.setBounds(52, 305, 61, 16);
 		}
 		return lblpw;
 	}
 	private JLabel getLblpwRe() {
 		if (lblpwRe == null) {
 			lblpwRe = new JLabel("PW 재입력 :");
-			lblpwRe.setBounds(52, 318, 65, 16);
+			lblpwRe.setBounds(52, 335, 65, 16);
 		}
 		return lblpwRe;
 	}
 	private JLabel getLblNickname() {
 		if (lblNickname == null) {
 			lblNickname = new JLabel("닉네임 :");
-			lblNickname.setBounds(52, 360, 61, 16);
+			lblNickname.setBounds(52, 394, 61, 16);
 		}
 		return lblNickname;
 	}
 	private JLabel getLblname() {
 		if (lblname == null) {
 			lblname = new JLabel("이름 :");
-			lblname.setBounds(52, 407, 61, 16);
+			lblname.setBounds(52, 440, 61, 16);
 		}
 		return lblname;
 	}
 	private JLabel getLblphone() {
 		if (lblphone == null) {
 			lblphone = new JLabel("전화번호 :");
-			lblphone.setBounds(52, 450, 61, 16);
+			lblphone.setBounds(52, 480, 61, 16);
 		}
 		return lblphone;
 	}
 	private JLabel getLbladdress() {
 		if (lbladdress == null) {
 			lbladdress = new JLabel("주소 :");
-			lbladdress.setBounds(52, 492, 61, 16);
+			lbladdress.setBounds(52, 522, 61, 16);
 		}
 		return lbladdress;
 	}
 	private JTextField getTfnickname() {
 		if (tfnickname == null) {
 			tfnickname = new JTextField();
-			tfnickname.setBounds(130, 354, 200, 26);
+			tfnickname.setBounds(130, 390, 200, 26);
 			tfnickname.setColumns(10);
 		}
 		return tfnickname;
 	}
-	private JTextField getTfphone1() {
-		if (tfphone1 == null) {
-			tfphone1 = new JTextField();
-			tfphone1.setColumns(10);
-			tfphone1.setBounds(130, 445, 65, 26);
+	private JTextField getTfphone() {
+		if (tfphone == null) {
+			tfphone = new JTextField();
+			tfphone.setColumns(10);
+			tfphone.setBounds(130, 475, 290, 26);
 		}
-		return tfphone1;
+		return tfphone;
 	}
 	private JTextField getTfpw() {
 		if (tfpw == null) {
 			tfpw = new JTextField();
 			tfpw.setColumns(10);
-			tfpw.setBounds(130, 270, 290, 26);
+			tfpw.setBounds(130, 300, 290, 26);
 		}
 		return tfpw;
 	}
@@ -198,7 +218,7 @@ public class Register extends JDialog {
 		if (tfid == null) {
 			tfid = new JTextField();
 			tfid.setColumns(10);
-			tfid.setBounds(130, 227, 200, 26);
+			tfid.setBounds(130, 257, 200, 26);
 		}
 		return tfid;
 	}
@@ -206,15 +226,28 @@ public class Register extends JDialog {
 		if (tfname == null) {
 			tfname = new JTextField();
 			tfname.setColumns(10);
-			tfname.setBounds(130, 402, 290, 26);
+			tfname.setBounds(130, 437, 290, 26);
 		}
 		return tfname;
 	}
 	private JTextField getTfpwRe() {
 		if (tfpwRe == null) {
 			tfpwRe = new JTextField();
+			tfpwRe.addFocusListener(new FocusAdapter() {
+				@Override
+				public void focusLost(FocusEvent e) {
+					 checkPasswordMatch();
+				}
+			});
+			tfpwRe.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyReleased(KeyEvent e) {
+					checkPasswordMatch();
+				}
+			});
+			
 			tfpwRe.setColumns(10);
-			tfpwRe.setBounds(130, 312, 290, 26);
+			tfpwRe.setBounds(130, 330, 290, 26);
 		}
 		return tfpwRe;
 	}
@@ -222,37 +255,68 @@ public class Register extends JDialog {
 		if (tfaddress2 == null) {
 			tfaddress2 = new JTextField();
 			tfaddress2.setColumns(10);
-			tfaddress2.setBounds(325, 487, 100, 26);
+			tfaddress2.setBounds(325, 518, 100, 26);
 		}
 		return tfaddress2;
 	}
 	private JTextField getTfaddress1() {
 		if (tfaddress1 == null) {
 			tfaddress1 = new JTextField();
+			tfaddress1.setEditable(false);
 			tfaddress1.setColumns(10);
-			tfaddress1.setBounds(225, 487, 100, 26);
+			tfaddress1.setBounds(225, 518, 100, 26);
 		}
 		return tfaddress1;
 	}
 	private JComboBox getCbaddress() {
 		if (cbaddress == null) {
 			cbaddress = new JComboBox();
+			cbaddress.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					 String selectedValue = (String) cbaddress.getSelectedItem();
+		                tfaddress1.setText(selectedValue);
+				}
+			});
 			cbaddress.setModel(new DefaultComboBoxModel(new String[] {"서울특별시", "인천광역시", "대전광역시", "대구광역시", "울산광역시", "부산광역시", "광주광역시", "세종특별자치시", "경기도", "강원도", "충청남도", "충청북도", "경상북도", "전라북도", "전라남도", "경상남도", "제주특별자치도"}));
-			cbaddress.setBounds(85, 488, 135, 27);
+			cbaddress.setBounds(85, 518, 135, 27);
 		}
 		return cbaddress;
 	}
 	private JButton getBtnIdchek() {
 		if (btnIdchek == null) {
 			btnIdchek = new JButton("중복확인");
-			btnIdchek.setBounds(330, 227, 80, 26);
+			btnIdchek.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					 String userID = tfid.getText();
+	                    Dao_Login dao = new Dao_Login();
+					  		idDoubleCheck();
+					  		 
+				}
+			});
+			btnIdchek.setBounds(330, 257, 80, 26);
 		}
 		return btnIdchek;
 	}
 	private JButton getBtnnickNamechek() {
 		if (btnnickNamechek == null) {
 			btnnickNamechek = new JButton("중복확인");
-			btnnickNamechek.setBounds(330, 354, 80, 26);
+			btnnickNamechek.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+//					 String userNickname = tfnickname.getText();
+//		                Dao_Login dao = new Dao_Login();
+		                daoLogin = new Dao_Login();
+		                
+		                    daoLogin.registerWithNickNameCheck();
+		                     if (daoLogin.passableNickname) {
+		                        JOptionPane.showMessageDialog(null, "사용 가능한 닉네임입니다.", "알림", JOptionPane.INFORMATION_MESSAGE);
+		                        tfnickname.setEditable(false);
+		                    } else {
+		                        JOptionPane.showMessageDialog(null, "이미 사용 중인 닉네임입니다. 다른 닉네임을 입력하세요.", "알림", JOptionPane.WARNING_MESSAGE);
+		                    }
+		                
+		            }
+		        });
+			btnnickNamechek.setBounds(330, 390, 80, 26);
 		}
 		return btnnickNamechek;
 	}
@@ -268,22 +332,93 @@ public class Register extends JDialog {
 	        btnsignIn.setBackground(BackColor);
 	        btnsignIn.setOpaque(true);
 			btnsignIn.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-									signIn();
+				public void actionPerformed(ActionEvent e) {		//회원가입 정보를 가져오기
+					if (!signError()) {
+                        return;
+                    }
+					 
+						String userid = tfid.getText();
+	                    String pw = tfpw.getText();  
+	                    String pwmatch = tfpwmatch.getText();
+	                    String nickname = tfnickname.getText();	                   
+	                    String phone = tfphone.getText();
+	                    String address = tfaddress1.getText() + " " + tfaddress2.getText() + " " + cbaddress.getSelectedItem();
+
+	                    // 비밀번호 일치 여부 확인
+	                    if (!tfpw.equals(tfpwmatch)) {
+	                        JOptionPane.showMessageDialog(null, "비밀번호가 일치하지 않습니다.");
+	                        return;
+	                    }
+
+                    // 회원가입 처리
+                    Dao_Login dao = new Dao_Login(userid, pw, nickname, phone, address );
+                    // 사용자 등록 수행
+                    dao.signUpdate( );
+
+                    // 사용자에게 성공적으로 등록되었음을 알림
+                    JOptionPane.showMessageDialog(null, "회원가입이 완료되었습니다.");
+                   dispose();
+      
 				}
 			});
-			btnsignIn.setBounds(158, 624, 117, 29);
+			btnsignIn.setBounds(260, 624, 117, 29);
 		}
 		return btnsignIn;
 	}
 	private JCheckBox getCkbagree() {
 		if (ckbagree == null) {
-			ckbagree = new JCheckBox("개인정보 처리에 동의하시갰습니까?");
-			ckbagree.setBounds(127, 545, 250, 23);
+			ckbagree = new JCheckBox("");
+			ckbagree.addMouseListener(new MouseAdapter() {
+			
+			});
+			ckbagree.setBounds(127, 575, 30, 23);
 		}
 		return ckbagree;
 	}
+	private JTextField getTfPinfo() {
+		if (tfPinfo == null) {
+			tfPinfo = new JTextField();
+			tfPinfo.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseEntered(MouseEvent e) {
+					tfPinfo.setForeground(Color.BLACK);						//글씨 색깔
+			        Font font = new Font("Arial Black", Font.ITALIC, 13);		//사용 폰트
+			        tfPinfo.setFont(font);	
+				}
+				@Override
+				public void mouseExited(MouseEvent e) {
+					 tfPinfo.setForeground(UIManager.getColor("TextField.foreground"));		//텍스트 색깔 되돌리기 
+				        tfPinfo.setFont(null);
+				} 
+			});
+			tfPinfo.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+							 goPinfo();
+				}
+			});
+			tfPinfo.setEditable(false);
+			tfPinfo.setText("(필수) 개인정보 수집에 대한 동의.");
+			tfPinfo.setBounds(158, 575, 220, 23);
+			tfPinfo.setColumns(10);
+		}
+		return tfPinfo;
+	}
 	
+	private JButton getBtnBack() {
+		if (btnBack == null) {
+			btnBack = new JButton("뒤로가기");
+			btnBack.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+										goBack();
+				}
+			});
+			btnBack.setOpaque(true);
+			btnBack.setBorder(new LineBorder(new Color(214, 203, 216), 2));
+			btnBack.setBackground(new Color(214, 203, 216));
+			btnBack.setBounds(70, 624, 117, 29);
+		}
+		return btnBack;
+	}
 	
 	
 	
@@ -296,34 +431,134 @@ public class Register extends JDialog {
 	public void signIn() {
 		
 	}
-	private JTextField getTfphone2() {
-		if (tfphone2 == null) {
-			tfphone2 = new JTextField();
-			tfphone2.setColumns(10);
-			tfphone2.setBounds(221, 445, 80, 26);
-		}
-		return tfphone2;
+		  // 회원가입에 필요한 데이터 수집
+//        String userID = tfid.getText();
+//        String userPW = tfpw.getText();
+//        String userNickname = tfnickname.getText();
+//        String userName = tfname.getText();
+//        String userPhone = tfphone.getText();
+//        String userAddress = cbaddress.getSelectedItem() + " " + tfaddress1.getText() + " " + tfaddress2.getText();
+//
+//        // 데이터베이스에 회원가입 정보 업데이트
+//        Dao_Login dao = new Dao_Login();
+//        boolean updateSuccess = dao.signUpdate(userID, userPW, userNickname, userName, userPhone, userAddress);
+//
+//        if (updateSuccess) {
+//            JOptionPane.showMessageDialog(null, "회원가입이 완료되었습니다.");
+//        } else {
+//            JOptionPane.showMessageDialog(null, "회원가입에 실패하였습니다. 다시 입력해 주세요.");
+//        }
+//    }
+				
+	public boolean signError() {
+		  if (tfid.getText().isEmpty()) {
+	            JOptionPane.showMessageDialog(this, "ID를 입력하세요.", "알림", JOptionPane.WARNING_MESSAGE);
+	            return false;
+	        }
+
+	        if (tfpw.getText().isEmpty()) {
+	            JOptionPane.showMessageDialog(this, "비밀번호를 입력하세요.", "알림", JOptionPane.WARNING_MESSAGE);
+	            return false;
+	        }
+
+	        if (tfpwRe.getText().isEmpty()) {
+	            JOptionPane.showMessageDialog(this, "비밀번호 재입력을 입력하세요.", "알림", JOptionPane.WARNING_MESSAGE);
+	            return false;
+	        }
+
+	        if (tfnickname.getText().isEmpty()) {
+	            JOptionPane.showMessageDialog(this, "닉네임을 입력하세요.", "알림", JOptionPane.WARNING_MESSAGE);
+	            return false;
+	        }
+
+	        if (tfname.getText().isEmpty()) {
+	            JOptionPane.showMessageDialog(this, "이름을 입력하세요.", "알림", JOptionPane.WARNING_MESSAGE);
+	            return false;
+	        }
+
+	        if (tfphone.getText().isEmpty()) {
+	            JOptionPane.showMessageDialog(this, "전화번호를 입력하세요.", "알림", JOptionPane.WARNING_MESSAGE);
+	            return false;
+	        }
+
+	        if (tfaddress1.getText().isEmpty() || tfaddress2.getText().isEmpty()) {
+	            JOptionPane.showMessageDialog(this, "주소를 입력하세요.", "알림", JOptionPane.WARNING_MESSAGE);
+	            return false;
+	        }
+	        if (tfpw.getText().isEmpty() || tfpwRe.getText().isEmpty() || !tfpw.getText().equals(tfpwRe.getText())) {
+	            JOptionPane.showMessageDialog(this, "비밀번호를 확인해주세요.", "알림", JOptionPane.WARNING_MESSAGE);
+	            return false;
+	        }
+
+	        return true;
+	    
+	
+				
+				
 	}
-	private JTextField getTfphone3() {
-		if (tfphone3 == null) {
-			tfphone3 = new JTextField();
-			tfphone3.setColumns(10);
-			tfphone3.setBounds(340, 445, 80, 26);
-		}
-		return tfphone3;
+	// 아이디 중복확인
+	public void idDoubleCheck() {
+		 String userId = tfid.getText();
+		 Dao_Login daoLogin = new Dao_Login(userId);
+		 			if ( tfid.getText().isEmpty()) {
+		 				JOptionPane.showMessageDialog(this, "ID를 입력해주세요.", "알림", JOptionPane.WARNING_MESSAGE);
+		 				return;
+		 			}
+		 			if (daoLogin.Idcheck())  {
+		        JOptionPane.showMessageDialog(this, "사용 가능한 ID입니다.", "알림", JOptionPane.INFORMATION_MESSAGE);
+		 		tfid.setEditable(false);
+		 			}
+		 			else 
+		        JOptionPane.showMessageDialog(this, "이미 사용 중인 ID입니다. 다른 ID를 입력하세요.", "알림", JOptionPane.WARNING_MESSAGE);
+	
+
 	}
-	private JLabel getLblNewLabel_1() {
-		if (lblNewLabel_1 == null) {
-			lblNewLabel_1 = new JLabel("-");
-			lblNewLabel_1.setBounds(199, 445, 20, 16);
-		}
-		return lblNewLabel_1;
+	//닉네임 중복 확인
+	public void nickNameDoubleCheck() {
+		 String userNickname = tfnickname.getText();
+		 Dao_Login daoLogin = new Dao_Login(userNickname);
+		 			if ( tfnickname.getText().isEmpty()) {		
+		 				JOptionPane.showMessageDialog(this, "닉네임을 입력해주세요.", "알림", JOptionPane.WARNING_MESSAGE);
+		 				return;
+		 			}
+		 			if (daoLogin.nickNameCheck()) {
+		        JOptionPane.showMessageDialog(this, "사용 가능한 닉네임 입니다.", "알림", JOptionPane.INFORMATION_MESSAGE);
+		          tfnickname.setEditable(false);
+	}else { 
+		        JOptionPane.showMessageDialog(this, "이미 사용 중인 닉네임 입니다. 다른 닉네임을 입력하세요.", "알림", JOptionPane.WARNING_MESSAGE);
+		        
+	} 	
 	}
-	private JLabel getLblNewLabel_1_1() {
-		if (lblNewLabel_1_1 == null) {
-			lblNewLabel_1_1 = new JLabel("-");
-			lblNewLabel_1_1.setBounds(310, 445, 20, 16);
-		}
-		return lblNewLabel_1_1;
+				
+		
+		
+	public void goPinfo() {
+			JOptionPane.showMessageDialog(null, "");				//약관 집어 넣기?
 	}
-}
+	// 로그인 화면으로 돌아가기
+	public void goBack () {
+		int back = JOptionPane.showConfirmDialog(null, "로그인 화면으로 돌아가시갰습니까?", "알림", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+		if (back == JOptionPane.YES_OPTION) {
+		dispose();
+		Login login = new Login();	
+		login.setVisible(true);
+		
+					
+	}
+	}
+	private void checkPasswordMatch() {
+		 String password = tfpw.getText();
+		    String reEnteredPassword = tfpwRe.getText();
+
+		    if (password.equals(reEnteredPassword)) {
+		    	tfpwmatch.setForeground(Color.BLUE);
+		    	tfpwmatch.setText("비밀번호가 일치합니다.");
+		    } else {
+		    	tfpwmatch.setForeground(Color.RED);
+		    	tfpwmatch.setText("비밀번호가 일치하지 않습니다.");
+		    }
+		    tfpwmatch.setVisible(true);
+		}
+	}
+	
+	

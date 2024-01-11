@@ -1,10 +1,14 @@
-package com.javalec.function;
+package com.javalec.function;	
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
+
+import com.mysql.cj.exceptions.RSAException;
 
 public class Dao_Login {
 
@@ -29,7 +33,7 @@ public class Dao_Login {
      private String profile_image;
      private String address;
      private String name;
-	
+     public boolean passableNickname = true;
 	//Constructor
 	
 	public Dao_Login() {
@@ -52,7 +56,16 @@ public class Dao_Login {
 		
 	}
 	
-	 public Dao_Login(String userid, String pw) {
+	 public Dao_Login(String userid, String pw, String phone, String nickname, String address) {
+		super();
+		this.userid = userid;
+		this.pw = pw;
+		this.phone = phone;
+		this.nickname = nickname;
+		this.address = address;
+	}
+
+	public Dao_Login(String userid, String pw) {
 	        this.userid = userid;
 	        this.pw = pw;
 	    }
@@ -69,7 +82,6 @@ public class Dao_Login {
 	    }
 
 	
-
 
 	public Dao_Login(String userid) {
 		super();
@@ -118,29 +130,101 @@ public class Dao_Login {
 		
 	//id 중복체크
 	public boolean Idcheck() {
-		boolean passableId = false;
-		String B ="select userid from user";
+		boolean passableId = true;
+		String B ="select userid from user where userid = ?";
 		
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection conn = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
-			Statement st = conn.createStatement();
-			ResultSet rs = st.executeQuery(B);
+			PreparedStatement pstmt = conn.prepareStatement(B);
+
 		
+
+			  											// 사용자 ID를 설정
+			pstmt.setString(1, this.userid);
+
+			ResultSet rs = pstmt.executeQuery();
+			
 				if ( rs.next()) {
 						passableId = false;
+				}else { 
+					passableId = true;
 				}
+			    // 아이디가 중복되지 않으면 데이터베이스에 등록
+	            String insertQuery = "INSERT INTO user (userid) VALUES (?)";
+	            PreparedStatement insertPstmt = conn.prepareStatement(insertQuery);
+	            insertPstmt.setString(1, this.userid);
+	            insertPstmt.executeUpdate();
+
+	          
+	        
 				conn.close();
 				}
-				catch(Exception e) {
+				catch( SQLIntegrityConstraintViolationException e) {
 					e.printStackTrace();
+				    passableId = false;
+				}catch ( Exception e) {
+					e.printStackTrace();
+					passableId = true;
 				}
-			
+
 	
 		return passableId;
 	
-	}
-		
+}
+	//nickname 중복체크
+	
+		public boolean nickNameCheck() {
+	        String E = "select nickname from user where nickname = ?";
+
+	        try {
+	            Class.forName("com.mysql.cj.jdbc.Driver");
+	            Connection conn = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+	            PreparedStatement pstmt = conn.prepareStatement(E);
+
+	            // 사용자 nickname 설정
+	            pstmt.setString(1, this.nickname);
+	            ResultSet rs = pstmt.executeQuery();
+
+	            if (rs.next()) {
+	                passableNickname = false;
+	            } else {
+	                passableNickname = true;
+	            }
+
+	            conn.close();
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	            passableNickname = true;
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            passableNickname = false;
+	        }
+
+	        return passableNickname;
+	    }
+
+
+		public void registerWithNickNameCheck() {
+	        if (nickNameCheck()) {
+	            try {
+	                String updateQuery = "update user set nickname = ? where userid = ?";
+	                try (Connection conn = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+	                     PreparedStatement updatePstmt = conn.prepareStatement(updateQuery)) {
+
+	                    updatePstmt.setString(1, this.nickname);
+	                    updatePstmt.setString(2, this.userid);
+	                    updatePstmt.executeUpdate();
+	                }
+	            } catch (SQLException e) {
+	                e.printStackTrace();
+	                passableNickname = false;
+	                
+	            }     
+	            	
+	    }}
+	
+			
 	//id 찾기
 	public boolean findId() {
 			boolean searchId = false;
@@ -149,27 +233,13 @@ public class Dao_Login {
 			try {
 				Class.forName("com.mysql.cj.jdbc.Driver");
 				Connection conn = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
-//				Statement st = conn.createStatement();
-//				ResultSet rs = st.executeQuery(C);
+
 				 PreparedStatement pstmt = conn.prepareStatement(C);
 				 pstmt.setString(1, this.nickname);
 		         pstmt.setString(2, this.phone);
 		            
 		         ResultSet rs = pstmt.executeQuery();
-//		            
-//				 if( rs.next()) {
-//					 	searchId = true;
-//				 }else { 
-//					 searchId = false;
-//				 }
-//			conn.close();
-//			
-//	}
-//	catch( Exception e) {
-//		e.printStackTrace();
-//	}
-//	return searchId;
-//	}
+
 		         if (rs.next()) {
 		                searchId = true;
 		                userid = rs.getString("userid");
@@ -215,8 +285,59 @@ public class Dao_Login {
 		
 	}catch (Exception e) {
 		e.printStackTrace();
-		
+		 
 	}
 	return searchPw;
+	}
+	//아이디 중복체크 후 아이디 등록
+//	public void idcheckafterinsert() {
+//		Dao_Login dao = new Dao_Login(userid);
+//	    if (dao.Idcheck()) {
+//				String A = "INSERT INTO user (userid) VALUES (?)";
+//				try {
+//					Class.forName("com.mysql.cj.jdbc.Driver");
+//					Connection conn = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+//					 PreparedStatement pstmt = conn.prepareStatement(A);
+//					 
+//					 pstmt.setString(1, userid);
+//					 
+//					 pstmt.executeUpdate();
+//					 
+//					 conn.close();
+//				}
+//				catch( Exception e) {
+//					e.printStackTrace();
+//				}
+//	}
+//	}
+	public void signUpdate() {
+		   // 회원 정보 업데이트 쿼리
+	    String A = "update user set pw = ?, phone = ?, nickname = ?, address = ? where userid = ?";
+	   
+	    try {
+	        Class.forName("com.mysql.cj.jdbc.Driver");
+	        Connection conn = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+	        
+	        
+	        		
+	        
+	        
+	        
+	        //업데이트 실행
+	        PreparedStatement pstmt = conn.prepareStatement(A);
+	        pstmt.setString(1, userid);
+	        pstmt.setString(2, pw);
+	        pstmt.setString(3, nickname);
+	        pstmt.setString(4, phone);
+	        pstmt.setString(5, address);
+
+	        // 업데이트 실행
+	        pstmt.executeUpdate();
+
+	        conn.close();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+//		return passableNickname;
 	}
 }

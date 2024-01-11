@@ -10,7 +10,7 @@ public class Dto_Home {
 	String title; // 포스트 제목
 	int start_price;
 	String nickname;
-	String sort;
+	String post_status;
 	int wishListCount;
 	int chatCount;
 	String desc;
@@ -42,21 +42,21 @@ public class Dto_Home {
 		this.start_price = start_price;
 	}
 	
-	public Dto_Home(byte[] post_image, String title, int start_price, String sort, String nickname) {
+	public Dto_Home(byte[] post_image, String title, int start_price, String post_status, String nickname) {
 		this.post_image = post_image;
 		this.title = title;
 		this.start_price = start_price;
-		this.sort = sort;
+		this.post_status = post_status;
 		this.nickname = nickname;
 	}
 
 
-	public Dto_Home(byte[] post_image, String title, int start_price, String nickname, String sort, int postId, int wishListCount, int chatCount) {
+	public Dto_Home(byte[] post_image, String title, int start_price, String nickname, String post_status, int postId, int wishListCount, int chatCount) {
 		this.post_image = post_image;
 		this.title = title;
 		this.start_price = start_price;
 		this.nickname = nickname;
-		this.sort = sort;
+		this.post_status = post_status;
 		this.postId = postId;
 		this.wishListCount = wishListCount;
 		this.chatCount = chatCount;
@@ -111,11 +111,11 @@ public class Dto_Home {
 	}
 
 	public String getSort() {
-		return sort;
+		return post_status;
 	}
 
 	public void setSort(String sort) {
-		this.sort = sort;
+		this.post_status = sort;
 	}
 
 	public int getWishListCount() {

@@ -27,7 +27,7 @@ public class Dao_Home {
 	String title; // 포스트 제목
 	int start_price;
 	String nickname;
-	String sort;
+	String post_status;
 	int max_price;
 	int viewCount;
 	String desc;
@@ -40,6 +40,7 @@ public class Dao_Home {
 	public Dao_Home(int postId) {
 		this.postId = postId;
 	}
+	
 	
 //	public Dao_Home(byte[] post_image, String title, String nickname, String desc, int start_price) {
 //		this.post_image = post_image;
@@ -61,7 +62,7 @@ public class Dao_Home {
 			Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
 			Statement st = con.createStatement();
 			
-			String query = "SELECT max_image.post_image, p.title, p.price, u.nickname, p.sort, p.postid, "
+			String query = "SELECT max_image.post_image, p.title, p.price, u.nickname, p.post_status, p.postid, "
 					+ "    ( "
 					+ "        SELECT COUNT(DISTINCT w.postid) "
 					+ "        FROM wish_list w "
@@ -111,7 +112,7 @@ public class Dao_Home {
 		
 		// SQL 구문
 		// 타이틀로 검색
-		String A = "SELECT max_image.post_image, p.title, p.price, u.nickname, p.sort, p.postid, "
+		String A = "SELECT max_image.post_image, p.title, p.price, u.nickname, p.post_status, p.postid, "
 				+ "    ( "
 				+ "        SELECT COUNT(DISTINCT w.postid) "
 				+ "        FROM wish_list w "
@@ -139,7 +140,7 @@ public class Dao_Home {
 				+ "where p.title like '%" + searchText + "%'";
 		
 		// 닉네임으로 검색
-		String B = "SELECT max_image.post_image, p.title, p.price, u.nickname, p.sort, p.postid, "
+		String B = "SELECT max_image.post_image, p.title, p.price, u.nickname, p.post_status, p.postid, "
 				+ "    ( "
 				+ "        SELECT COUNT(DISTINCT w.postid) "
 				+ "        FROM wish_list w "
@@ -438,6 +439,33 @@ public class Dao_Home {
 		}
 		return boolFlag;
 	}
+	
+	// detail로 들어온 제품을 위시리스트로 찜을 했는지 체크
+		public String findPostStatus() {
+			String str = "";
+			try {
+				Class.forName("com.mysql.cj.jdbc.Driver");
+				Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+				Statement st = con.createStatement();
+				
+				String query = "select post_status from post "
+						+ "where postid = " + Share.postId;
+				
+				ResultSet rs = st.executeQuery(query);
+				
+				if (rs.next()) {
+					str = rs.getString(1);
+				}
+				
+				con.close();
+				
+				
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+			return str;
+		}
 	
 
 	// 고객이 클릭 시 제품 카운트를 센다

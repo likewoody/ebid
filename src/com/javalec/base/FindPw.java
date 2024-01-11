@@ -165,6 +165,7 @@ public class FindPw extends JDialog {
 	        btnNewButton.setOpaque(true);
 			btnNewButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+									cancelclick();
 				}
 			});
 			btnNewButton.setBounds(250, 570, 117, 29);
@@ -207,7 +208,17 @@ public class FindPw extends JDialog {
 	            JOptionPane.showMessageDialog(null, "일치하는 정보가 없습니다. 다시 입력해 주세요.", "알림", JOptionPane.ERROR_MESSAGE);
 	        }
 	    }
-	
+	public void cancelclick() {
+		int cancel = JOptionPane.showConfirmDialog(null, "비밀번호 찾기를 취소 하시겠습니까?", "알림", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
+		if (cancel == JOptionPane.YES_OPTION) {
+		dispose();
+			
+			
+		}
 	}
+}
+	
+	
+	
 	
 

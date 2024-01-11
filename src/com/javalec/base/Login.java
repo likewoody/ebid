@@ -36,12 +36,15 @@ public class Login extends JDialog {
 	private JLabel lblPw;
 	private JTextField tfId;
 	private JButton btnLogin;
-	private JLabel lblSign;
-	private JLabel lblFindid;
-	private JLabel lblFindpw;
 	private JLabel lblNewLabel_1_2;
 	private JLabel lblNewLabel_1_3;
 	private JPasswordField tfpw;
+	private JButton btnNewButton;
+	private JButton btnNewButton_1;
+	private JButton btnNewButton_2;
+	private JButton btnSign;
+	private JButton btnFindid;
+	private JButton btnFindpw;
 
 	/**
 	 * Launch the application.
@@ -73,13 +76,17 @@ public class Login extends JDialog {
 		contentPanel.add(getBtnLogin());
 		contentPanel.add(getLblNewLabel_1_3());
 		contentPanel.add(getLblNewLabel_1_2());
-		contentPanel.add(getLblSign());
-		contentPanel.add(getLblFindid());
-		contentPanel.add(getLblFindpw());
 		
 		tfpw = new JPasswordField();
 		tfpw.setBounds(96, 370, 280, 26);
+		tfpw.setBorder(new LineBorder(new Color(214, 203, 216)));
 		contentPanel.add(tfpw);
+//		contentPanel.add(getBtnNewButton());
+//		contentPanel.add(getBtnNewButton_(1));
+//		contentPanel.add(getBtnNewButton_(2));
+		contentPanel.add(getBtnSign());
+		contentPanel.add(getBtnFindid());
+		contentPanel.add(getBtnFindpw());
 		contentPanel.add(getLoginBackground());
 	}
 	private JLabel getLoginBackground() {
@@ -135,75 +142,11 @@ public class Login extends JDialog {
 		}
 		return btnLogin;
 	}
-	private JLabel getLblSign() {
-		if (lblSign == null) {
-			lblSign = new JLabel("회원가입");
-			lblSign.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-									clickSign();
-				}
-				@Override
-				public void mouseEntered(MouseEvent e) {
-									enterSign();
-				}
-				@Override
-				public void mouseExited(MouseEvent e) {
-									exitSign();
-					
-				}
-			});
-			lblSign.setBounds(100, 500, 61, 16);
-		}
-		return lblSign;
-	}
-	private JLabel getLblFindid() {
-		if (lblFindid == null) {
-			lblFindid = new JLabel("아이디 찾기");
-			lblFindid.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-									clickFindid();
-				}
-				@Override
-				public void mouseEntered(MouseEvent e) {
-									enterFindid();
-				}
-				@Override
-				public void mouseExited(MouseEvent e) {
-									exitFindid();
-				}
-			});
-			lblFindid.setBounds(180, 500, 65, 16);
-		}
-		return lblFindid;
-	}
-	private JLabel getLblFindpw() {
-		if (lblFindpw == null) {
-			lblFindpw = new JLabel("비밀번호 찾기");
-			lblFindpw.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-									clickFindpw();
-				}
-				@Override
-				public void mouseEntered(MouseEvent e) {
-									enterFindpw();
-				}
-				@Override
-				public void mouseExited(MouseEvent e) {
-									exitFindpw();
-				}
-			});
-			lblFindpw.setBounds(270, 500, 80, 16);
-		}
-		return lblFindpw;
-	}
 	private JLabel getLblNewLabel_1_2() {
 		if (lblNewLabel_1_2 == null) {
 			lblNewLabel_1_2 = new JLabel("|");
 			lblNewLabel_1_2.setHorizontalAlignment(SwingConstants.CENTER);
-			lblNewLabel_1_2.setBounds(232, 500, 61, 16);
+			lblNewLabel_1_2.setBounds(275, 500, 20, 16);
 		}
 		return lblNewLabel_1_2;
 	}
@@ -216,9 +159,79 @@ public class Login extends JDialog {
 				}
 			});
 			lblNewLabel_1_3.setHorizontalAlignment(SwingConstants.CENTER);
-			lblNewLabel_1_3.setBounds(134, 500, 61, 16);
+			lblNewLabel_1_3.setBounds(145, 500, 20, 16);
 		}
 		return lblNewLabel_1_3;
+	}
+	private JButton getBtnSign() {
+		if (btnSign == null) {
+			btnSign = new JButton("회원가입");
+			 btnSign.setBorderPainted(false);
+			btnSign.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseEntered(MouseEvent e) {
+					SignMouseEnter();
+				}
+				@Override
+				public void mouseExited(MouseEvent e) {
+					SignMouseExit();
+				}
+			});
+			btnSign.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Signclick();
+				}
+			});
+			btnSign.setBounds(60, 500, 90, 20);
+		}
+		return btnSign;
+	}
+	private JButton getBtnFindid() {
+		if (btnFindid == null) {
+			btnFindid = new JButton("아이디 찾기");
+			 btnFindid.setBorderPainted(false);
+			btnFindid.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseEntered(MouseEvent e) {
+					FindidMouseEnter();
+					
+				}
+				@Override
+				public void mouseExited(MouseEvent e) {
+					FindidMouseExit();
+				}
+			});
+			btnFindid.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Findidclick();
+				}
+			});
+			btnFindid.setBounds(165, 500, 110, 16);
+		}
+		return btnFindid;
+	}
+	private JButton getBtnFindpw() {
+		if (btnFindpw == null) {
+			btnFindpw = new JButton("비밀번호 찾기");
+			 btnFindpw.setBorderPainted(false);
+			btnFindpw.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseEntered(MouseEvent e) {
+					FindpwMouseEnter();
+				}
+				@Override
+				public void mouseExited(MouseEvent e) {
+					FindpwMouseExit();
+				}
+			});
+			btnFindpw.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Findpwclick();
+				}
+			});
+			btnFindpw.setBounds(285, 500, 115, 16);
+		}
+		return btnFindpw;
 	}
 	
 	
@@ -226,62 +239,57 @@ public class Login extends JDialog {
 	//---------Function---------
 	
 	
-	public void clickSign() {
+	public void Signclick() {
+		dispose();
 				Register register = new Register();			//회원가입 클릭
 				register.setVisible(true);
-			//	this.setVisible(false);
+
+	}
 				
-				
+	public void SignMouseEnter() {
+			setMouseOverEffect(btnSign);
+	}
+	public void SignMouseExit()	{
+			resetButton(btnSign);
 		
 	}
-	public void enterSign() {					
-	
+	public void Findidclick() {
+		FindId findId = new FindId();			  //아이디 찾기 클릭
+		findId.setVisible(true);
+
 	}
-	public void exitSign() {					
+	public void FindidMouseEnter() {
+			setMouseOverEffect(btnFindid);
+	}
+	public void FindidMouseExit() {
+			resetButton(btnFindid);
 		
 	}
-	public void clickFindid() {
-				FindId findId = new FindId();			  //아이디 찾기 클릭
-				findId.setVisible(true);
-	//			this.setVisible(false);
+	public void Findpwclick() {
+		FindPw findPw = new FindPw();				//패스워드 찾기 클릭
+		findPw.setVisible(true);
+
+
+	}
+	public void FindpwMouseEnter() {
+			setMouseOverEffect(btnFindpw);
 			
-				
 	}
-	public void enterFindid() {
-		
+	public void FindpwMouseExit() {
+		   resetButton(btnFindpw);
 	}
-	public void exitFindid() {
-		
-	}
-	public void clickFindpw() {
-			FindPw findPw = new FindPw();				//패스워드 찾기 클릭
-			findPw.setVisible(true);
-	//		this.setVisible(false);
-			
-	}
-	public void enterFindpw() {
-		
-	}
-	public void exitFindpw() {
-		
-	}
-	
-	
-	
-	
-	
 	
 //	// 중복되는 코드 모아주는 매소드   ************************************************
-//	 private void setMouseOverEffect(JLabel lblSign2) {
-//	        lblSign2.setForeground(Color.BLACK);						//글씨 색깔
-//	        Font font = new Font("Arial Black", Font.ITALIC, 13);		//사용 폰트
-//	        lblSign2.setFont(font);									//폰트 적용
-//	    }
-//	
-//	 private void resetButton(JTextField textField) {
-//	        textField.setForeground(UIManager.getColor("TextField.foreground"));		//텍스트 색깔 되돌리기 
-//	        textField.setFont(null);													//폰트 초기화
-//	    }
+	 private void setMouseOverEffect(JButton btnSign2) {
+	        btnSign2.setForeground(Color.BLACK);						//글씨 색깔
+	        Font font = new Font("Arial Black", Font.ITALIC, 13);		//사용 폰트
+	        btnSign2.setFont(font);									    //폰트 적용
+	    }
+	
+	 private void resetButton(JButton btnLogin2) {
+	        btnLogin2.setForeground(UIManager.getColor("TextField.foreground"));		//텍스트 색깔 되돌리기 
+	        btnLogin2.setFont(null);													//폰트 초기화
+	    }
 //	 // 중복되는 코드 모아주는 매소드   ************************************************
 	
 	public void Login() {
@@ -328,5 +336,4 @@ public class Login extends JDialog {
 		
 				
 	}
-	
 }

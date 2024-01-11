@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -46,7 +47,7 @@ public class Home_detail extends JDialog {
 	private JButton btnHome;
 	private JButton btnChat;
 	private JButton btnWrite;
-	private JTextField tfOption;
+	private JTextField tfStatus;
 	private JLabel lbPostTitle;
 	private JScrollPane scrollPane;
 	private JTable innerTableImage;
@@ -96,7 +97,7 @@ public class Home_detail extends JDialog {
 		contentPanel.add(getBtnMypage());
 		contentPanel.add(getBtnChat());
 		contentPanel.add(getBtnWrite());
-		contentPanel.add(getTfOption());
+		contentPanel.add(getTfStatus());
 		contentPanel.add(getLbPostTitle());
 		contentPanel.add(getLbUserImage());
 		contentPanel.add(getLbBid());
@@ -158,6 +159,13 @@ public class Home_detail extends JDialog {
 		if (btnChat == null) {
 			btnChat = new JButton("채팅");
 			btnChat.setFont(new Font("Helvetica", Font.PLAIN, 14));
+			btnChat.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Chat chat = new Chat();
+					chat.setVisible(true);
+					dispose();
+				}
+			});
 			btnChat.setBounds(230, 55, 70, 34);
 //			btnChat.setBorder(new LineBorder(new Color(214, 203, 216), 2));
 		}
@@ -177,18 +185,18 @@ public class Home_detail extends JDialog {
 		}
 		return btnWrite;
 	}
-	private JTextField getTfOption() {
-		if (tfOption == null) {
-			tfOption = new JTextField();
-			tfOption.setEditable(false);
-			tfOption.setHorizontalAlignment(SwingConstants.CENTER);
-			tfOption.setText("판매");
-			tfOption.setBounds(10, 112, 85, 30);
-			tfOption.setColumns(10);
-			tfOption.setBorder(new LineBorder(new Color(214, 203, 216), 2));
+	private JTextField getTfStatus() {
+		if (tfStatus == null) {
+			tfStatus = new JTextField();
+			tfStatus.setEditable(false);
+			tfStatus.setHorizontalAlignment(SwingConstants.CENTER);
+			tfStatus.setText(Share.post_status);
+			tfStatus.setBounds(10, 112, 85, 30);
+			tfStatus.setColumns(10);
+			tfStatus.setBorder(new LineBorder(new Color(214, 203, 216), 2));
 			
 		}
-		return tfOption;
+		return tfStatus;
 	}
 	private JLabel getLbPostTitle() {
 		if (lbPostTitle == null) {
@@ -203,6 +211,7 @@ public class Home_detail extends JDialog {
 			scrollPane = new JScrollPane();
 			scrollPane.setBounds(0, 156, 430, 126);
 			scrollPane.setViewportView(getInnerTableImage());
+			scrollPane.setBorder(BorderFactory.createEmptyBorder());
 		}
 		return scrollPane;
 	}
