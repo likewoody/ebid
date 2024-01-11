@@ -14,19 +14,27 @@ import java.awt.Font;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
+import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.JTextPane;
 
 public class Write extends JFrame {
 
 	private static final long serialVersionUID = 1L;
+	
 	private JPanel contentPane;
 	private JTextField tfTitle;
 	private JTextField tfPrice;
 	private JTextField tfDescription;
 	private JTextField tfUserid;
 	private JLabel lblNewLabel_3_1;
+
+	private AbstractButton lblUserid;
+
 
 	/**
 	 * Launch the application.
@@ -63,16 +71,41 @@ public class Write extends JFrame {
 		contentPane.setLayout(null);
 		
 		JButton btnHome = new JButton("홈");
+		btnHome.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//input
+				Home home = new Home();
+				dispose();
+				home.setVisible(true);
+			
+			}
+		});
 		btnHome.setFont(new Font("Dialog", Font.PLAIN, 14));
 		btnHome.setBounds(37, 55, 70, 34);
 		contentPane.add(btnHome);
 		
 		JButton btnMypage = new JButton("개인");
+		btnMypage.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//input
+				MyPage mypage = new MyPage();
+				dispose();
+				mypage.setVisible(true);
+			
+			}
+		});
 		btnMypage.setFont(new Font("Dialog", Font.PLAIN, 14));
 		btnMypage.setBounds(131, 55, 70, 34);
 		contentPane.add(btnMypage);
 		
 		JButton btnChat = new JButton("채팅");
+		btnChat.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+					Chat chat = new Chat();
+					dispose();
+					chat.setVisible(true);
+			}
+		});
 		btnChat.setFont(new Font("Dialog", Font.PLAIN, 14));
 		btnChat.setBounds(227, 55, 70, 34);
 		contentPane.add(btnChat);
@@ -84,7 +117,7 @@ public class Write extends JFrame {
 		
 		JLabel lblNewLabel_3 = new JLabel("제목");
 		lblNewLabel_3.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_3.setFont(new Font("Dialog", Font.PLAIN, 14));
+		lblNewLabel_3.setFont(new Font("Dialog", Font.PLAIN, 13));
 		lblNewLabel_3.setBounds(37, 119, 70, 30);
 		contentPane.add(lblNewLabel_3);
 		contentPane.add(getLblNewLabel_3_1());
@@ -109,6 +142,7 @@ public class Write extends JFrame {
 		contentPane.add(lblNewLabel_1);
 		
 		tfDescription = new JTextField();
+		tfDescription.setHorizontalAlignment(SwingConstants.LEFT);
 		tfDescription.setFont(new Font("Dialog", Font.PLAIN, 14));
 		tfDescription.setColumns(10);
 		tfDescription.setBounds(29, 215, 371, 294);
@@ -128,24 +162,25 @@ public class Write extends JFrame {
 		btnPost.setBounds(111, 640, 210, 40);
 		contentPane.add(btnPost);
 		
-		JLabel lblNewLabel_4 = new JLabel("ID :");
+		JLabel lblNewLabel_4 = new JLabel("아이디 :");
 		lblNewLabel_4.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_4.setFont(new Font("Dialog", Font.PLAIN, 10));
-		lblNewLabel_4.setBounds(294, 521, 34, 15);
+		lblNewLabel_4.setBounds(289, 521, 47, 15);
 		contentPane.add(lblNewLabel_4);
 		contentPane.add(getTfUserid());
 		
-		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon(Write.class.getResource("/com/javalec/images/writingBackgroundnew.png")));
-		lblNewLabel.setBounds(0, 0, 430, 704);
-		contentPane.add(lblNewLabel);
+		JLabel lblBackground = new JLabel("");
+		lblBackground.setIcon(new ImageIcon(Write.class.getResource("/com/javalec/images/writingBackgroundnew.png")));
+		lblBackground.setBounds(0, 0, 430, 704);
+		contentPane.add(lblBackground);
 		
 	}
 	private JTextField getTfUserid() {
 		if (tfUserid == null) {
 			tfUserid = new JTextField();
+			tfUserid.setHorizontalAlignment(SwingConstants.CENTER);
 			tfUserid.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
-			tfUserid.setBounds(326, 520, 78, 16);
+			tfUserid.setBounds(336, 520, 64, 16);
 			tfUserid.setColumns(10);
 		}
 		return tfUserid;
@@ -155,8 +190,8 @@ public class Write extends JFrame {
 		if (lblNewLabel_3_1 == null) {
 			lblNewLabel_3_1 = new JLabel("판매가격");
 			lblNewLabel_3_1.setHorizontalAlignment(SwingConstants.CENTER);
-			lblNewLabel_3_1.setFont(new Font("Dialog", Font.PLAIN, 14));
-			lblNewLabel_3_1.setBounds(37, 150, 70, 30);
+			lblNewLabel_3_1.setFont(new Font("Dialog", Font.PLAIN, 13));
+			lblNewLabel_3_1.setBounds(37, 156, 70, 24);
 		}
 		return lblNewLabel_3_1;
 	}
@@ -171,6 +206,7 @@ public class Write extends JFrame {
 		
 			tfUserid.setText(dto.getUserid());
 		
+			lblUserid.setText(dto.getUserid());
+		
 	}
-	
 }//--end--
