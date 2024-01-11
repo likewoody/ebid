@@ -212,6 +212,13 @@ public class Chat extends JDialog {
 					innerTable.setDefaultEditor(Object.class, null);
 					
 					if (e.getClickCount() == 2) {
+						// 챗 아이디를 찾기 위함
+						Dao_Chat dao = new Dao_Chat();
+						ArrayList<Dto_Chat> dto = dao.searchChat();
+						
+						int i = innerTable.getSelectedRow();
+						Share.chatid = dto.get(i).getChatid();
+						
 						ChatDetail cd = new ChatDetail();
 						cd.setVisible(true);
 						dispose();
@@ -293,10 +300,11 @@ public class Chat extends JDialog {
 		//test
 //		innerTable.getColumnModel().getColumn(2).setCellRenderer(new FramePanel());
 		innerTable.setRowHeight(80);
+		
 	}
 	
 	private void deleteChat() {
-		// 유저 아이디를 찾기 위함
+		// 챗 아이디를 찾기 위함
 		Dao_Chat dao = new Dao_Chat();
 		ArrayList<Dto_Chat> dto = dao.searchChat();
 		

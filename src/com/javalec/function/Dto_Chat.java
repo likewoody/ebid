@@ -1,5 +1,7 @@
 package com.javalec.function;
 
+import java.sql.Date;
+
 public class Dto_Chat {
 	
 	private byte[] profile_image;
@@ -8,9 +10,8 @@ public class Dto_Chat {
 	private int chatDate;
 	private int chatid;
 	private String detailtext;
-	private String detailuserid;
-	private int detailDate;
-	private String deatilUser;
+	private Date detailDate;
+	private String detailUser;
 	
 	
 	public Dto_Chat() {
@@ -21,10 +22,15 @@ public class Dto_Chat {
 	
 
 	public Dto_Chat(String deatilUser) {
-		this.deatilUser = deatilUser;
+		this.detailUser = deatilUser;
 	}
 
 
+	public Dto_Chat(String detailtext, Date detailDate, String detailUser) {
+		this.detailtext = detailtext;
+		this.detailDate = detailDate;
+		this.detailUser = detailUser;
+	}
 
 
 	public Dto_Chat(byte[] profile_image, String nickname, String title, int chatid) {
@@ -39,20 +45,12 @@ public class Dto_Chat {
 //		this.title = title;
 //		this.chatDate = chatDate;
 //	}
-	
-	
-	public Dto_Chat(String detailtext, String detailuserid, int detailDate) {
-		super();
-		this.detailtext = detailtext;
-		this.detailuserid = detailuserid;
-		this.detailDate = detailDate;
-	}
-
 
 
 	public byte[] getProfile_image() {
 		return profile_image;
 	}
+
 
 
 
@@ -62,9 +60,11 @@ public class Dto_Chat {
 
 
 
+
 	public String getNickname() {
 		return nickname;
 	}
+
 
 
 
@@ -74,9 +74,11 @@ public class Dto_Chat {
 
 
 
+
 	public String getTitle() {
 		return title;
 	}
+
 
 
 
@@ -86,9 +88,11 @@ public class Dto_Chat {
 
 
 
+
 	public int getChatDate() {
 		return chatDate;
 	}
+
 
 
 
@@ -98,9 +102,11 @@ public class Dto_Chat {
 
 
 
+
 	public int getChatid() {
 		return chatid;
 	}
+
 
 
 
@@ -110,9 +116,11 @@ public class Dto_Chat {
 
 
 
+
 	public String getDetailtext() {
 		return detailtext;
 	}
+
 
 
 
@@ -122,27 +130,30 @@ public class Dto_Chat {
 
 
 
-	public String getDetailuserid() {
-		return detailuserid;
-	}
 
-
-
-	public void setDetailuserid(String detailuserid) {
-		this.detailuserid = detailuserid;
-	}
-
-
-
-	public int getDetailDate() {
+	public Date getDetailDate() {
 		return detailDate;
 	}
 
 
 
-	public void setDetailDate(int detailDate) {
+
+	public void setDetailDate(Date detailDate) {
 		this.detailDate = detailDate;
 	}
-	
+
+
+
+
+	public String getDetailUser() {
+		return detailUser;
+	}
+
+
+
+
+	public void setDetailUser(String detailUser) {
+		this.detailUser = detailUser;
+	}
 	
 }

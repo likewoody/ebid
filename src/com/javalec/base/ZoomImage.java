@@ -1,23 +1,19 @@
 package com.javalec.base;
 
-import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.Image;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
-import java.awt.Font;
-import java.awt.Image;
-import java.util.ArrayList;
-
 import javax.swing.JLabel;
 
 import com.javalec.function.Dao_Home;
 import com.javalec.function.Dto_Home;
 import com.javalec.function.Share;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 public class ZoomImage extends JDialog {
 
@@ -53,7 +49,7 @@ public class ZoomImage extends JDialog {
 		});
 		setFont(new Font("Lucida Grande", Font.BOLD, 27));
 		setTitle("이미지 확대");
-		setBounds(100, 100, 400, 352);
+		setBounds(100, 100, 430, 732);
 		getContentPane().setLayout(null);
 		getContentPane().add(getLbZoomImage());
 
@@ -61,15 +57,7 @@ public class ZoomImage extends JDialog {
 	private JLabel getLbZoomImage() {
 		if (lbZoomImage == null) {
 			lbZoomImage = new JLabel("");
-			lbZoomImage.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					if (e.getClickCount() == 2) {
-						dispose();
-					}
-				}
-			});
-			lbZoomImage.setBounds(0, 0, 400, 324);
+			lbZoomImage.setBounds(0, 0, 430, 703);
 		}
 		return lbZoomImage;
 	}
@@ -87,7 +75,7 @@ public class ZoomImage extends JDialog {
 		}
 		ImageIcon imageIcon = new ImageIcon(getImg);
 		Image img = imageIcon.getImage();
-		Image setImg = img.getScaledInstance(400, 324, DO_NOTHING_ON_CLOSE);
+		Image setImg = img.getScaledInstance(430, 703, DO_NOTHING_ON_CLOSE);
 		ImageIcon image = new ImageIcon(setImg);
 		lbZoomImage.setIcon(image);
 	}

@@ -20,6 +20,7 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
 import com.javalec.function.Dao_Chat;
@@ -27,8 +28,10 @@ import com.javalec.function.Dto_Chat;
 import com.javalec.function.Dto_Home;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.sql.Date;
 import java.util.ArrayList;
 
 import javax.swing.JScrollPane;
@@ -267,6 +270,7 @@ public class ChatDetail extends JDialog {
 			innerTable = new JTable();
 			innerTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			innerTable.setModel(outerTable);
+			innerTable.setFont(new Font("Helvetica", Font.PLAIN, 15));
 		}
 		return innerTable;
 	}
@@ -274,16 +278,28 @@ public class ChatDetail extends JDialog {
 	// ---- Fucntion ----
 	
 	private void tableInit() {
-		outerTable.addColumn("왼쪽유저");
-		outerTable.addColumn("오른쪽유저");
+		outerTable.addColumn("닉넴");
+		outerTable.addColumn("유저");
 		outerTable.setColumnCount(2);
 		
 		TableColumn col = innerTable.getColumnModel().getColumn(0);
-		int width = 215;
+		int width = 65;
 		col.setPreferredWidth(width);
 		
 		col = innerTable.getColumnModel().getColumn(1);
+		width = 365;
 		col.setPreferredWidth(width);
+//		int maxWidth = 0;
+//		
+//		for (int row = 0; row < innerTable.getRowCount(); row++) {
+//		    TableCellRenderer renderer = innerTable.getCellRenderer(row, 1);
+//		    Component comp = innerTable.prepareRenderer(renderer, row, 1);
+//		    maxWidth = Math.max(comp.getPreferredSize().width, maxWidth);
+//		}
+//
+//		col.setPreferredWidth(maxWidth);
+//
+//		col = innerTable.getColumnModel().getColumn(2);
 		
 		int i = innerTable.getRowCount();
 		for (int j = 0; j < i; i++) {
@@ -294,14 +310,17 @@ public class ChatDetail extends JDialog {
 	private void getUserInfo() {
 		Dao_Chat dao = new Dao_Chat();
 		
+		// 이미지 사진 첫 메시지에만 사진이 나온다 특히 상대방의 그게 아니라면 사진이 안나옴 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@22
+		
 		for (Dto_Chat dto : dao.findChatDeatil()) {
-			outerTable.addColumn(new Object[] {
-					dto.getDetailtext(),
-					dto.getDetailuserid(),
-					dto.getDetailDate()
+			Date strDate = dto.getDetailDate();
+			outerTable.addRow(new Object[] {
+					dto.getDetailUser(),
+					String.format("<html>: %s&nbsp;&nbsp;&nbsp;<h5>%s</h5><br></html>", dto.getDetailtext(), strDate) 
+					
 			});
 		}
-		innerTable.getTableHeader().setReorderingAllowed(false); // true값과 false값의 차이를 모르겠음 *******
+//		innerTable.getTableHeader().setReorderingAllowed(false); // true값과 false값의 차이를 모르겠음 *******
 	}
 	
 
