@@ -291,7 +291,7 @@ public class Home extends JDialog {
 		for (Dto_Home dto : dao.searchDB()) {
 				outerTable.addRow(new Object[] {
 						dto.getPost_image(),
-						String.format("<html>[%s]"
+						String.format("<html><b>[%s]</b>"
 								+ "<br><br>"
 								+ "%s"
 								+ "<br>"
