@@ -146,7 +146,7 @@ public class Dao_Login {
 			Connection conn = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
 			PreparedStatement pstmt = conn.prepareStatement(B);
 
-		
+						
 			
 					
 			  											// 사용자 ID를 설정
@@ -181,10 +181,10 @@ public class Dao_Login {
 					e.printStackTrace();
 					passableId = true;
 				}
-
+							
 	
 		return passableId;
-	
+								
 }
 	//nickname 중복체크
 	
@@ -218,7 +218,7 @@ public class Dao_Login {
 			}	
 	        return passableNickname;	
 	    }	
-		
+					
 //	            if (rs.next()) {
 //	                passableNickname = false;
 //	            } 

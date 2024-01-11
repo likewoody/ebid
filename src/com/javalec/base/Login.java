@@ -26,8 +26,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JPasswordField;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
 public class Login extends JDialog {
 
@@ -318,7 +316,7 @@ public class Login extends JDialog {
 		    	 
 		    	
 		    	 if (dao.LoginAction()) {
-		    	        JOptionPane.showMessageDialog(null, "환영합니다.", "알림", JOptionPane.INFORMATION_MESSAGE);
+//		    	        JOptionPane.showMessageDialog(null, "환영합니다.", "알림", JOptionPane.INFORMATION_MESSAGE);
 
 		    	        // 로그인 성공 시 홈 화면으로 이동
 		    	        Home home = new Home();

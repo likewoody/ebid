@@ -294,7 +294,9 @@ public class Register extends JDialog {
 					 String userID = tfid.getText();
 	                    Dao_Login dao = new Dao_Login();
 					  		idDoubleCheck();
-					  		
+					  int i =0;
+					  
+					  if ( dao.Idcheck()  )
 					  		idcount++;
 					  		 
 				}
@@ -442,7 +444,7 @@ public class Register extends JDialog {
 			
 	public boolean signError() {
 					Dao_Login dao = new Dao_Login();
-						
+										
 						
 		  if (tfid.getText().isEmpty()) {
 	            JOptionPane.showMessageDialog(this, "ID를 입력하세요.", "알림", JOptionPane.WARNING_MESSAGE);
