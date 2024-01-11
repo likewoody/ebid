@@ -20,6 +20,7 @@ public class Main {
 
 	private JFrame frame;
 	private JLabel homeBackImage;
+	private Timer timer;
 
 	/**
 	 * Launch the application.
@@ -90,7 +91,7 @@ public class Main {
 	
 		SwingUtilities.invokeLater(() ->  {
 			// 타이머 클래스 객체 생성 0.2초 딜레이, actionlistener 객체 생성
-			Timer timer = new Timer(delay, new ActionListener() {
+			timer = new Timer(delay, new ActionListener() {
 				
 				// 카운트
 				int iteration = 0; 
@@ -104,15 +105,17 @@ public class Main {
 						iteration++;
 					}
 					else {
-						frame.setVisible(false);
+						Login log = new Login();
+						log.setVisible(true);
+						frame.dispose();
+						timer.stop();
 					}
 				}
-				
 			});
-			
 			// 타이머 시작
 			timer.start();
 		});
 		
 	}
+	
 }
