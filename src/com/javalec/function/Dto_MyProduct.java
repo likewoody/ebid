@@ -3,26 +3,28 @@ package com.javalec.function;
 public class Dto_MyProduct {
 
 	int price;
+	int postid;
 	String nickname;
 	String title;
 	String post_status;
-	int chat;
-	int like;
+	int count;
 
 	public Dto_MyProduct() {
 
 	}
 	
-	public Dto_MyProduct(int like) {
-		this.like = like;
+	public Dto_MyProduct(int count) {
+		this.count = count;
 	}
 	
-	public Dto_MyProduct(String post_status, String title, int price, String nickname) {
+	public Dto_MyProduct(int postid, String post_status, String title, int price, String nickname) {
+		this.postid = postid;
 		this.post_status = post_status;
 		this.title = title;
 		this.price = price;
 		this.nickname = nickname;
 	}
+
 
 	public int getPrice() {
 		return price;
@@ -56,21 +58,15 @@ public class Dto_MyProduct {
 		this.post_status = post_status;
 	}
 
-	public int getChat() {
-		return chat;
+	public int getCount() {
+		return count;
 	}
 
-	public void setChat(int chat) {
-		this.chat = chat;
+	public void setCount(int count) {
+		this.count = count;
 	}
 
-	public int getLike() {
-		return like;
-	}
-
-	public void setLike(int like) {
-		this.like = like;
-	}
+	
 	
 	
 	

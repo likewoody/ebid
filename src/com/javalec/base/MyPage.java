@@ -94,6 +94,13 @@ public class MyPage extends JDialog {
 	private JButton getBtnHome() {
 		if (btnHome == null) {
 			btnHome = new JButton("홈");
+			btnHome.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Home home = new Home();
+					dispose();
+					home.setVisible(true);
+				}
+			});
 			btnHome.setBounds(33, 55, 70, 34);
 		}
 		return btnHome;
@@ -110,6 +117,13 @@ public class MyPage extends JDialog {
 	private JButton getBtnChat() {
 		if (btnChat == null) {
 			btnChat = new JButton("채팅");
+			btnChat.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Chat chat = new Chat();
+					dispose();
+					chat.setVisible(true);
+				}
+			});
 			btnChat.setBounds(230, 55, 70, 34);
 		}
 		return btnChat;
@@ -118,6 +132,12 @@ public class MyPage extends JDialog {
 	private JButton getBtnWrite() {
 		if (btnWrite == null) {
 			btnWrite = new JButton("글쓰기");
+			btnWrite.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Writing write = new Writing();
+					dispose();
+				}
+			});
 			btnWrite.setBounds(330, 55, 70, 34);
 		}
 		return btnWrite;

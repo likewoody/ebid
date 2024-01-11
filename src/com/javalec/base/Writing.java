@@ -177,7 +177,6 @@ public class Writing {
 		if (btnNewButton == null) {
 			btnNewButton = new JButton("게시하기");
 			btnNewButton.setFont(new Font("Dialog", Font.PLAIN, 14));
-			btnNewButton.setBounds(111, 640, 210, 40);
 		}
 		return btnNewButton;
 	}

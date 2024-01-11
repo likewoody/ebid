@@ -56,7 +56,7 @@ public class Dao_Like {
 		return dtoList;
 	}
 	
-	public ArrayList<Dto_Like> searchlikeandchat() {
+	public ArrayList<Dto_Like> searchlike() {
 		ArrayList<Dto_Like> dtoList = new ArrayList<Dto_Like>();
 		Dto_Like dto = null;
 
@@ -65,15 +65,7 @@ public class Dao_Like {
 			Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
 			Statement st = con.createStatement();
 
-			String query = "SELECT p.postid, p.title, p.post_status, p.price, s.userid, u.nickname, MAX(i.imageid) AS max_imageid, "
-					+ "(SELECT post_image FROM image WHERE imageid = MAX(i.imageid)) AS max_post_image "
-					+ "FROM post AS p "
-					+ "JOIN wish_list AS w ON p.postid = w.postid "
-					+ "JOIN sell AS s ON s.postid = p.postid "
-					+ "JOIN user AS u ON u.userid = s.userid "
-					+ "JOIN image AS i ON i.postid = p.postid "
-					+ "WHERE w.userid = '" + Share.id + "' "
-					+ "GROUP BY p.postid, p.title, p.post_status, p.price, s.userid, u.nickname;";
+			String query = "";
 
 			ResultSet rs = st.executeQuery(query);
 			while (rs.next()) {

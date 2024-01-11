@@ -87,6 +87,13 @@ public class MyProduct extends JFrame {
 	private JButton getBtnHome() {
 		if (btnHome == null) {
 			btnHome = new JButton("홈");
+			btnHome.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Home home = new Home();
+					dispose();
+					home.setVisible(true);
+				}
+			});
 			btnHome.setBounds(33, 55, 70, 34);
 		}
 		return btnHome;
@@ -95,6 +102,13 @@ public class MyProduct extends JFrame {
 	private JButton getBtnMy() {
 		if (btnMy == null) {
 			btnMy = new JButton("개인");
+			btnMy.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					MyPage mp = new MyPage();
+					dispose();
+					mp.setVisible(true);
+				}
+			});
 			btnMy.setBounds(130, 55, 70, 34);
 		}
 		return btnMy;
@@ -103,6 +117,13 @@ public class MyProduct extends JFrame {
 	private JButton getBtnChat() {
 		if (btnChat == null) {
 			btnChat = new JButton("채팅");
+			btnChat.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Chat chat = new Chat();
+					dispose();
+					chat.setVisible(true);
+				}
+			});
 			btnChat.setBounds(230, 55, 70, 34);
 		}
 		return btnChat;
@@ -198,6 +219,7 @@ public class MyProduct extends JFrame {
 		Dao_MyProduct dao = new Dao_MyProduct();
 		ArrayList<Dto_MyProduct> dtolist = dao.searchDB();
 		ArrayList<Dto_MyProduct> like = dao.LikeDB();
+		ArrayList<Dto_MyProduct> chat = dao.ChatDB();
 
 		int listCount = dtolist.size();
 
@@ -209,8 +231,8 @@ public class MyProduct extends JFrame {
 							+ "%s<br>"
 							+ "가격 : %s<br>"
 							+ "판매자 : %s<br><br>"
-							+ "좋아요 : %s</html>", dtolist.get(i).getPost_status(), dtolist.get(i).getTitle(),
-							Integer.toString(dtolist.get(i).getPrice()), dtolist.get(i).getNickname(),Integer.toString(like.get(i).getLike()))};
+							+ "채팅 : %s  ㅣ  찜 : %s</html>", dtolist.get(i).getPost_status(), dtolist.get(i).getTitle(),
+							Integer.toString(dtolist.get(i).getPrice()), dtolist.get(i).getNickname(),Integer.toString(chat.get(i).getCount()),Integer.toString(like.get(i).getCount()))};
 			outertable.addRow(qTxt);
 			innertable.setRowHeight(i, 150);
 		}
