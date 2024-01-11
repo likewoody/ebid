@@ -64,7 +64,7 @@ public class Dao_Home {
 			
 			String query = "SELECT max_image.post_image, p.title, p.price, u.nickname, p.post_status, p.postid, "
 					+ "    ( "
-					+ "        SELECT COUNT(DISTINCT w.postid) "
+					+ "        SELECT COUNT(w.postid) "
 					+ "        FROM wish_list w "
 					+ "        WHERE w.postid = p.postid "
 					+ "    ) AS wish_list_count, "
