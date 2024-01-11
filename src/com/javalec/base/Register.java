@@ -22,6 +22,7 @@ import java.awt.Color;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.GrayFilter;
 import javax.swing.JCheckBox;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -62,7 +63,9 @@ public class Register extends JDialog {
 	private JButton btnBack;
 	private JTextField tfpwmatch;
 	private Dao_Login daoLogin;
-
+	private int idcount = 0;
+	private int namecount = 0;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -262,6 +265,7 @@ public class Register extends JDialog {
 	private JTextField getTfaddress1() {
 		if (tfaddress1 == null) {
 			tfaddress1 = new JTextField();
+			tfaddress1.setText("서울특별시");
 			tfaddress1.setEditable(false);
 			tfaddress1.setColumns(10);
 			tfaddress1.setBounds(225, 518, 100, 26);
@@ -290,6 +294,8 @@ public class Register extends JDialog {
 					 String userID = tfid.getText();
 	                    Dao_Login dao = new Dao_Login();
 					  		idDoubleCheck();
+					  		
+					  		idcount++;
 					  		 
 				}
 			});
@@ -302,18 +308,10 @@ public class Register extends JDialog {
 			btnnickNamechek = new JButton("중복확인");
 			btnnickNamechek.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-//					 String userNickname = tfnickname.getText();
-//		                Dao_Login dao = new Dao_Login();
-		                daoLogin = new Dao_Login();
-		                
-		                    daoLogin.registerWithNickNameCheck();
-		                     if (daoLogin.passableNickname) {
-		                        JOptionPane.showMessageDialog(null, "사용 가능한 닉네임입니다.", "알림", JOptionPane.INFORMATION_MESSAGE);
-		                        tfnickname.setEditable(false);
-		                    } else {
-		                        JOptionPane.showMessageDialog(null, "이미 사용 중인 닉네임입니다. 다른 닉네임을 입력하세요.", "알림", JOptionPane.WARNING_MESSAGE);
-		                    }
-		                
+						String usernickname = tfnickname.getText();
+					Dao_Login dao = new Dao_Login();					
+						nickNameDoubleCheck();
+						namecount++;
 		            }
 		        });
 			btnnickNamechek.setBounds(330, 390, 80, 26);
@@ -338,27 +336,20 @@ public class Register extends JDialog {
                     }
 					 
 						String userid = tfid.getText();
-	                    String pw = tfpw.getText();  
-	                    String pwmatch = tfpwmatch.getText();
+	                    String pw = tfpw.getText();  	                
 	                    String nickname = tfnickname.getText();	                   
 	                    String phone = tfphone.getText();
-	                    String address = tfaddress1.getText() + " " + tfaddress2.getText() + " " + cbaddress.getSelectedItem();
-
-	                    // 비밀번호 일치 여부 확인
-	                    if (!tfpw.equals(tfpwmatch)) {
-	                        JOptionPane.showMessageDialog(null, "비밀번호가 일치하지 않습니다.");
-	                        return;
-	                    }
+	                    String address = tfaddress1.getText() + " " + tfaddress2.getText();
 
                     // 회원가입 처리
-                    Dao_Login dao = new Dao_Login(userid, pw, nickname, phone, address );
+                    Dao_Login dao = new Dao_Login(userid, pw, phone, nickname, address );
                     // 사용자 등록 수행
-                    dao.signUpdate( );
+                    dao.signUpdate();
 
                     // 사용자에게 성공적으로 등록되었음을 알림
                     JOptionPane.showMessageDialog(null, "회원가입이 완료되었습니다.");
                    dispose();
-      
+                   					
 				}
 			});
 			btnsignIn.setBounds(260, 624, 117, 29);
@@ -397,7 +388,7 @@ public class Register extends JDialog {
 				}
 			});
 			tfPinfo.setEditable(false);
-			tfPinfo.setText("(필수) 개인정보 수집에 대한 동의.");
+			tfPinfo.setText("(필수) 개인정보 수집에 대한 동의");
 			tfPinfo.setBounds(158, 575, 220, 23);
 			tfPinfo.setColumns(10);
 		}
@@ -422,79 +413,96 @@ public class Register extends JDialog {
 	
 	
 	
-	
-	
 	//--------Function---------
 	
-	
-	
-	public void signIn() {
+	public void checkPasswordMatch() {
+		String password = tfpw.getText();
+		String reEnteredPassword = tfpwRe.getText();
 		
+//		for (int i = 0; i <= tfpw.getText().length(); i++) {
+//						if ( password.equals(reEnteredPassword) && tfpw.getText().length() == tfpwmatch.getText().length()) {
+//							
+//						}
+//	}
+		
+		
+		if (password.equals(reEnteredPassword)) {
+			tfpwmatch.setForeground(Color.BLUE);
+			tfpwmatch.setText("비밀번호가 일치합니다.");
+		} else {
+			tfpwmatch.setForeground(Color.RED);
+			tfpwmatch.setText("비밀번호가 일치하지 않습니다.");
+		}
+		 if (password.isEmpty() && reEnteredPassword.isEmpty()) {
+		        tfpwmatch.setVisible(true);
+		 }
+		 
+		tfpwmatch.setVisible(true);
 	}
-		  // 회원가입에 필요한 데이터 수집
-//        String userID = tfid.getText();
-//        String userPW = tfpw.getText();
-//        String userNickname = tfnickname.getText();
-//        String userName = tfname.getText();
-//        String userPhone = tfphone.getText();
-//        String userAddress = cbaddress.getSelectedItem() + " " + tfaddress1.getText() + " " + tfaddress2.getText();
-//
-//        // 데이터베이스에 회원가입 정보 업데이트
-//        Dao_Login dao = new Dao_Login();
-//        boolean updateSuccess = dao.signUpdate(userID, userPW, userNickname, userName, userPhone, userAddress);
-//
-//        if (updateSuccess) {
-//            JOptionPane.showMessageDialog(null, "회원가입이 완료되었습니다.");
-//        } else {
-//            JOptionPane.showMessageDialog(null, "회원가입에 실패하였습니다. 다시 입력해 주세요.");
-//        }
-//    }
-				
+			
 	public boolean signError() {
+					Dao_Login dao = new Dao_Login();
+						
+						
 		  if (tfid.getText().isEmpty()) {
 	            JOptionPane.showMessageDialog(this, "ID를 입력하세요.", "알림", JOptionPane.WARNING_MESSAGE);
 	            return false;
 	        }
+		  	  else if (idcount < 1 ) {
+	            JOptionPane.showMessageDialog(this, "ID 중복확인을 수행하세요.", "알림", JOptionPane.WARNING_MESSAGE);
+	            return false;
+	        }
 
-	        if (tfpw.getText().isEmpty()) {
+		      else	if (tfpw.getText().isEmpty()) {
 	            JOptionPane.showMessageDialog(this, "비밀번호를 입력하세요.", "알림", JOptionPane.WARNING_MESSAGE);
 	            return false;
 	        }
 
-	        if (tfpwRe.getText().isEmpty()) {
+		      else  if (tfpwRe.getText().isEmpty()) {
 	            JOptionPane.showMessageDialog(this, "비밀번호 재입력을 입력하세요.", "알림", JOptionPane.WARNING_MESSAGE);
 	            return false;
 	        }
+		      else if (tfpw.getText().isEmpty() || tfpwRe.getText().isEmpty() || !tfpw.getText().equals(tfpwRe.getText())) {
+		    	  JOptionPane.showMessageDialog(this, "비밀번호를 확인해주세요.", "알림", JOptionPane.WARNING_MESSAGE);
+		    	  return false;
+		      }
 
-	        if (tfnickname.getText().isEmpty()) {
+		      else  if (tfnickname.getText().isEmpty()) {	
 	            JOptionPane.showMessageDialog(this, "닉네임을 입력하세요.", "알림", JOptionPane.WARNING_MESSAGE);
-	            return false;
+	            return false;						
 	        }
+		      else  if (namecount < 1) {
+			  JOptionPane.showMessageDialog(this, "닉네임 중복확인을 수행하세요.", "알림", JOptionPane.WARNING_MESSAGE);
+			  return false;
+		  }
 
-	        if (tfname.getText().isEmpty()) {
+		   else  if (tfname.getText().isEmpty()) {
 	            JOptionPane.showMessageDialog(this, "이름을 입력하세요.", "알림", JOptionPane.WARNING_MESSAGE);
 	            return false;
-	        }
-
-	        if (tfphone.getText().isEmpty()) {
+		   }
+		   else  if (tfphone.getText().isEmpty()) {
 	            JOptionPane.showMessageDialog(this, "전화번호를 입력하세요.", "알림", JOptionPane.WARNING_MESSAGE);
 	            return false;
 	        }
 
-	        if (tfaddress1.getText().isEmpty() || tfaddress2.getText().isEmpty()) {
-	            JOptionPane.showMessageDialog(this, "주소를 입력하세요.", "알림", JOptionPane.WARNING_MESSAGE);
-	            return false;
+		   else if (tfaddress1.getText().isEmpty() || tfaddress2.getText().isEmpty()) {
+			 	JOptionPane.showMessageDialog(this, "주소를 입력하세요.", "알림", JOptionPane.WARNING_MESSAGE);
+			 	return false;
 	        }
-	        if (tfpw.getText().isEmpty() || tfpwRe.getText().isEmpty() || !tfpw.getText().equals(tfpwRe.getText())) {
-	            JOptionPane.showMessageDialog(this, "비밀번호를 확인해주세요.", "알림", JOptionPane.WARNING_MESSAGE);
-	            return false;
-	        }
-
-	        return true;
-	    
-	
+		   else if (!ckbagree.isSelected() ) {	
+			  
+	        	JOptionPane.showMessageDialog(this, "개인정보 수집에 대한 동의가 필요합니다.", "알림", JOptionPane.WARNING_MESSAGE);
+	        	return false;
+           }
+		  return true;
+		  		//Dao_Login Dao = new Dao_Login();
+		  		
+//		  			if (dao.Idcheck() )
 				
-				
+		  
+		   
+		  
+											
 	}
 	// 아이디 중복확인
 	public void idDoubleCheck() {
@@ -509,31 +517,34 @@ public class Register extends JDialog {
 		 		tfid.setEditable(false);
 		 			}
 		 			else 
+		 				
 		        JOptionPane.showMessageDialog(this, "이미 사용 중인 ID입니다. 다른 ID를 입력하세요.", "알림", JOptionPane.WARNING_MESSAGE);
 	
-
+		 			
 	}
-	//닉네임 중복 확인
+	//닉네임 중복 확인								
 	public void nickNameDoubleCheck() {
-		 String userNickname = tfnickname.getText();
-		 Dao_Login daoLogin = new Dao_Login(userNickname);
-		 			if ( tfnickname.getText().isEmpty()) {		
+		 String userNickname = tfnickname.getText();			
+		 Dao_Login daoLogin = new Dao_Login(userNickname);		
+		 			if ( tfnickname.getText().isEmpty()) {			
 		 				JOptionPane.showMessageDialog(this, "닉네임을 입력해주세요.", "알림", JOptionPane.WARNING_MESSAGE);
-		 				return;
-		 			}
+		 				return;	
+		 			}			
 		 			if (daoLogin.nickNameCheck()) {
 		        JOptionPane.showMessageDialog(this, "사용 가능한 닉네임 입니다.", "알림", JOptionPane.INFORMATION_MESSAGE);
 		          tfnickname.setEditable(false);
-	}else { 
+		         
+	             }
+		 			else  
 		        JOptionPane.showMessageDialog(this, "이미 사용 중인 닉네임 입니다. 다른 닉네임을 입력하세요.", "알림", JOptionPane.WARNING_MESSAGE);
 		        
-	} 	
+		 				
 	}
 				
-		
+
 		
 	public void goPinfo() {
-			JOptionPane.showMessageDialog(null, "");				//약관 집어 넣기?
+			JOptionPane.showMessageDialog(null, "");				//약관 집어 넣기
 	}
 	// 로그인 화면으로 돌아가기
 	public void goBack () {
@@ -543,22 +554,10 @@ public class Register extends JDialog {
 		Login login = new Login();	
 		login.setVisible(true);
 		
-					
+							
 	}
 	}
-	private void checkPasswordMatch() {
-		 String password = tfpw.getText();
-		    String reEnteredPassword = tfpwRe.getText();
 
-		    if (password.equals(reEnteredPassword)) {
-		    	tfpwmatch.setForeground(Color.BLUE);
-		    	tfpwmatch.setText("비밀번호가 일치합니다.");
-		    } else {
-		    	tfpwmatch.setForeground(Color.RED);
-		    	tfpwmatch.setText("비밀번호가 일치하지 않습니다.");
-		    }
-		    tfpwmatch.setVisible(true);
-		}
 	}
 	
 	

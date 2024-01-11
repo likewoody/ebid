@@ -7,7 +7,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
+import com.javalec.base.Register;
 import com.mysql.cj.exceptions.RSAException;
 
 public class Dao_Login {
@@ -83,6 +86,11 @@ public class Dao_Login {
 
 	
 
+	public Dao_Login(boolean passableNickname) {
+			super();
+			this.passableNickname = passableNickname;
+		}
+
 	public Dao_Login(String userid) {
 		super();
 		this.userid = userid;
@@ -131,7 +139,7 @@ public class Dao_Login {
 	//id 중복체크
 	public boolean Idcheck() {
 		boolean passableId = true;
-		String B ="select userid from user where userid = ?";
+		String B ="select userid from user where userid = ?";				
 		
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -139,24 +147,30 @@ public class Dao_Login {
 			PreparedStatement pstmt = conn.prepareStatement(B);
 
 		
-
+			
+					
 			  											// 사용자 ID를 설정
 			pstmt.setString(1, this.userid);
-
+					
 			ResultSet rs = pstmt.executeQuery();
-			
+					
 				if ( rs.next()) {
 						passableId = false;
+					//	System.out.println("Duplicate ID found: " + this.userid);
 				}else { 
-					passableId = true;
-				}
+									
+							
 			    // 아이디가 중복되지 않으면 데이터베이스에 등록
+				 //   System.out.println("ID not found. Registering: " + this.userid);
+			if ( this.userid != null) {   
 	            String insertQuery = "INSERT INTO user (userid) VALUES (?)";
 	            PreparedStatement insertPstmt = conn.prepareStatement(insertQuery);
 	            insertPstmt.setString(1, this.userid);
 	            insertPstmt.executeUpdate();
-
-	          
+			}else {
+//				 System.out.println("Error: this.userid is null");
+			}
+				}
 	        
 				conn.close();
 				}
@@ -175,55 +189,50 @@ public class Dao_Login {
 	//nickname 중복체크
 	
 		public boolean nickNameCheck() {
-	        String E = "select nickname from user where nickname = ?";
-
+			 
+		boolean	passableNickname = true;
+	       // String E = "select nickname from user where nickname = ?";
+	        String E =  "SELECT COUNT(*) FROM user WHERE nickname = ?";
+	        				
+	        	
 	        try {
 	            Class.forName("com.mysql.cj.jdbc.Driver");
 	            Connection conn = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
 	            PreparedStatement pstmt = conn.prepareStatement(E);
-
+	            			
 	            // 사용자 nickname 설정
-	            pstmt.setString(1, this.nickname);
-	            ResultSet rs = pstmt.executeQuery();
-
-	            if (rs.next()) {
-	                passableNickname = false;
-	            } else {
-	                passableNickname = true;
-	            }
-
-	            conn.close();
-	        } catch (SQLException e) {
-	            e.printStackTrace();
-	            passableNickname = true;
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	            passableNickname = false;
-	        }
-
-	        return passableNickname;
-	    }
-
-
-		public void registerWithNickNameCheck() {
-	        if (nickNameCheck()) {
-	            try {
-	                String updateQuery = "update user set nickname = ? where userid = ?";
-	                try (Connection conn = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
-	                     PreparedStatement updatePstmt = conn.prepareStatement(updateQuery)) {
-
-	                    updatePstmt.setString(1, this.nickname);
-	                    updatePstmt.setString(2, this.userid);
-	                    updatePstmt.executeUpdate();
-	                }
-	            } catch (SQLException e) {
-	                e.printStackTrace();
-	                passableNickname = false;
-	                
-	            }     
-	            	
-	    }}
-	
+	            pstmt.setString(1, nickname);	
+//	            ResultSet rs = pstmt.executeQuery();
+	            		
+	            try (ResultSet rs = pstmt.executeQuery()) {
+	                if (rs.next()) {   		
+	                    passableNickname = false;	
+	                }	
+	            }	
+	        } catch (SQLException e) {	
+	            passableNickname = true;	
+	            e.printStackTrace();	
+	        } catch (ClassNotFoundException e) {
+				
+				e.printStackTrace();
+			}	
+	        return passableNickname;	
+	    }	
+		
+//	            if (rs.next()) {
+//	                passableNickname = false;
+//	            } 
+//	            			
+//
+//	            
+//	            conn.close();
+//	        }  catch (Exception e) {
+//	            e.printStackTrace();
+//	            passableNickname = true;
+//	        }
+//
+//	        return passableNickname;
+//	    }
 			
 	//id 찾기
 	public boolean findId() {
@@ -256,7 +265,7 @@ public class Dao_Login {
 		        return userid;
 		    }
 	
-
+		    
 	//pw 찾기
 	
 	public boolean findPw() {
@@ -265,15 +274,14 @@ public class Dao_Login {
 		try {
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		Connection conn = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
-//		Statement st = conn.createStatement();
-//		RPreparedStatement pstmt = conn.prepareStatement(D);
+					
 		 PreparedStatement pstmt = conn.prepareStatement(D);
         pstmt.setString(1, this.userid);
         pstmt.setString(2, this.nickname);
         pstmt.setString(3, this.phone);
-
+        			
         ResultSet rs = pstmt.executeQuery();
-//        		esultSet rs = st.executeQuery(D);
+        	
 			
 		if ( rs.next()) {
 				searchPw = true;
@@ -289,47 +297,33 @@ public class Dao_Login {
 	}
 	return searchPw;
 	}
-	//아이디 중복체크 후 아이디 등록
-//	public void idcheckafterinsert() {
-//		Dao_Login dao = new Dao_Login(userid);
-//	    if (dao.Idcheck()) {
-//				String A = "INSERT INTO user (userid) VALUES (?)";
-//				try {
-//					Class.forName("com.mysql.cj.jdbc.Driver");
-//					Connection conn = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
-//					 PreparedStatement pstmt = conn.prepareStatement(A);
-//					 
-//					 pstmt.setString(1, userid);
-//					 
-//					 pstmt.executeUpdate();
-//					 
-//					 conn.close();
-//				}
-//				catch( Exception e) {
-//					e.printStackTrace();
-//				}
-//	}
-//	}
+
 	public void signUpdate() {
 		   // 회원 정보 업데이트 쿼리
-	    String A = "update user set pw = ?, phone = ?, nickname = ?, address = ? where userid = ?";
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String currentDateAndTime = sdf.format(new Date());
+
+		
+	    String A = "UPDATE user SET pw = ?, phone = ?, nickname = ?, join_date = ?, address = ? WHERE userid = ?";
 	   
 	    try {
 	        Class.forName("com.mysql.cj.jdbc.Driver");
 	        Connection conn = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
 	        
 	        
-	        		
+
 	        
 	        
 	        
-	        //업데이트 실행
+	        //업데이트
 	        PreparedStatement pstmt = conn.prepareStatement(A);
-	        pstmt.setString(1, userid);
-	        pstmt.setString(2, pw);
+	        pstmt.setString(1, pw);
+	        pstmt.setString(2, phone);
 	        pstmt.setString(3, nickname);
-	        pstmt.setString(4, phone);
+	        pstmt.setString(4, currentDateAndTime);
 	        pstmt.setString(5, address);
+	        pstmt.setString(6, userid);
 
 	        // 업데이트 실행
 	        pstmt.executeUpdate();
@@ -338,6 +332,6 @@ public class Dao_Login {
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	    }
-//		return passableNickname;
+
 	}
 }
