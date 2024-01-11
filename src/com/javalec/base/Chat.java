@@ -212,6 +212,8 @@ public class Chat extends JDialog {
 					innerTable.setDefaultEditor(Object.class, null);
 					
 					if (e.getClickCount() == 2) {
+						ChatDetail cd = new ChatDetail();
+						cd.setVisible(true);
 						dispose();
 					}
 				}

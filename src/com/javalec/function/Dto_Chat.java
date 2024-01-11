@@ -10,6 +10,7 @@ public class Dto_Chat {
 	private String detailtext;
 	private String detailuserid;
 	private int detailDate;
+	private String deatilUser;
 	
 	
 	public Dto_Chat() {
@@ -17,6 +18,14 @@ public class Dto_Chat {
 	}
 	
 	
+	
+
+	public Dto_Chat(String deatilUser) {
+		this.deatilUser = deatilUser;
+	}
+
+
+
 
 	public Dto_Chat(byte[] profile_image, String nickname, String title, int chatid) {
 		this.profile_image = profile_image;
