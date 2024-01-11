@@ -211,7 +211,7 @@ public class Home_detail extends JDialog {
 			scrollPane = new JScrollPane();
 			scrollPane.setBounds(0, 156, 430, 126);
 			scrollPane.setViewportView(getInnerTableImage());
-			scrollPane.setBorder(BorderFactory.createEmptyBorder());
+//			scrollPane.setBorder(BorderFactory.createEmptyBorder());
 		}
 		return scrollPane;
 	}
@@ -328,24 +328,52 @@ public class Home_detail extends JDialog {
 	// ---- Function ----
 	
 	private void tableInit() {
-		imageOuterTable.addColumn("");
-		imageOuterTable.addColumn("");
-		imageOuterTable.addColumn("");
+		Dao_Home dao = new Dao_Home();
+		ArrayList<Dto_Home> dto = dao.findPostImage();
 		
-		imageOuterTable.setColumnCount(3);
+		// 사진 갯수에 따라 컬럼 갯수를 다르게 설정
+		if (dto.size() == 3) {
+			imageOuterTable.addColumn("");
+			imageOuterTable.addColumn("");
+			imageOuterTable.addColumn("");
+			imageOuterTable.setColumnCount(3);
+			TableColumn col = innerTableImage.getColumnModel().getColumn(0);
+			int width = 160;
+			col.setPreferredWidth(width);
+			
+			col = innerTableImage.getColumnModel().getColumn(1);
+			col.setPreferredWidth(width);
+			
+			col = innerTableImage.getColumnModel().getColumn(2);
+			col.setPreferredWidth(width);
+		}
+		// 사진 갯수에 따라 컬럼 갯수를 다르게 설정
+		else if (dto.size() == 2) {
+			imageOuterTable.addColumn("");
+			imageOuterTable.addColumn("");
+			imageOuterTable.setColumnCount(2);
+			TableColumn col = innerTableImage.getColumnModel().getColumn(0);
+			int width = 160;
+			col.setPreferredWidth(width);
+			
+			col = innerTableImage.getColumnModel().getColumn(1);
+			col.setPreferredWidth(width);
+			
+		}
+		// 사진 갯수에 따라 컬럼 갯수를 다르게 설정
+		else if (dto.size() == 1) {
+			imageOuterTable.addColumn("");
+			imageOuterTable.setColumnCount(1);
+			TableColumn col = innerTableImage.getColumnModel().getColumn(0);
+			int width = 160;
+			col.setPreferredWidth(width);
+			
+			
+		}
 		
-		TableColumn col = innerTableImage.getColumnModel().getColumn(0);
-		int width = 160;
-		col.setPreferredWidth(width);
-		
-		col = innerTableImage.getColumnModel().getColumn(1);
-		col.setPreferredWidth(width);
-		
-		col = innerTableImage.getColumnModel().getColumn(2);
-		col.setPreferredWidth(width);
 		
 		// 화면 자동 조절 오프, 오프시 화면 스크롤바가 나오게 한다.
-		innerTableImage.setAutoResizeMode(innerTableImage.AUTO_RESIZE_OFF);
+//		innerTableImage.setAutoResizeMode(innerTableImage.AUTO_RESIZE_OFF);
 		
 		int i = imageOuterTable.getRowCount();
 		for (int j = 0; j < i; j ++) {
@@ -353,16 +381,11 @@ public class Home_detail extends JDialog {
 		}
 	}
 	
-//	private void getPostInfo() {
-//		Dao_Home dao = new Dao_Home();
-//		lbPostTitle.setText(dao.findPostTitle());
-//	}
-	
 	private void searchDB() {
 		Dao_Home dao = new Dao_Home();
 		ArrayList<Dto_Home> dto = dao.findPostImage();
 		
-		// 테이블 최대 3개 이미지 넣기 
+		// 테이블 (최대 이미지 3개) 이미지 넣기 
 		if (dto.size() == 3) {
 			imageOuterTable.addRow(new Object[] {
 					dto.get(0).getPost_image(), dto.get(1).getPost_image(), dto.get(2).getPost_image()
@@ -385,7 +408,6 @@ public class Home_detail extends JDialog {
 			});
 			innerTableImage.getColumnModel().getColumn(0).setCellRenderer(new ImageRender());
 		}
-		else {}
 				
 		innerTableImage.getTableHeader().setReorderingAllowed(false); // true값과 false값의 차이를 모르겠음 *******
 		innerTableImage.setRowHeight(110);

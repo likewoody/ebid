@@ -30,7 +30,6 @@ public class MyPageEdit extends JFrame {
 	private JButton btnHome;
 	private JButton btnWrite;
 	private JButton btnMy;
-	private JButton btnAlarm;
 	private JButton btnChat;
 	private JButton btnBack;
 	private JLabel lblUserImage;
@@ -96,7 +95,6 @@ public class MyPageEdit extends JFrame {
 		getContentPane().add(getBtnHome());
 		getContentPane().add(getBtnWrite());
 		getContentPane().add(getBtnMy());
-		getContentPane().add(getBtnAlarm());
 		getContentPane().add(getBtnChat());
 		getContentPane().add(getBtnBack());
 		getContentPane().add(getLblUserImage());
@@ -130,7 +128,7 @@ public class MyPageEdit extends JFrame {
 	private JButton getBtnHome() {
 		if (btnHome == null) {
 			btnHome = new JButton("홈");
-			btnHome.setBounds(20, 55, 70, 34);
+			btnHome.setBounds(33, 55, 70, 34);
 		}
 		return btnHome;
 	}
@@ -138,7 +136,7 @@ public class MyPageEdit extends JFrame {
 	private JButton getBtnWrite() {
 		if (btnWrite == null) {
 			btnWrite = new JButton("글쓰기");
-			btnWrite.setBounds(340, 55, 70, 34);
+			btnWrite.setBounds(330, 55, 70, 34);
 		}
 		return btnWrite;
 	}
@@ -146,23 +144,15 @@ public class MyPageEdit extends JFrame {
 	private JButton getBtnMy() {
 		if (btnMy == null) {
 			btnMy = new JButton("개인");
-			btnMy.setBounds(100, 55, 70, 34);
+			btnMy.setBounds(130, 55, 70, 34);
 		}
 		return btnMy;
-	}
-
-	private JButton getBtnAlarm() {
-		if (btnAlarm == null) {
-			btnAlarm = new JButton("알림");
-			btnAlarm.setBounds(180, 55, 70, 34);
-		}
-		return btnAlarm;
 	}
 
 	private JButton getBtnChat() {
 		if (btnChat == null) {
 			btnChat = new JButton("채팅");
-			btnChat.setBounds(260, 55, 70, 34);
+			btnChat.setBounds(230, 55, 70, 34);
 		}
 		return btnChat;
 	}

@@ -55,6 +55,37 @@ public class Dao_Like {
 		}
 		return dtoList;
 	}
+	
+	public ArrayList<Dto_Like> searchlike() {
+		ArrayList<Dto_Like> dtoList = new ArrayList<Dto_Like>();
+		Dto_Like dto = null;
+
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+			Statement st = con.createStatement();
+
+			String query = "";
+
+			ResultSet rs = st.executeQuery(query);
+			while (rs.next()) {
+
+				int postid = rs.getInt(1);
+				String post_status = rs.getString(2);
+				String title = rs.getString(3);
+				int price = rs.getInt(4);
+				String nickname = rs.getString(5);
+
+				dto = new Dto_Like(postid, post_status, title, price, nickname);
+
+				dtoList.add(dto);
+			}
+			con.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return dtoList;
+	}
 
 	public void deleteLike(int like) {
 		PreparedStatement ps = null;

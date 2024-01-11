@@ -36,7 +36,6 @@ public class MyCutoff extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JButton btnHome;
 	private JButton btnMy;
-	private JButton btnAlarm;
 	private JButton btnChat;
 	private JButton btnWrite;
 	private JButton btnBack;
@@ -81,7 +80,6 @@ public class MyCutoff extends JFrame {
 		getContentPane().setLayout(null);
 		getContentPane().add(getBtnHome());
 		getContentPane().add(getBtnMy());
-		getContentPane().add(getBtnAlarm());
 		getContentPane().add(getBtnChat());
 		getContentPane().add(getBtnWrite());
 		getContentPane().add(getBtnBack());
@@ -95,7 +93,14 @@ public class MyCutoff extends JFrame {
 	private JButton getBtnHome() {
 		if (btnHome == null) {
 			btnHome = new JButton("홈");
-			btnHome.setBounds(20, 55, 70, 34);
+			btnHome.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Home home = new Home();
+					dispose();
+					home.setVisible(true);
+				}
+			});
+			btnHome.setBounds(33, 55, 70, 34);
 		}
 		return btnHome;
 	}
@@ -103,23 +108,29 @@ public class MyCutoff extends JFrame {
 	private JButton getBtnMy() {
 		if (btnMy == null) {
 			btnMy = new JButton("개인");
-			btnMy.setBounds(100, 55, 70, 34);
+			btnMy.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					MyPage mp = new MyPage();
+					dispose();
+					mp.setVisible(true);
+				}
+			});
+			btnMy.setBounds(130, 55, 70, 34);
 		}
 		return btnMy;
-	}
-
-	private JButton getBtnAlarm() {
-		if (btnAlarm == null) {
-			btnAlarm = new JButton("알림");
-			btnAlarm.setBounds(180, 55, 70, 34);
-		}
-		return btnAlarm;
 	}
 
 	private JButton getBtnChat() {
 		if (btnChat == null) {
 			btnChat = new JButton("채팅");
-			btnChat.setBounds(260, 55, 70, 34);
+			btnChat.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Chat chat = new Chat();
+					dispose();
+					chat.setVisible(true);
+				}
+			});
+			btnChat.setBounds(230, 55, 70, 34);
 		}
 		return btnChat;
 	}
@@ -127,7 +138,12 @@ public class MyCutoff extends JFrame {
 	private JButton getBtnWrite() {
 		if (btnWrite == null) {
 			btnWrite = new JButton("글쓰기");
-			btnWrite.setBounds(340, 55, 70, 34);
+			btnWrite.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+				
+				}
+			});
+			btnWrite.setBounds(330, 55, 70, 34);
 		}
 		return btnWrite;
 	}

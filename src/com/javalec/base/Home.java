@@ -266,10 +266,12 @@ public class Home extends JDialog {
 		outerTable.addColumn("");
 		outerTable.setColumnCount(2);
 		
+		// 이미지 컬럼
 		TableColumn col = innerTable.getColumnModel().getColumn(0);
 		int width = 140;
 		col.setPreferredWidth(width);
 		
+		// 인포 컬럼
 		col = innerTable.getColumnModel().getColumn(1);
 		width = 330;
 		col.setPreferredWidth(width);

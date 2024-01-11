@@ -19,4 +19,7 @@ public class Share {
 	// post_status 저장
 	public static String post_status;
 	
+	// chat id
+	public static int chatid;
+	
 }
