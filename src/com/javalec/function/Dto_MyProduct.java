@@ -13,6 +13,10 @@ public class Dto_MyProduct {
 
 	}
 	
+	public Dto_MyProduct(int like) {
+		this.like = like;
+	}
+	
 	public Dto_MyProduct(String post_status, String title, int price, String nickname) {
 		this.post_status = post_status;
 		this.title = title;
