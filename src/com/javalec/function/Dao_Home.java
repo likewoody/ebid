@@ -440,32 +440,31 @@ public class Dao_Home {
 	}
 	
 	// detail로 들어온 제품을 위시리스트로 찜을 했는지 체크
-		public String findPostStatus() {
-			String str = "";
-			try {
-				Class.forName("com.mysql.cj.jdbc.Driver");
-				Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
-				Statement st = con.createStatement();
-				
-				String query = "select post_status from post "
-						+ "where postid = " + Share.postId;
-				
-				ResultSet rs = st.executeQuery(query);
-				
-				if (rs.next()) {
-					str = rs.getString(1);
-				}
-				
-				con.close();
-				
-				
+	public String findPostStatus() {
+		String str = "";
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+			Statement st = con.createStatement();
+			
+			String query = "select post_status from post "
+					+ "where postid = " + Share.postId;
+			
+			ResultSet rs = st.executeQuery(query);
+			
+			if (rs.next()) {
+				str = rs.getString(1);
 			}
-			catch (Exception e) {
-				e.printStackTrace();
-			}
-			return str;
+			
+			con.close();
+			
+			
 		}
-	
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return str;
+	}
 
 	// 고객이 클릭 시 제품 카운트를 센다
 	public void viewCount() {
