@@ -4,8 +4,11 @@ import java.awt.EventQueue;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
+
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -14,11 +17,13 @@ import java.awt.event.ActionListener;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 
 import com.javalec.function.Dao_Chat;
 import com.javalec.function.Dto_Chat;
+import com.javalec.function.Dto_Home;
 
 import java.awt.Color;
 import java.awt.event.WindowAdapter;
@@ -161,7 +166,9 @@ public class ChatDetail extends JDialog {
 			btnWrite = new JButton("글쓰기");
 			btnWrite.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					Writing wrt = new Writing();
+					Write wrt = new Write();
+					wrt.setVisible(true);
+					dispose();
 				}
 			});
 			btnWrite.setFont(new Font("Helvetica", Font.PLAIN, 14));
@@ -244,7 +251,8 @@ public class ChatDetail extends JDialog {
 			btnRating = new JButton("후기남기기");
 			btnRating.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					
+					WriteRating wr = new WriteRating();
+					wr.setVisible(true);
 				}
 			});
 			btnRating.setFont(new Font("Helvetica", Font.BOLD, 14));
@@ -263,49 +271,71 @@ public class ChatDetail extends JDialog {
 	private void getUserInfo() {
 	    Dao_Chat dao = new Dao_Chat();
 	    ArrayList<Dto_Chat> dtoList = dao.findChatDeatil();
-
-	    for (Dto_Chat dto : dtoList) {
-	    	System.out.println(dto.getDetailtext());
-	    	System.out.println(dto.getDetailuserid());
-	        addChatDetailToPanel(dto);
-	    }
-	}
-
-	private void addChatDetailToPanel(Dto_Chat dto) {
-	    String detailText = dto.getDetailtext();
-	    String detailUserId = dto.getDetailuserid();
-
-	    // Create components for the chat detail
-	    JLabel detailTextLabel = new JLabel(detailText);
-	    JLabel detailUserIdLabel = new JLabel("User ID: " + detailUserId);
-
-	    // Customize the appearance, fonts, etc. as needed
-	    detailTextLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-	    detailUserIdLabel.setFont(new Font("Arial", Font.PLAIN, 12));
-
-	    // Create a panel to hold the components
-	    JPanel detailPanel = new JPanel(new GridLayout(2, 1));
-	    detailPanel.add(detailTextLabel);
-	    detailPanel.add(detailUserIdLabel);
-
-	    // Add the detailPanel to your innerPanel
-	    innerPanel.add(detailPanel);
 	    
-	    // Optionally, you might want to add some spacing between chat details
-	    innerPanel.add(Box.createVerticalStrut(10));
+	    SwingUtilities.invokeLater(() -> {
+        	new ArrayPanelExample(dtoList);
+        	});
+
+//	    for (Dto_Chat dto : dtoList) {
+//	    	System.out.println(dto.getDetailtext());
+//	    	System.out.println(dto.getDetailuserid());
+//	        addChatDetailToPanel(dto);
+//	    }
 	}
+
+//	private void addChatDetailToPanel(Dto_Chat dto) {
+//	    String detailText = dto.getDetailtext();
+//	    String detailUserId = dto.getDetailuserid();
+//
+//	    // Create components for the chat detail
+//	    JLabel detailTextLabel = new JLabel(detailText);
+//	    JLabel detailUserIdLabel = new JLabel("User ID: " + detailUserId);
+//
+//	    // Customize the appearance, fonts, etc. as needed
+//	    detailTextLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+//	    detailUserIdLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+//
+//	    // Create a panel to hold the components
+//	    JPanel detailPanel = new JPanel(new GridLayout(2, 1));
+//	    detailPanel.add(detailTextLabel);
+//	    detailPanel.add(detailUserIdLabel);
+//
+//	    // Add the detailPanel to your innerPanel
+//	    innerPanel.add(detailPanel);
+//	    
+//	    // Optionally, you might want to add some spacing between chat details
+//	    innerPanel.add(Box.createVerticalStrut(10));
+//	}
 	
-	private static JPanel createPanel(ArrayList<Dto_Chat> dto) {
-		JPanel panel = new JPanel(new GridLayout(0, 1)); // Use GridLayout for a single column
-		
-		 // Create and add labels to the panel
-        for (Dto_Chat item : dto) {
-            JLabel label = new JLabel();
-            label.setFont(new Font("Lucida Grande", Font.BOLD, 14));
-            panel.add(label);
-        }
-        
-		return panel;
+//	private static JPanel createPanel(ArrayList<Dto_Chat> dto) {
+//		JPanel panel = new JPanel(new GridLayout(0, 1)); // Use GridLayout for a single column
+//		
+//		 // Create and add labels to the panel
+//        for (Dto_Chat item : dto) {
+//            JLabel label = new JLabel();
+//            label.setFont(new Font("Lucida Grande", Font.BOLD, 14));
+//            panel.add(label);
+//        }
+//        
+//		return panel;
+//	}
+	
+	public class ArrayPanelExample extends JFrame {
+
+	    public ArrayPanelExample(ArrayList<Dto_Chat> dtoList) {
+	        // Create an array of data
+	        ArrayList<Dto_Chat> dataArray = dtoList;
+
+	        // Create a JPanel to hold the array data
+	        JPanel panel = new JPanel();
+	        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+	        // Populate the panel with JLabels using the array data
+	        for (Dto_Chat item : dataArray) {
+	            JLabel label = new JLabel(item.getDetailtext());
+	            panel.add(label);
+	        }
+	    }
+
 	}
-	
 }

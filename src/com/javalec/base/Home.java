@@ -173,7 +173,9 @@ public class Home extends JDialog {
 			btnWrite = new JButton("글쓰기");
 			btnWrite.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					Writing wrt = new Writing();
+					Write wrt = new Write();
+					wrt.setVisible(true);
+					dispose();
 				}
 			});
 			btnWrite.setFont(new Font("Helvetica", Font.PLAIN, 14));
