@@ -1,6 +1,8 @@
 package com.javalec.base;
 
+import java.awt.Component;
 import java.awt.EventQueue;
+import java.awt.Image;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -16,9 +18,9 @@ import javax.swing.JTable;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
-
 import com.javalec.function.*;
 
 import java.awt.event.WindowAdapter;
@@ -217,24 +219,51 @@ public class MyProduct extends JFrame {
 
 	private void searchAction() {
 		Dao_MyProduct dao = new Dao_MyProduct();
-		ArrayList<Dto_MyProduct> dtolist = dao.searchDB();
-		ArrayList<Dto_MyProduct> like = dao.LikeDB();
-		ArrayList<Dto_MyProduct> chat = dao.ChatDB();
+		int row = 0;
+		for (Dto_MyProduct dto : dao.searchDB()) {
+				outertable.addRow(new Object[] {
+						dto.getPostimage(),
+						String.format("<html><b>[%s]</b>"
+								+ "<br><br>"
+								+ "%s<br>"
+								+ "가격 : %s<br>"
+								+ "판매자 : %s<br><br>"
+								+ "채팅 : %s  ㅣ  찜 : %s</html>", dto.getStatus(), dto.getTitle(),
+			                    Integer.toString(dto.getPrice()), dto.getNick(), Integer.toString(dto.getChat()), Integer.toString(dto.getWish()))
+				});
+				innertable.setRowHeight(row, 150);
+				row ++;
+		}
+		// true값과 false값의 차이를 모르겠음 *******
+		innertable.getTableHeader().setReorderingAllowed(false); // true값과 false값의 차이를 모르겠음 *******
+		// true값과 false값의 차이를 모르겠음 *******
+		
+		// 1번째 이미지 컬럼을 새로 만든다.
+		innertable.getColumnModel().getColumn(0).setCellRenderer(new ImageRender());
+	}
+	
+	private class ImageRender extends DefaultTableCellRenderer {
 
-		int listCount = dtolist.size();
-
-		for (int i = 0; i < listCount; i++) {
+		@Override
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+				int row, int column) {
 			
-			String[] qTxt = { null,
-					String.format("<html><b>[%s]</b>"
-							+ "<br><br>"
-							+ "%s<br>"
-							+ "가격 : %s<br>"
-							+ "판매자 : %s<br><br>"
-							+ "채팅 : %s  ㅣ  찜 : %s</html>", dtolist.get(i).getPost_status(), dtolist.get(i).getTitle(),
-							Integer.toString(dtolist.get(i).getPrice()), dtolist.get(i).getNickname(),Integer.toString(chat.get(i).getCount()),Integer.toString(like.get(i).getCount()))};
-			outertable.addRow(qTxt);
-			innertable.setRowHeight(i, 150);
+			// innerTable.getColumnModel().getColumn(0)로부터 데이터 받아오기
+			byte[] bytes = (byte[]) value;
+			
+			// 이미지 객체로 전환 및 이미지 사이즈 설정
+			ImageIcon imageIcon = new ImageIcon(bytes);
+			Image img = imageIcon.getImage();
+			Image setImg = img.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+			ImageIcon image = new ImageIcon(setImg);
+			
+			// 이미지 아이콘으로 세팅, 보더, 수직 수평, 배경 설정
+			setIcon(image);
+//				setBorder(UIManager.getBorder("TableHeader.cellBorder"));
+			setHorizontalAlignment(JLabel.CENTER);
+			setBackground(getBackground());
+			
+			return this;
 		}
 	}
 
