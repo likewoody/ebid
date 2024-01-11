@@ -21,6 +21,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextPane;
+import javax.swing.JTextArea;
 
 public class Write extends JFrame {
 
@@ -29,11 +30,12 @@ public class Write extends JFrame {
 	private JPanel contentPane;
 	private JTextField tfTitle;
 	private JTextField tfPrice;
-	private JTextField tfDescription;
+	private JTextField tfdescription;
 	private JTextField tfUserid;
 	private JLabel lblNewLabel_3_1;
 
 	private AbstractButton lblUserid;
+	private JTextArea texDescription;
 
 
 	/**
@@ -134,19 +136,13 @@ public class Write extends JFrame {
 		tfPrice.setColumns(10);
 		tfPrice.setBounds(150, 156, 240, 24);
 		contentPane.add(tfPrice);
+		contentPane.add(getTexDescription());
 		
 		JLabel lblNewLabel_1 = new JLabel("원");
 		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_1.setFont(new Font("Dialog", Font.PLAIN, 14));
 		lblNewLabel_1.setBounds(379, 156, 34, 25);
 		contentPane.add(lblNewLabel_1);
-		
-		tfDescription = new JTextField();
-		tfDescription.setHorizontalAlignment(SwingConstants.LEFT);
-		tfDescription.setFont(new Font("Dialog", Font.PLAIN, 14));
-		tfDescription.setColumns(10);
-		tfDescription.setBounds(29, 215, 371, 294);
-		contentPane.add(tfDescription);
 		
 		JLabel lbladdimage = new JLabel("");
 		lbladdimage.setHorizontalAlignment(SwingConstants.CENTER);
@@ -174,10 +170,18 @@ public class Write extends JFrame {
 		lblBackground.setBounds(0, 0, 430, 704);
 		contentPane.add(lblBackground);
 		
+		tfdescription = new JTextField();
+		tfdescription.setHorizontalAlignment(SwingConstants.LEFT);
+		tfdescription.setFont(new Font("Dialog", Font.PLAIN, 14));
+		tfdescription.setColumns(10);
+		tfdescription.setBounds(29, 215, 371, 294);
+		contentPane.add(tfdescription);
+		
 	}
 	private JTextField getTfUserid() {
 		if (tfUserid == null) {
 			tfUserid = new JTextField();
+			tfUserid.setEditable(false);
 			tfUserid.setHorizontalAlignment(SwingConstants.CENTER);
 			tfUserid.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
 			tfUserid.setBounds(336, 520, 64, 16);
@@ -206,7 +210,17 @@ public class Write extends JFrame {
 		
 			tfUserid.setText(dto.getUserid());
 		
-			lblUserid.setText(dto.getUserid());
+			
 		
+	}
+	private JTextArea getTexDescription() {
+		if (texDescription == null) {
+			texDescription = new JTextArea();
+			texDescription.setWrapStyleWord(true);
+			texDescription.setLineWrap(true);
+			texDescription.setFont(new Font("Dialog", Font.PLAIN, 13));
+			texDescription.setBounds(37, 224, 353, 285);
+		}
+		return texDescription;
 	}
 }//--end--
