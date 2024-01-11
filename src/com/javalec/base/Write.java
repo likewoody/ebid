@@ -5,12 +5,18 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import com.javalec.function.Dao_Write;
+import com.javalec.function.Dto_Write;
+
 import javax.swing.JButton;
 import java.awt.Font;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import javax.swing.ImageIcon;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class Write extends JFrame {
 
@@ -19,6 +25,8 @@ public class Write extends JFrame {
 	private JTextField tfTitle;
 	private JTextField tfPrice;
 	private JTextField tfDescription;
+	private JTextField tfUserid;
+	private JLabel lblNewLabel_3_1;
 
 	/**
 	 * Launch the application.
@@ -40,8 +48,14 @@ public class Write extends JFrame {
 	 * Create the frame.
 	 */
 	public Write() {
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowActivated(WindowEvent e) {
+				insertInfo();//*****input*****
+			}
+		});
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 679);
+		setBounds(100, 100, 430, 732);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -73,6 +87,7 @@ public class Write extends JFrame {
 		lblNewLabel_3.setFont(new Font("Dialog", Font.PLAIN, 14));
 		lblNewLabel_3.setBounds(37, 119, 70, 30);
 		contentPane.add(lblNewLabel_3);
+		contentPane.add(getLblNewLabel_3_1());
 		
 		tfTitle = new JTextField();
 		tfTitle.setFont(new Font("Dialog", Font.PLAIN, 14));
@@ -96,7 +111,7 @@ public class Write extends JFrame {
 		tfDescription = new JTextField();
 		tfDescription.setFont(new Font("Dialog", Font.PLAIN, 14));
 		tfDescription.setColumns(10);
-		tfDescription.setBounds(37, 214, 370, 294);
+		tfDescription.setBounds(29, 215, 371, 294);
 		contentPane.add(tfDescription);
 		
 		JLabel lbladdimage = new JLabel("");
@@ -113,19 +128,49 @@ public class Write extends JFrame {
 		btnPost.setBounds(111, 640, 210, 40);
 		contentPane.add(btnPost);
 		
-		JLabel lblNewLabel_4 = new JLabel("글쓴이 :");
+		JLabel lblNewLabel_4 = new JLabel("ID :");
+		lblNewLabel_4.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_4.setFont(new Font("Dialog", Font.PLAIN, 10));
-		lblNewLabel_4.setBounds(294, 521, 38, 15);
+		lblNewLabel_4.setBounds(294, 521, 34, 15);
 		contentPane.add(lblNewLabel_4);
-		
-		JLabel lblId = new JLabel("");
-		lblId.setFont(new Font("Dialog", Font.PLAIN, 10));
-		lblId.setBounds(331, 521, 50, 15);
-		contentPane.add(lblId);
+		contentPane.add(getTfUserid());
 		
 		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setIcon(new ImageIcon(Write.class.getResource("/com/javalec/images/writingBackgroundnew.png")));
 		lblNewLabel.setBounds(0, 0, 430, 704);
 		contentPane.add(lblNewLabel);
+		
 	}
-}
+	private JTextField getTfUserid() {
+		if (tfUserid == null) {
+			tfUserid = new JTextField();
+			tfUserid.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
+			tfUserid.setBounds(326, 520, 78, 16);
+			tfUserid.setColumns(10);
+		}
+		return tfUserid;
+	}
+	
+	private JLabel getLblNewLabel_3_1() {
+		if (lblNewLabel_3_1 == null) {
+			lblNewLabel_3_1 = new JLabel("판매가격");
+			lblNewLabel_3_1.setHorizontalAlignment(SwingConstants.CENTER);
+			lblNewLabel_3_1.setFont(new Font("Dialog", Font.PLAIN, 14));
+			lblNewLabel_3_1.setBounds(37, 150, 70, 30);
+		}
+		return lblNewLabel_3_1;
+	}
+	
+	
+	//--------functions----------
+	
+		private void insertInfo() {
+		
+			Dao_Write dao = new Dao_Write();
+			Dto_Write dto = dao.userIdinput();
+		
+			tfUserid.setText(dto.getUserid());
+		
+	}
+	
+}//--end--
