@@ -13,10 +13,19 @@ import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
+
+
+import com.javalec.function.Dao_Write;
+
+import com.javalec.function.Dto_Write;
+import com.javalec.function.Share;
+
 import javax.swing.JTextField;
 import javax.swing.JTextArea;
 import javax.swing.JSeparator;
 import javax.swing.JFormattedTextField;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class Writing {
 
@@ -31,6 +40,9 @@ public class Writing {
 	private JTextField tfPrice;
 	private JLabel lblNewLabel_3;
 	private JButton btnNewButton;
+	private JLabel lblNewLabel_4;
+	private JTextField tfWriting;
+	private JTextField tfUserid;
 
 	/**
 	 * Launch the application.
@@ -60,6 +72,13 @@ public class Writing {
 	 */
 	private void initialize() {
 		frame = new JFrame();
+		frame.addWindowListener(new WindowAdapter() {
+			@Override 
+			public void windowActivated(WindowEvent e) {
+				insertInfo(); //***input******
+			}
+		});
+		frame.setTitle("글쓰기");
 		frame.setBounds(100, 100, 430, 732);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
@@ -70,6 +89,7 @@ public class Writing {
 		frame.getContentPane().add(getLblNewLabel_3());
 		
 		tfTitle = new JTextField();
+		
 		tfTitle.setFont(new Font("Dialog", Font.PLAIN, 14));
 		tfTitle.setBounds(150, 119, 240, 28);
 		frame.getContentPane().add(tfTitle);
@@ -88,12 +108,7 @@ public class Writing {
 		lblNewLabel_1.setFont(new Font("Dialog", Font.PLAIN, 14));
 		lblNewLabel_1.setBounds(379, 159, 34, 25);
 		frame.getContentPane().add(lblNewLabel_1);
-		
-		JTextArea taWriting = new JTextArea();
-		taWriting.setLineWrap(true);
-		taWriting.setFont(new Font("Dialog", Font.PLAIN, 14));
-		taWriting.setBounds(39, 219, 351, 288);
-		frame.getContentPane().add(taWriting);
+		frame.getContentPane().add(getTfWriting());
 		
 		JLabel lbladdimage = new JLabel("");
 		lbladdimage.setHorizontalAlignment(SwingConstants.CENTER);
@@ -104,6 +119,8 @@ public class Writing {
 		lblimage.setBounds(127, 548, 64, 59);
 		frame.getContentPane().add(lblimage);
 		frame.getContentPane().add(getBtnNewButton());
+		frame.getContentPane().add(getLblNewLabel_4());
+		frame.getContentPane().add(getTfUserid());
 		frame.getContentPane().add(getLblNewLabel());
 	}
 
@@ -180,4 +197,48 @@ public class Writing {
 		}
 		return btnNewButton;
 	}
-}
+	
+	
+	
+	
+	private JLabel getLblNewLabel_4() {
+		if (lblNewLabel_4 == null) {
+			lblNewLabel_4 = new JLabel("ID :");
+			lblNewLabel_4.setBounds(300, 528, 18, 15);
+		}
+		return lblNewLabel_4;
+	}
+	private JTextField getTfWriting() {
+		if (tfWriting == null) {
+			tfWriting = new JTextField();
+			tfWriting.setEditable(false);
+			tfWriting.setBounds(30, 209, 370, 306);
+			tfWriting.setColumns(10);
+		}
+		return tfWriting;
+	}
+		
+	private JTextField getTfUserid() {
+		if (tfUserid == null) {
+			tfUserid = new JTextField();
+			tfUserid.setHorizontalAlignment(SwingConstants.CENTER);
+			tfUserid.setFont(new Font("굴림", Font.PLAIN, 10));
+			tfUserid.setBounds(330, 526, 70, 21);
+			tfUserid.setColumns(10);
+		}
+		return tfUserid;
+			
+	}
+		
+	//--------------------functions--------------
+	
+		private void insertInfo() {
+			
+			Dao_Write dao = new Dao_Write();
+			Dto_Write dto = dao.userIdinput();
+			
+			tfUserid.setText(dto.getUserid());
+			
+		}
+		
+}//--end

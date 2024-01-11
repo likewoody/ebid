@@ -1,9 +1,12 @@
 package com.javalec.base;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.EventQueue;
+import java.awt.FlowLayout;
 
 import javax.swing.BorderFactory;
+import javax.swing.DefaultCellEditor;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import java.awt.Font;
@@ -12,7 +15,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -47,7 +53,17 @@ public class Chat extends JDialog {
 	private JLabel lbDelete;
 	private JScrollPane scrollPane;
 	private JTable innerTable;
-	private final DefaultTableModel outerTable = new DefaultTableModel();
+	private final DefaultTableModel outerTable = new DefaultTableModel() {
+		public java.lang.Class<?> getColumnClass(int column) {
+			switch(column) {
+			case 0 : return boolean.class;
+			case 1 : return byte[].class;
+			case 2 : return Object[].class;
+			default :
+				return Object[].class;
+			}
+		};
+	};
 
 	/**
 	 * Launch the application.
@@ -164,6 +180,12 @@ public class Chat extends JDialog {
 	private JLabel getLbDelete() {
 		if (lbDelete == null) {
 			lbDelete = new JLabel("삭제하기");
+			lbDelete.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					deleteChat();
+				}
+			});
 			lbDelete.setFont(new Font("Lucida Grande", Font.BOLD, 14));
 			lbDelete.setHorizontalAlignment(SwingConstants.CENTER);
 			lbDelete.setBounds(133, 642, 163, 40);
@@ -194,13 +216,19 @@ public class Chat extends JDialog {
 			});
 			innerTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			innerTable.setModel(outerTable);
+			innerTable.setGridColor(Color.LIGHT_GRAY);
+			innerTable.setShowGrid(false);
+			innerTable.setShowHorizontalLines(true);
+
 			
 		}
 		return innerTable;
 	}
 	
 	// ---- Fucntion ----
+	
 	private void tableInit() {
+		
 		outerTable.addColumn("체크박");
 		outerTable.addColumn("이밎");
 		outerTable.addColumn("사용자, 채팅, 날짜");
@@ -215,7 +243,23 @@ public class Chat extends JDialog {
 		col = innerTable.getColumnModel().getColumn(2);
 		col.setPreferredWidth(300);
 		
+		TableColumn checkboxColumn = innerTable.getColumnModel().getColumn(0);
+	    checkboxColumn.setCellRenderer(new DefaultTableCellRenderer() {
+	        @Override
+	        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+	            JCheckBox checkbox = new JCheckBox();
+	            checkbox.setSelected((Boolean) value);
+	            checkbox.setHorizontalAlignment(SwingConstants.CENTER);
+	            checkbox.setBackground(getBackground());
+	            return checkbox;
+	        }
+	    });
+
+	    checkboxColumn.setCellEditor(new DefaultCellEditor(new JCheckBox()));
+		
 		innerTable.setAutoResizeMode(innerTable.AUTO_RESIZE_OFF);
+		
+		
 		
 		int i = outerTable.getRowCount();
 		for (int j = 0; j < i; j++) {
@@ -225,30 +269,44 @@ public class Chat extends JDialog {
 	
 	private void searchChat() {
 		Dao_Chat dao = new Dao_Chat();
+		int count = 0;
 		for (Dto_Chat dto : dao.searchChat()) {
-//			Date date = new Date(dto.getChatDate());
-//			String strDate = new SimpleDateFormat("yyyy-mm-dd").format(date);
-//			new SimpleDateFormat("yyyy-MM-dd").format(date);
-			outerTable.addRow(new Object[] {
-				Boolean.TRUE,
-				dto.getProfile_image(),
-				String.format("<html>"
-						+ "%s<br>"
-						+ "%s<br>"
-						+ "</html>", dto.getNickname(), dto.getTitle())
-			});
+			outerTable.addRow(new Object[0]);
+			outerTable.setValueAt(false, count, 0);
+			outerTable.setValueAt(dto.getProfile_image(), count, 1);
+			outerTable.setValueAt(String.format("<html>"
+					+ "<h2>%s</h2>"
+					+ "%s<br>"
+					+ "</html>", dto.getNickname(), dto.getTitle()), count, 2);
+			
+			count++;
 		}
+		
+		
 		
 		innerTable.getTableHeader().setReorderingAllowed(false);
 		innerTable.getColumnModel().getColumn(1).setCellRenderer(new ImageRender());
+		//test
+//		innerTable.getColumnModel().getColumn(2).setCellRenderer(new FramePanel());
 		innerTable.setRowHeight(80);
 	}
 	
-	private void CheckBox() {
+	private void deleteChat() {
+		// 유저 아이디를 찾기 위함
+		Dao_Chat dao = new Dao_Chat();
+		ArrayList<Dto_Chat> dto = dao.searchChat();
+		
+		int i = innerTable.getSelectedRow();
+		Share.chatid = dto.get(i).getChatid();
+		dao.deleteChat(dto.get(i).getChatid());
+		tableInit();
+		searchChat();
+		
 	}
 	
+	
+	// image render
 	private class ImageRender extends DefaultTableCellRenderer {
-
 		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 				int row, int column) {
@@ -265,4 +323,53 @@ public class Chat extends JDialog {
 		}
 		
 	}
+	
+	// checkbox render
+	private class CheckBoxRender extends DefaultTableCellRenderer {
+		@Override
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+				int row, int column) {
+			JCheckBox checkbox = new JCheckBox();
+            checkbox.setSelected((Boolean) value);
+            checkbox.setHorizontalAlignment(SwingConstants.CENTER);
+            return checkbox;
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	// TEst
+//	private class FramePanel extends DefaultTableCellRenderer {
+//
+//		@Override
+//		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+//				int row, int column) {
+//	    	JPanel jp = new JPanel(new FlowLayout(FlowLayout.LEFT));
+//	    	 JLabel[] labels = (JLabel[]) jlabelTest();
+//	    	for (JLabel label : labels) {
+//	    		jp.add(label);
+//	    	}
+//	    	jp.setBackground(getBackground());
+//	    	jp.setFont(new Font("Lucida Grande", Font.BOLD, 14));
+//	    	
+//	    	return jp;
+//		}
+//
+//		private Component[] jlabelTest() {
+//			JLabel panel = new JLabel("nickname");
+//			JLabel panel2 = new JLabel("title");
+//			JLabel[] panelArr = {panel, panel2};
+//			panel.setFont(new Font("Lucida Grande", Font.BOLD, 14));
+//			
+//			return panelArr;
+//		}
+//		
+//		
+//	}
 }
