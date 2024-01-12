@@ -28,6 +28,8 @@ import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
 import javax.swing.JSeparator;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class MyProduct extends JFrame {
 
@@ -176,6 +178,27 @@ public class MyProduct extends JFrame {
 	private JTable getInnertable() {
 		if (innertable == null) {
 			innertable = new JTable();
+			innertable.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					innertable.setDefaultEditor(Object.class, null);
+					
+					if (e.getClickCount() == 2) {
+						// postid가 7부터 시작이기에 viewcount에 선택된 row번호에 +7을 객체로 넣어준다.
+						Dao_Home dao = new Dao_Home(innertable.getSelectedRow() + 9);
+						
+						// detail에서 사용하기 위함
+						Share.postId = innertable.getSelectedRow() + 9;
+						Share.sellId = innertable.getSelectedRow() + 5;
+						Share.post_status = dao.findPostStatus();
+						
+						dao.viewCount();
+						Home_detail homeDetail = new Home_detail();
+						homeDetail.setVisible(true);
+						dispose();
+					}
+				}
+			});
 			innertable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			innertable.setModel(outertable);
 		}
@@ -221,48 +244,44 @@ public class MyProduct extends JFrame {
 		Dao_MyProduct dao = new Dao_MyProduct();
 		int row = 0;
 		for (Dto_MyProduct dto : dao.searchDB()) {
-				outertable.addRow(new Object[] {
-						dto.getPostimage(),
-						String.format("<html><b>[%s]</b>"
-								+ "<br><br>"
-								+ "%s<br>"
-								+ "가격 : %s<br>"
-								+ "판매자 : %s<br><br>"
-								+ "채팅 : %s  ㅣ  찜 : %s</html>", dto.getStatus(), dto.getTitle(),
-			                    Integer.toString(dto.getPrice()), dto.getNick(), Integer.toString(dto.getChat()), Integer.toString(dto.getWish()))
-				});
-				innertable.setRowHeight(row, 150);
-				row ++;
+			outertable.addRow(new Object[] { dto.getPostimage(),
+					String.format(
+							"<html><b>[%s]</b>" + "<br><br>" + "%s<br>" + "가격 : %s<br>" + "판매자 : %s<br><br>"
+									+ "채팅 : %s  ㅣ  찜 : %s</html>",
+							dto.getStatus(), dto.getTitle(), Integer.toString(dto.getPrice()), dto.getNick(),
+							Integer.toString(dto.getChat()), Integer.toString(dto.getWish())) });
+			innertable.setRowHeight(row, 150);
+			row++;
 		}
 		// true값과 false값의 차이를 모르겠음 *******
 		innertable.getTableHeader().setReorderingAllowed(false); // true값과 false값의 차이를 모르겠음 *******
 		// true값과 false값의 차이를 모르겠음 *******
-		
+
 		// 1번째 이미지 컬럼을 새로 만든다.
 		innertable.getColumnModel().getColumn(0).setCellRenderer(new ImageRender());
 	}
-	
+
 	private class ImageRender extends DefaultTableCellRenderer {
 
 		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 				int row, int column) {
-			
+
 			// innerTable.getColumnModel().getColumn(0)로부터 데이터 받아오기
 			byte[] bytes = (byte[]) value;
-			
+
 			// 이미지 객체로 전환 및 이미지 사이즈 설정
 			ImageIcon imageIcon = new ImageIcon(bytes);
 			Image img = imageIcon.getImage();
 			Image setImg = img.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
 			ImageIcon image = new ImageIcon(setImg);
-			
+
 			// 이미지 아이콘으로 세팅, 보더, 수직 수평, 배경 설정
 			setIcon(image);
 //				setBorder(UIManager.getBorder("TableHeader.cellBorder"));
 			setHorizontalAlignment(JLabel.CENTER);
 			setBackground(getBackground());
-			
+
 			return this;
 		}
 	}

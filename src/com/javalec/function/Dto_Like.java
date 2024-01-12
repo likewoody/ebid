@@ -1,41 +1,32 @@
 package com.javalec.function;
 
 public class Dto_Like {
-	
-	int price;
-	String nickname;
+
 	String title;
-	String post_status;
+	int price;
+	String nick;
+	String status;
 	int postid;
+	int sellid;
+	int wish;
 	int chat;
-	int like;
+	byte[] postimage;
 
 	public Dto_Like() {
 
 	}
-	
-	public Dto_Like(int postid, String post_status, String title, int price, String nickname) {
-		this.postid = postid;
-		this.post_status = post_status;
+
+	public Dto_Like(byte[] postimage, String title, int price, String nick, String status, int postid,int sellid, int wish,
+			int chat) {
 		this.title = title;
 		this.price = price;
-		this.nickname = nickname;
-	}
-
-	public int getPrice() {
-		return price;
-	}
-
-	public void setPrice(int price) {
-		this.price = price;
-	}
-
-	public String getNickname() {
-		return nickname;
-	}
-
-	public void setNickname(String nickname) {
-		this.nickname = nickname;
+		this.nick = nick;
+		this.status = status;
+		this.postid = postid;
+		this.sellid = sellid;
+		this.wish = wish;
+		this.chat = chat;
+		this.postimage = postimage;
 	}
 
 	public String getTitle() {
@@ -46,28 +37,28 @@ public class Dto_Like {
 		this.title = title;
 	}
 
-	public String getPost_status() {
-		return post_status;
+	public int getPrice() {
+		return price;
 	}
 
-	public void setPost_status(String post_status) {
-		this.post_status = post_status;
+	public void setPrice(int price) {
+		this.price = price;
 	}
 
-	public int getChat() {
-		return chat;
+	public String getNick() {
+		return nick;
 	}
 
-	public void setChat(int chat) {
-		this.chat = chat;
+	public void setNick(String nick) {
+		this.nick = nick;
 	}
 
-	public int getLike() {
-		return like;
+	public String getStatus() {
+		return status;
 	}
 
-	public void setLike(int like) {
-		this.like = like;
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	public int getPostid() {
@@ -78,6 +69,39 @@ public class Dto_Like {
 		this.postid = postid;
 	}
 
+	public int getWish() {
+		return wish;
+	}
+
+	public void setWish(int wish) {
+		this.wish = wish;
+	}
+
+	public int getChat() {
+		return chat;
+	}
+
+	public void setChat(int chat) {
+		this.chat = chat;
+	}
+
+	public byte[] getPostimage() {
+		return postimage;
+	}
+
+	public void setPostimage(byte[] postimage) {
+		this.postimage = postimage;
+	}
+
+	public int getSellid() {
+		return sellid;
+	}
+
+	public void setSellid(int sellid) {
+		this.sellid = sellid;
+	}
+	
+	
 	
 	
 

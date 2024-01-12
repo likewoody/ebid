@@ -19,6 +19,7 @@ import javax.swing.JButton;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
@@ -29,6 +30,7 @@ import com.javalec.function.Dto_Home;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.Date;
@@ -39,6 +41,8 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class ChatDetail extends JDialog {
 
@@ -268,6 +272,12 @@ public class ChatDetail extends JDialog {
 	private JTable getInnerTable() {
 		if (innerTable == null) {
 			innerTable = new JTable();
+			innerTable.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					innerTable.setDefaultEditor(Object.class, null);
+				}
+			});
 			innerTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			innerTable.setModel(outerTable);
 			innerTable.setFont(new Font("Helvetica", Font.PLAIN, 15));
@@ -313,14 +323,36 @@ public class ChatDetail extends JDialog {
 		// 이미지 사진 첫 메시지에만 사진이 나온다 특히 상대방의 그게 아니라면 사진이 안나옴 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@22
 		
 		for (Dto_Chat dto : dao.findChatDeatil()) {
-			Date strDate = dto.getDetailDate();
 			outerTable.addRow(new Object[] {
 					dto.getDetailUser(),
-					String.format("<html>: %s&nbsp;&nbsp;&nbsp;<h5>%s</h5><br></html>", dto.getDetailtext(), strDate) 
+					dto.getDetailtext()
 					
 			});
 		}
-//		innerTable.getTableHeader().setReorderingAllowed(false); // true값과 false값의 차이를 모르겠음 *******
+		innerTable.getTableHeader().setReorderingAllowed(false); // true값과 false값의 차이를 모르겠음 *******
+		
+		innerTable.getColumnModel().getColumn(1).setCellRenderer(new JText());
+		innerTable.setRowHeight(30);
+	}
+	
+	private class JText extends DefaultTableCellRenderer {
+
+		@Override
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+				int row, int column) {
+			
+			String txts = (String) value;
+			
+			JTextField jText = new JTextField();
+			jText.setSize(100, 30);
+			jText.setText(txts);
+			jText.setOpaque(true);
+//			jText.setEditable(false);
+			jText.setBackground(Color.WHITE);
+			jText.setBorder(new LineBorder(Color.BLACK));
+			return jText;
+		}
+		
 	}
 	
 

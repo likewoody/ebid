@@ -62,36 +62,39 @@ public class Dao_Home {
 			Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
 			Statement st = con.createStatement();
 			
-			String query = "SELECT max_image.post_image, p.title, p.price, u.nickname, p.post_status, p.postid, "
-					+ "    ( "
-					+ "        SELECT COUNT(w.postid) "
-					+ "        FROM wish_list w "
-					+ "        WHERE w.postid = p.postid "
-					+ "    ) AS wish_list_count, "
-					+ "    ( "
-					+ "        SELECT COUNT(c.sellid) "
-					+ "        FROM chat c "
-					+ "        JOIN sell s ON c.sellid = s.sellid "
-					+ "        JOIN post p ON s.postid = p.postid "
-					+ "        WHERE p.postid = max_image.postid "
-					+ "    ) AS chat_count "
-					+ "FROM ( "
-					+ "    SELECT MAX(i.post_image) AS post_image, p.postid "
-					+ "    FROM image i "
-					+ "    JOIN post p ON p.postid = i.postid "
-					+ "    LEFT JOIN sell s ON s.postid = p.postid "
-					+ "    GROUP BY p.postid "
-					+ ") max_image "
-					+ "LEFT JOIN post p ON max_image.postid = p.postid "
-					+ "LEFT JOIN user u ON u.userid = ( "
-					+ "    SELECT s.userid "
-					+ "    FROM sell s "
-					+ "    WHERE s.postid = p.postid);";
+			String query = "SELECT max_image.post_image, p.title, p.price, u.nickname, p.post_status, p.postid, max_image.sellid, "
+					+ "					  ( "
+					+ "					       SELECT COUNT(w.postid) "
+					+ "					    FROM wish_list w "
+					+ "					      WHERE w.postid = p.postid "
+					+ "					  ) AS wish_list_count, "
+					+ "					  ( "
+					+ "					       SELECT COUNT(c.sellid) "
+					+ "				        FROM chat c "
+					+ "				        JOIN sell s ON c.sellid = s.sellid "
+					+ "					      JOIN post p ON s.postid = p.postid "
+					+ "					       WHERE p.postid = max_image.postid "
+					+ "					   ) AS chat_count "
+					+ "				FROM ( "
+					+ "				   SELECT MAX(i.post_image) AS post_image, p.postid, p.start_date, s.sellid "
+					+ "					   FROM image i "
+					+ "					    JOIN post p ON p.postid = i.postid "
+					+ "					    LEFT JOIN sell s ON s.postid = p.postid "
+					+ "					    GROUP BY p.postid, s.sellid "
+					+ "					) max_image "
+					+ "					LEFT JOIN post p ON max_image.postid = p.postid "
+					+ "					LEFT JOIN user u ON u.userid = ( "
+					+ "					   SELECT s.userid "
+					+ "					   FROM sell s "
+					+ "					    WHERE s.postid = p.postid) "
+					+ "					order by p.start_date desc;";
 			
 			ResultSet rs = st.executeQuery(query);
 			while (rs.next()) {
 				
-				dto = new Dto_Home(rs.getBytes(1), rs.getString(2), rs.getInt(3), rs.getString(4), rs.getString(5), rs.getInt(6), rs.getInt(7), rs.getInt(8));
+				dto = new Dto_Home(rs.getBytes(1), rs.getString(2), rs.getInt(3), 
+						rs.getString(4), rs.getString(5), rs.getInt(6), 
+						rs.getInt(7), rs.getInt(8), rs.getInt(9));
 				
 				dtoList.add(dto);
 				
@@ -112,60 +115,62 @@ public class Dao_Home {
 		
 		// SQL 구문
 		// 타이틀로 검색
-		String A = "SELECT max_image.post_image, p.title, p.price, u.nickname, p.post_status, p.postid, "
-				+ "    ( "
-				+ "        SELECT COUNT(DISTINCT w.postid) "
-				+ "        FROM wish_list w "
-				+ "        WHERE w.postid = p.postid "
-				+ "    ) AS wish_list_count, "
-				+ "    ( "
-				+ "        SELECT COUNT(c.sellid) "
-				+ "        FROM chat c "
-				+ "        JOIN sell s ON c.sellid = s.sellid "
-				+ "        JOIN post p ON s.postid = p.postid "
-				+ "        WHERE p.postid = max_image.postid "
-				+ "    ) AS chat_count "
-				+ "FROM ( "
-				+ "    SELECT MAX(i.post_image) AS post_image, p.postid "
-				+ "    FROM image i "
-				+ "    JOIN post p ON p.postid = i.postid "
-				+ "    LEFT JOIN sell s ON s.postid = p.postid "
-				+ "    GROUP BY p.postid "
-				+ ") max_image "
-				+ "LEFT JOIN post p ON max_image.postid = p.postid "
-				+ "LEFT JOIN user u ON u.userid = ( "
-				+ "    SELECT s.userid "
-				+ "    FROM sell s "
-				+ "    WHERE s.postid = p.postid) "
-				+ "where p.title like '%" + searchText + "%'";
+		String A = "SELECT max_image.post_image, p.title, p.price, u.nickname, p.post_status, p.postid, max_image.sellid, "
+				+ "					  ( "
+				+ "					       SELECT COUNT(w.postid) "
+				+ "					    FROM wish_list w "
+				+ "					      WHERE w.postid = p.postid "
+				+ "					  ) AS wish_list_count, "
+				+ "					  ( "
+				+ "					       SELECT COUNT(c.sellid) "
+				+ "				        FROM chat c "
+				+ "				        JOIN sell s ON c.sellid = s.sellid "
+				+ "					      JOIN post p ON s.postid = p.postid "
+				+ "					       WHERE p.postid = max_image.postid "
+				+ "					   ) AS chat_count "
+				+ "				FROM ( "
+				+ "				   SELECT MAX(i.post_image) AS post_image, p.postid, p.start_date, s.sellid "
+				+ "					   FROM image i "
+				+ "					    JOIN post p ON p.postid = i.postid "
+				+ "					    LEFT JOIN sell s ON s.postid = p.postid "
+				+ "					    GROUP BY p.postid, s.sellid "
+				+ "					) max_image "
+				+ "					LEFT JOIN post p ON max_image.postid = p.postid "
+				+ "					LEFT JOIN user u ON u.userid = ( "
+				+ "					   SELECT s.userid "
+				+ "					   FROM sell s "
+				+ "					    WHERE s.postid = p.postid) "
+				+ "where p.title like '%" + searchText + "%' "
+						+ "order by p.start_date desc";
 		
 		// 닉네임으로 검색
-		String B = "SELECT max_image.post_image, p.title, p.price, u.nickname, p.post_status, p.postid, "
-				+ "    ( "
-				+ "        SELECT COUNT(DISTINCT w.postid) "
-				+ "        FROM wish_list w "
-				+ "        WHERE w.postid = p.postid "
-				+ "    ) AS wish_list_count, "
-				+ "    ( "
-				+ "        SELECT COUNT(c.sellid) "
-				+ "        FROM chat c "
-				+ "        JOIN sell s ON c.sellid = s.sellid "
-				+ "        JOIN post p ON s.postid = p.postid "
-				+ "        WHERE p.postid = max_image.postid "
-				+ "    ) AS chat_count "
-				+ "FROM ( "
-				+ "    SELECT MAX(i.post_image) AS post_image, p.postid "
-				+ "    FROM image i "
-				+ "    JOIN post p ON p.postid = i.postid "
-				+ "    LEFT JOIN sell s ON s.postid = p.postid "
-				+ "    GROUP BY p.postid "
-				+ ") max_image "
-				+ "LEFT JOIN post p ON max_image.postid = p.postid "
-				+ "LEFT JOIN user u ON u.userid = ( "
-				+ "    SELECT s.userid "
-				+ "    FROM sell s "
-				+ "    WHERE s.postid = p.postid) "
-				+ "where u.nickname like '%" + searchText + "%'";
+		String B = "SELECT max_image.post_image, p.title, p.price, u.nickname, p.post_status, p.postid, max_image.sellid, "
+				+ "					  ( "
+				+ "					       SELECT COUNT(w.postid) "
+				+ "					    FROM wish_list w "
+				+ "					      WHERE w.postid = p.postid "
+				+ "					  ) AS wish_list_count, "
+				+ "					  ( "
+				+ "					       SELECT COUNT(c.sellid) "
+				+ "				        FROM chat c "
+				+ "				        JOIN sell s ON c.sellid = s.sellid "
+				+ "					      JOIN post p ON s.postid = p.postid "
+				+ "					       WHERE p.postid = max_image.postid "
+				+ "					   ) AS chat_count "
+				+ "				FROM ( "
+				+ "				   SELECT MAX(i.post_image) AS post_image, p.postid, p.start_date, s.sellid "
+				+ "					   FROM image i "
+				+ "					    JOIN post p ON p.postid = i.postid "
+				+ "					    LEFT JOIN sell s ON s.postid = p.postid "
+				+ "					    GROUP BY p.postid, s.sellid "
+				+ "					) max_image "
+				+ "					LEFT JOIN post p ON max_image.postid = p.postid "
+				+ "					LEFT JOIN user u ON u.userid = ( "
+				+ "					   SELECT s.userid "
+				+ "					   FROM sell s "
+				+ "					    WHERE s.postid = p.postid) "
+				+ "where u.nickname like '%" + searchText + "%' "
+						+ "order by p.start_date desc";
 		
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -179,7 +184,9 @@ public class Dao_Home {
 
 				while (rs.next()) {
 
-					dto = new Dto_Home(rs.getBytes(1), rs.getString(2), rs.getInt(3), rs.getString(4), rs.getString(5), rs.getInt(6), rs.getInt(7), rs.getInt(8));
+					dto = new Dto_Home(rs.getBytes(1), rs.getString(2), rs.getInt(3), 
+							rs.getString(4), rs.getString(5), rs.getInt(6), 
+							rs.getInt(7), rs.getInt(8), rs.getInt(9));
 					dtoList.add(dto);
 				}
 			}
@@ -190,7 +197,9 @@ public class Dao_Home {
 
 				while (rs.next()) {
 
-					dto = new Dto_Home(rs.getBytes(1), rs.getString(2), rs.getInt(3), rs.getString(4), rs.getString(5), rs.getInt(6), rs.getInt(7), rs.getInt(8));
+					dto = new Dto_Home(rs.getBytes(1), rs.getString(2), rs.getInt(3), 
+							rs.getString(4), rs.getString(5), rs.getInt(6), 
+							rs.getInt(7), rs.getInt(8), rs.getInt(9));
 					dtoList.add(dto);
 				}
 			}
@@ -439,7 +448,7 @@ public class Dao_Home {
 		return boolFlag;
 	}
 	
-	// detail로 들어온 제품을 위시리스트로 찜을 했는지 체크
+	// find 판매중인지 혹은 판매완료인지 체크
 	public String findPostStatus() {
 		String str = "";
 		try {
@@ -464,6 +473,31 @@ public class Dao_Home {
 			e.printStackTrace();
 		}
 		return str;
+	}
+	
+	// set static sell id 
+	public List<Dto_Home> findSellId() {
+		List<Dto_Home> dtoL = new ArrayList<Dto_Home>();
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+			Statement st = con.createStatement();
+			
+			String query = "select sellid from sell where postid = " + Share.postId;
+			ResultSet rs = st.executeQuery(query);
+			
+			if(rs.next()) {
+				Dto_Home dto = new Dto_Home(rs.getInt(1));
+				System.out.println(rs.getInt(1));
+				System.out.println(dto);
+				dtoL.add(dto);
+			}
+			con.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return dtoL;
 	}
 
 	// 고객이 클릭 시 제품 카운트를 센다

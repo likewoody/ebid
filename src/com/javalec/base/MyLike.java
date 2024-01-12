@@ -1,6 +1,8 @@
 package com.javalec.base;
 
+import java.awt.Component;
 import java.awt.EventQueue;
+import java.awt.Image;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -9,6 +11,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.JCheckBox;
@@ -26,8 +29,9 @@ import java.awt.event.WindowEvent;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-
 import com.javalec.function.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class MyLike extends JFrame {
 
@@ -201,6 +205,12 @@ public class MyLike extends JFrame {
 	private JTable getInnertable() {
 		if (innertable == null) {
 			innertable = new JTable();
+			innertable.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					 
+				}
+			});
 			innertable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			innertable.setModel(outertable);
 		}
@@ -235,18 +245,51 @@ public class MyLike extends JFrame {
 
 	private void searchAction() {
 		Dao_Like dao = new Dao_Like();
+		int row = 0;
+		for (Dto_Like dto : dao.searchDB()) {
+			outertable.addRow(new Object[] { dto.getPostimage(),
+					String.format(
+							"<html><b>[%s]</b>" 
+					+ "<br><br>" 
+					+ "%s<br>" 
+					+ "가격 : %s<br>" 
+					+ "판매자 : %s<br><br>"
+					+ "채팅 : %s  ㅣ  찜 : %s</html>",
+							dto.getStatus(), dto.getTitle(), Integer.toString(dto.getPrice()), dto.getNick(),
+							Integer.toString(dto.getChat()), Integer.toString(dto.getWish())) });
+			innertable.setRowHeight(row, 150);
+			row++;
+		}
+		// true값과 false값의 차이를 모르겠음 *******
+		innertable.getTableHeader().setReorderingAllowed(false); // true값과 false값의 차이를 모르겠음 *******
+		// true값과 false값의 차이를 모르겠음 *******
 
-		dtolist = dao.searchDB();
+		// 1번째 이미지 컬럼을 새로 만든다.
+		innertable.getColumnModel().getColumn(0).setCellRenderer(new ImageRender());
+	}
 
-		int listCount = dtolist.size();
+	private class ImageRender extends DefaultTableCellRenderer {
 
-		for (int i = 0; i < listCount; i++) {
-			String[] qTxt = { null,
-					String.format("<html><b>[%s]</b>" + "<br><br>" + "%s<br>" + "가격 : %s<br>" + "판매자 : %s </html>",
-							dtolist.get(i).getPost_status(), dtolist.get(i).getTitle(),
-							Integer.toString(dtolist.get(i).getPrice()), dtolist.get(i).getNickname()) };
-			outertable.addRow(qTxt);
-			innertable.setRowHeight(i, 150);
+		@Override
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+				int row, int column) {
+
+			// innerTable.getColumnModel().getColumn(0)로부터 데이터 받아오기
+			byte[] bytes = (byte[]) value;
+
+			// 이미지 객체로 전환 및 이미지 사이즈 설정
+			ImageIcon imageIcon = new ImageIcon(bytes);
+			Image img = imageIcon.getImage();
+			Image setImg = img.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+			ImageIcon image = new ImageIcon(setImg);
+
+			// 이미지 아이콘으로 세팅, 보더, 수직 수평, 배경 설정
+			setIcon(image);
+//				setBorder(UIManager.getBorder("TableHeader.cellBorder"));
+			setHorizontalAlignment(JLabel.CENTER);
+			setBackground(getBackground());
+
+			return this;
 		}
 	}
 

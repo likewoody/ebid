@@ -42,7 +42,7 @@ public class MyCutoff extends JFrame {
 	private JScrollPane scrollPane;
 	private JTable innertable;
 	ArrayList<Dto_MyCutoff> dtolist = null;
-	
+
 	// Table
 	private final DefaultTableModel outertable = new DefaultTableModel();
 	private JButton btnDelete;
@@ -141,7 +141,7 @@ public class MyCutoff extends JFrame {
 			btnWrite = new JButton("글쓰기");
 			btnWrite.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-				
+
 				}
 			});
 			btnWrite.setBounds(330, 55, 70, 34);
@@ -227,7 +227,7 @@ public class MyCutoff extends JFrame {
 		// Coulmn명 초기화
 		outertable.addColumn("");
 		outertable.setColumnCount(1);
-		
+
 		int i = outertable.getRowCount();
 
 		for (int j = 0; j < i; j++) {
@@ -244,7 +244,7 @@ public class MyCutoff extends JFrame {
 
 		for (int i = 0; i < listCount; i++) {
 
-			String[] qTxt = { "       "+dtolist.get(i).getId()+" ( "+dtolist.get(i).getNick()+" )"};
+			String[] qTxt = { "       " + dtolist.get(i).getId() + " ( " + dtolist.get(i).getNick() + " )" };
 			outertable.addRow(qTxt);
 			innertable.setRowHeight(i, 100);
 		}
