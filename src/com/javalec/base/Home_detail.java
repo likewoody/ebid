@@ -265,6 +265,11 @@ public class Home_detail extends JDialog {
 	private JLabel getLbBid() {
 		if (lbBid == null) {
 			lbBid = new JLabel("채팅");
+			lbBid.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+				}
+			});
 			lbBid.setHorizontalAlignment(SwingConstants.CENTER);
 			lbBid.setBounds(247, 643, 160, 37);
 		}

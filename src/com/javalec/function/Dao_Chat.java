@@ -8,6 +8,8 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import com.mysql.cj.x.protobuf.MysqlxPrepare.Prepare;
+
 public class Dao_Chat {
 	
 	
@@ -23,6 +25,32 @@ public class Dao_Chat {
 	}
 	
 	// method
+	
+	// insert
+	public void insertChat(String chatText) {
+		PreparedStatement ps = null;
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection(url_mysql,id_mysql,pw_mysql);
+			
+			String query = "insert into chat_text_detail (chatid, text, date, userid) "
+					+ "values(?, ?, now(), 'cici16')";
+			
+			ps = con.prepareStatement(query);
+			
+			ps.setInt(1, Share.chatid);
+			ps.setString(2, chatText);
+			
+			ps.executeUpdate();
+			
+			con.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
 	
 	// read
 	public ArrayList<Dto_Chat> searchChat() {
@@ -40,7 +68,7 @@ public class Dao_Chat {
 					+ "left join sell s on s.sellid = img.sellid "
 					+ "left join user u on u.userid = s.userid "
 					// @@@@@@@@@@@@@@ 아이디 바꿔야함 @@@@@@@@@@@@
-					+ "where u.userid = 'joa72' "					// @@@@@@@@@@@@@@ 아이디 바꿔야함 @@@@@@@@@@@@
+					+ "where u.userid = 'cici16' "					// @@@@@@@@@@@@@@ 아이디 바꿔야함 @@@@@@@@@@@@
 					// @@@@@@@@@@@@@@ 아이디 바꿔야함 @@@@@@@@@@@@
 					+ "order by img.date desc" ;
 			
@@ -95,27 +123,7 @@ public class Dao_Chat {
 		return dtoList;
 	}
 	
-	// chat 삭제
-	public void deleteChat(int chatId) {
-		
-		PreparedStatement ps = null;
-		
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
-			
-			String query = "Delete from chat where chatid = '" + chatId + "'";
-			
-			ps = con.prepareStatement(query);
-			
-			ps.executeUpdate();
-			
-			con.close();
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+	
 	
 	
 	// chat detail 유저 정보 찾기
@@ -142,6 +150,28 @@ public class Dao_Chat {
 			
 			con.close();
 			
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	// delete chat 삭제
+	public void deleteChat(int chatId) {
+		
+		PreparedStatement ps = null;
+		
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+			
+			String query = "Delete from chat where chatid = '" + chatId + "'";
+			
+			ps = con.prepareStatement(query);
+			
+			ps.executeUpdate();
+			
+			con.close();
 		}
 		catch (Exception e) {
 			e.printStackTrace();
