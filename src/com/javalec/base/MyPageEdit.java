@@ -23,6 +23,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.FileInputStream;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.DefaultComboBoxModel;
@@ -488,11 +489,20 @@ public class MyPageEdit extends JFrame {
 
 		int ret = chooser.showOpenDialog(null);
 		if (ret == JFileChooser.APPROVE_OPTION) {
+			// 내가 선택한 사진 파일 경로 찾기
 		    File selectedFile = chooser.getSelectedFile();
-		    
-		    // 선택한 파일의 경로를 얻어오고, 해당 경로를 사용하여 이미지를 설정
 		    String filePath = selectedFile.getPath();
-		    dao.updateImage(selectedFile.getPath());
+		    
+		    FileInputStream input = null;
+		    File file = new File(filePath);
+		    
+		    try {
+		    	input = new FileInputStream(file);
+		    }catch(Exception e) {
+		    	e.printStackTrace();
+		    }
+		    dao.updateImage(input);
+		    JOptionPane.showMessageDialog(null, "프로필 사진이 변경되었습니다.");
 		} else {
 		    JOptionPane.showMessageDialog(null, "파일을 선택하지 않았습니다.");
 		}

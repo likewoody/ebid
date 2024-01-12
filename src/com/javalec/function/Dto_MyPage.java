@@ -10,6 +10,7 @@ public class Dto_MyPage {
 	String address;
 	String join_date;
 	String delect_date;
+	byte[] profileimage;
 	
 	public Dto_MyPage() {
 		
@@ -86,6 +87,14 @@ public class Dto_MyPage {
 
 	public void setAddress(String address) {
 		this.address = address;
+	}
+
+	public byte[] getProfileimage() {
+		return profileimage;
+	}
+
+	public void setProfileimage(byte[] profileimage) {
+		this.profileimage = profileimage;
 	}
 	
 	

@@ -1,6 +1,7 @@
 package com.javalec.function;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.sql.Connection;
@@ -31,7 +32,7 @@ public class Dao_MyPage {
 
 		Dto_MyPage dto = null;
 
-		String A = "select userid, pw, phone, email, nickname, address,profile_image from user where userid = '"
+		String A = "select userid, pw, phone, email, nickname, address, profile_image from user where userid = '"
 				+ Share.id + "'";
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -157,7 +158,7 @@ public class Dao_MyPage {
 		}
 	}
 	
-	public void updateImage(String image) {
+	public void updateImage(FileInputStream input) {
 		PreparedStatement ps = null;
 
 		try {
@@ -165,11 +166,11 @@ public class Dao_MyPage {
 			Connection conn_mysql = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
 			Statement stmt_mysql = conn_mysql.createStatement();
 
-			String A = "update user set = ? ";
+			String A = "update user set profile_image = ? ";
 			String B = "where userid = '" + Share.id + "'";
 
 			ps = conn_mysql.prepareStatement(A + B);
-			ps.setString(1, image);
+			ps.setBinaryStream(1, input);
 			ps.executeUpdate();
 
 			conn_mysql.close();
