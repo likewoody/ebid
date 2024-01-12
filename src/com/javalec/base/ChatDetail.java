@@ -27,6 +27,7 @@ import javax.swing.table.TableColumn;
 import com.javalec.function.Dao_Chat;
 import com.javalec.function.Dto_Chat;
 import com.javalec.function.Dto_Home;
+import com.javalec.function.Share;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -63,6 +64,7 @@ public class ChatDetail extends JDialog {
 	private JButton btnRating;
 	private JTable innerTable;
 	private DefaultTableModel outerTable = new DefaultTableModel();
+	private JButton btnBlock;
 
 	/**
 	 * Launch the application.
@@ -89,7 +91,7 @@ public class ChatDetail extends JDialog {
 			@Override
 			public void windowActivated(WindowEvent e) {
 				tableInit();
-				getUserInfo();
+				searchDB();
 					
 			}
 		});
@@ -105,6 +107,7 @@ public class ChatDetail extends JDialog {
 		getContentPane().add(getBtnInsert());
 		getContentPane().add(getBtnRating());
 		getContentPane().add(getTfText());
+		getContentPane().add(getBtnBlock());
 		getContentPane().add(getScrollPane());
 		getContentPane().add(getLbUserImage());
 		getContentPane().add(getLbUserNickname());
@@ -232,6 +235,11 @@ public class ChatDetail extends JDialog {
 	private JButton getBtnInsert() {
 		if (btnInsert == null) {
 			btnInsert = new JButton("전송");
+			btnInsert.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					insertChat();
+				}
+			});
 			btnInsert.setFont(new Font("Helvetica", Font.BOLD, 14));
 			btnInsert.setBounds(350, 575, 70, 34);
 		}
@@ -257,7 +265,7 @@ public class ChatDetail extends JDialog {
 	}
 	private JButton getBtnRating() {
 		if (btnRating == null) {
-			btnRating = new JButton("후기남기기");
+			btnRating = new JButton("별점남기기");
 			btnRating.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					WriteRating wr = new WriteRating();
@@ -265,7 +273,7 @@ public class ChatDetail extends JDialog {
 				}
 			});
 			btnRating.setFont(new Font("Helvetica", Font.BOLD, 14));
-			btnRating.setBounds(148, 648, 128, 34);
+			btnRating.setBounds(60, 648, 128, 34);
 		}
 		return btnRating;
 	}
@@ -281,57 +289,48 @@ public class ChatDetail extends JDialog {
 			innerTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			innerTable.setModel(outerTable);
 			innerTable.setFont(new Font("Helvetica", Font.PLAIN, 15));
+			innerTable.setBorder(new LineBorder(Color.BLACK));
 		}
 		return innerTable;
+	}
+	private JButton getBtnBlock() {
+		if (btnBlock == null) {
+			btnBlock = new JButton("차단하기");
+			btnBlock.setFont(new Font("Helvetica", Font.BOLD, 14));
+			btnBlock.setBounds(230, 650, 128, 34);
+		}
+		return btnBlock;
 	}
 	
 	// ---- Fucntion ----
 	
 	private void tableInit() {
 		outerTable.addColumn("닉넴");
-		outerTable.addColumn("유저");
-		outerTable.setColumnCount(2);
+		outerTable.setColumnCount(1);
 		
-		TableColumn col = innerTable.getColumnModel().getColumn(0);
-		int width = 65;
-		col.setPreferredWidth(width);
-		
-		col = innerTable.getColumnModel().getColumn(1);
-		width = 365;
-		col.setPreferredWidth(width);
-//		int maxWidth = 0;
-//		
-//		for (int row = 0; row < innerTable.getRowCount(); row++) {
-//		    TableCellRenderer renderer = innerTable.getCellRenderer(row, 1);
-//		    Component comp = innerTable.prepareRenderer(renderer, row, 1);
-//		    maxWidth = Math.max(comp.getPreferredSize().width, maxWidth);
-//		}
-//
-//		col.setPreferredWidth(maxWidth);
-//
-//		col = innerTable.getColumnModel().getColumn(2);
+//		TableColumn col = innerTable.getColumnModel().getColumn(0);
+//		int width = 430;
+//		col.setPreferredWidth(width);
 		
 		int i = innerTable.getRowCount();
-		for (int j = 0; j < i; i++) {
+		for (int j = 0; j < i; j++) {
 			outerTable.removeRow(0);
 		}
 	}
 	
-	private void getUserInfo() {
+	private void searchDB() {
 		Dao_Chat dao = new Dao_Chat();
 		
 		// 이미지 사진 첫 메시지에만 사진이 나온다 특히 상대방의 그게 아니라면 사진이 안나옴 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@22
 		
 		for (Dto_Chat dto : dao.findChatDeatil()) {
 			outerTable.addRow(new Object[] {
-					dto.getDetailUser(),
-					dto.getDetailtext()
-					
+					String.format("%s : %s", dto.getDetailUser(), dto.getDetailtext())
 			});
 		}
 		innerTable.getTableHeader().setReorderingAllowed(false); // true값과 false값의 차이를 모르겠음 *******
 		
-		innerTable.getColumnModel().getColumn(1).setCellRenderer(new JText());
+		innerTable.getColumnModel().getColumn(0).setCellRenderer(new JText());
 		innerTable.setRowHeight(30);
 	}
 	
@@ -349,65 +348,19 @@ public class ChatDetail extends JDialog {
 			jText.setOpaque(true);
 //			jText.setEditable(false);
 			jText.setBackground(Color.WHITE);
-			jText.setBorder(new LineBorder(Color.BLACK));
+			
 			return jText;
 		}
 		
 	}
 	
-
-//	private void addChatDetailToPanel(Dto_Chat dto) {
-//	    String detailText = dto.getDetailtext();
-//	    String detailUserId = dto.getDetailuserid();
-//
-//	    // Create components for the chat detail
-//	    JLabel detailTextLabel = new JLabel(detailText);
-//	    JLabel detailUserIdLabel = new JLabel("User ID: " + detailUserId);
-//
-//	    // Customize the appearance, fonts, etc. as needed
-//	    detailTextLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-//	    detailUserIdLabel.setFont(new Font("Arial", Font.PLAIN, 12));
-//
-//	    // Create a panel to hold the components
-//	    JPanel detailPanel = new JPanel(new GridLayout(2, 1));
-//	    detailPanel.add(detailTextLabel);
-//	    detailPanel.add(detailUserIdLabel);
-//
-//	    // Add the detailPanel to your innerPanel
-//	    innerPanel.add(detailPanel);
-//	    
-//	    // Optionally, you might want to add some spacing between chat details
-//	    innerPanel.add(Box.createVerticalStrut(10));
-//	}
+	private void insertChat() {
+		Dao_Chat dao = new Dao_Chat();
+		dao.insertChat(tfText.getText());
+		tfText.setText("");
+		tableInit();
+		searchDB();
+	}
 	
-//	private static JPanel createPanel(ArrayList<Dto_Chat> dto) {
-//		JPanel panel = new JPanel(new GridLayout(0, 1)); // Use GridLayout for a single column
-//		
-//		 // Create and add labels to the panel
-//        for (Dto_Chat item : dto) {
-//            JLabel label = new JLabel();
-//            label.setFont(new Font("Lucida Grande", Font.BOLD, 14));
-//            panel.add(label);
-//        }
-//        
-//		return panel;
-//	}
 	
-//	public class ArrayPanelExample extends JFrame {
-//
-//	    public ArrayPanelExample(ArrayList<Dto_Chat> dtoList) {
-//	        // Create an array of data
-//	        ArrayList<Dto_Chat> dataArray = dtoList;
-//
-//	        // Create a JPanel to hold the array data
-//	        JPanel panel = new JPanel();
-//	        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-//
-//	        // Populate the panel with JLabels using the array data
-//	        for (Dto_Chat item : dataArray) {
-//	            JLabel label = new JLabel(item.getDetailtext());
-//	            panel.add(label);
-//	        }
-//	    }
-//	}
 }

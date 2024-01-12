@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 public class Dao_Write {
@@ -22,6 +23,7 @@ public class Dao_Write {
 	private String price;
 	private String view_count;
 	private String start_date;
+	private int postid;
 		
 	
 
@@ -91,7 +93,7 @@ public class Dao_Write {
 	 //회원 정보 업데이트
 	public void wUpdate() {
 		
-		//글게시 완료 동됨.*****************************************
+		//글게시 완료 업로드 *****************************************
 		
 		String AA ="INSERT INTO ebid.post (title, description, post_status, sort, price, view_count, start_date) VALUES (?, ?, ?, ?, ?, ?, ?)";
 	
@@ -120,8 +122,58 @@ public class Dao_Write {
     } catch (Exception e) {
         e.printStackTrace();
     }
-
+    sUpdate();
+    
   } 
-	}
+	 public void sUpdate() {
+		    //-----sales table에 data 넣기----------
+		    
+		    String postidQ = "SELECT MAX(postid) FROM ebid.post";
+		    String userid = Share.id;
+		    String ISC ="INSERT INTO ebid.sales (userid, postid, date) VALUES (?, ?, ?)";
+		    try {
+		        Class.forName("com.mysql.cj.jdbc.Driver");
+		        Connection conn = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+	        
+		        // Step 1: Get the maximum postid from the database
+		        int maxPostId =getMaxPostId(conn, postidQ);
+		        
+		        // Step 2: Insert sales data using the obtained maxPostId
+		        insertSalesData(conn, ISC, userid, maxPostId);
+		        
+		        conn.close();
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		    }
+		}
+		 private int getMaxPostId(Connection connection, String postidQ) throws SQLException {
+			    try (PreparedStatement ps = connection.prepareStatement(postidQ);
+			         ResultSet resultSet = ps.executeQuery()) {
+			        if (resultSet.next()) {
+			            return resultSet.getInt(1);
+			        } else {
+			            throw new SQLException("Error retrieving max postid");
+			        }
+			    }
+			}
+		 
+		 private void insertSalesData(Connection connection, String insertSalesQuery, String userid, int postid) throws SQLException {
+			    try (PreparedStatement pstmt = connection.prepareStatement(insertSalesQuery)) {
+			        // Set the values for the insert statement
+			        pstmt.setString(1, userid);
+			        pstmt.setInt(2, postid);
+
+			        // Set the current timestamp
+			        java.sql.Timestamp currentDateAndTime = new java.sql.Timestamp(System.currentTimeMillis());
+			        pstmt.setTimestamp(3, currentDateAndTime);
+
+			        // Execute the insert statement
+			        int rowsAffected = pstmt.executeUpdate();
+			       // System.out.println(rowsAffected + " row(s) inserted into ebid.sales successfully");
+			    }
+			}
+		 
+		 
+	}// end
 
 
