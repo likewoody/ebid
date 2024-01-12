@@ -14,11 +14,17 @@ public class Dto_Home {
 	int wishListCount;
 	int chatCount;
 	String desc;
+	int sellid;
 //	double rating;
 	
 	public Dto_Home() {
 		// TODO Auto-generated constructor stub
 	}
+	
+	public Dto_Home(int sellid) {
+		this.sellid = sellid;
+	}
+	
 	
 	public Dto_Home(byte[] post_image) {
 		this.post_image = post_image;
@@ -51,13 +57,14 @@ public class Dto_Home {
 	}
 
 
-	public Dto_Home(byte[] post_image, String title, int start_price, String nickname, String post_status, int postId, int wishListCount, int chatCount) {
+	public Dto_Home(byte[] post_image, String title, int start_price, String nickname, String post_status, int postId, int sellid, int wishListCount, int chatCount) {
 		this.post_image = post_image;
 		this.title = title;
 		this.start_price = start_price;
 		this.nickname = nickname;
 		this.post_status = post_status;
 		this.postId = postId;
+		this.sellid = sellid;
 		this.wishListCount = wishListCount;
 		this.chatCount = chatCount;
 	}
@@ -140,6 +147,14 @@ public class Dto_Home {
 
 	public void setDesc(String desc) {
 		this.desc = desc;
+	}
+
+	public int getSellid() {
+		return sellid;
+	}
+
+	public void setSellid(int sellid) {
+		this.sellid = sellid;
 	}
 
 	

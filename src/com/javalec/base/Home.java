@@ -227,17 +227,22 @@ public class Home extends JDialog {
 					
 					if (e.getClickCount() == 2) {
 						// postid가 7부터 시작이기에 viewcount에 선택된 row번호에 +7을 객체로 넣어준다.
-						Dao_Home dao = new Dao_Home(innerTable.getSelectedRow() + 7);
+						Dao_Home dao = new Dao_Home();
+						ArrayList<Dto_Home> dto = dao.searchDB();
 						
-						// detail에서 사용하기 위함
-						Share.postId = innerTable.getSelectedRow() + 7;
-						Share.sellId = innerTable.getSelectedRow() + 3;
+						// for finding postid
+						Share.postId = dto.get(innerTable.getSelectedRow()).getPostId();
+						
+						// for find sellid
+						Share.sellId = dto.get(innerTable.getSelectedRow()).getSellid();
+//						
 						Share.post_status = dao.findPostStatus();
 						
 						dao.viewCount();
 						Home_detail homeDetail = new Home_detail();
 						homeDetail.setVisible(true);
 						dispose();
+						
 					}
 				}
 			});
