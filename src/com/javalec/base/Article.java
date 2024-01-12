@@ -91,6 +91,7 @@ public class Article {
 			btnExit = new JButton("닫기");
 			btnExit.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+										
 								
 				}
 			});

@@ -37,6 +37,7 @@ public class Dao_Login {
      private String address;
      private String name;
      public boolean passableNickname = true;
+    // public boolean deleteCom = true;
 	//Constructor
 	
 	public Dao_Login() {
@@ -67,23 +68,18 @@ public class Dao_Login {
 		this.nickname = nickname;
 		this.address = address;
 	}
+	 
+	 public Dao_Login(String pw, String phone, String nickname) {
+		 super();
+		 this.pw = pw;
+		 this.phone = phone;
+		 this.nickname = nickname;
+	 }
 
 	public Dao_Login(String userid, String pw) {
 	        this.userid = userid;
 	        this.pw = pw;
 	    }
-	
-	
-	
-	    public void setNickname(String nickname) {
-	        this.nickname = nickname;
-	    }
-
-	 
-	    public void setPhone(String phone) {
-	        this.phone = phone;
-	    }
-
 	
 
 	public Dao_Login(boolean passableNickname) {
@@ -95,14 +91,29 @@ public class Dao_Login {
 		super();
 		this.userid = userid;
 	}
-	public String getPw() {
-        return pw;
-    }
+				
+	
+	//id , pw 를 찾기위한 메소드
+	  public void setPhone(String phone) {
+	        this.phone = phone;
+	    }
+
+	    public void setNickname(String nickname) {
+	        this.nickname = nickname;
+	    }
+
+	    public String getPw() {
+	        return pw;
+	    }
+	  
+
 	//Method
 	
 	//	로그인 실행
 				
 	
+	
+
 	public boolean LoginAction() {
 	     boolean yesLogin = false;
 		String A = "SELECT pw FROM user WHERE userid = '" + userid + "'";
@@ -152,10 +163,11 @@ public class Dao_Login {
 			  											// 사용자 ID를 설정
 			pstmt.setString(1, this.userid);
 					
-			ResultSet rs = pstmt.executeQuery();
+			ResultSet rs = pstmt.executeQuery();			
 					
 				if ( rs.next()) {
-						passableId = false;
+						passableId = false;					        
+				
 					//	System.out.println("Duplicate ID found: " + this.userid);
 				}else { 
 									
@@ -186,86 +198,54 @@ public class Dao_Login {
 		return passableId;
 								
 }
-	//nickname 중복체크
-	
-		public boolean nickNameCheck() {
+			//회원가입 취소시 아이디 삭제
+	public void idDelete() {
+		String X = "delete from user where userid = ?";
+				
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection conn = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+			PreparedStatement D = conn.prepareStatement(X);
+		
+			
+					D.setString(1, this.userid);
+					D.executeUpdate();
+					conn.close();
+					 
+					
+		}catch (Exception e) {
+			e.printStackTrace();
 			 
-		boolean	passableNickname = true;
-	        String E =  "SELECT COUNT(*) FROM user WHERE nickname = ?";
-	        				
-	        	
-	        try {
-	            Class.forName("com.mysql.cj.jdbc.Driver");
-	            Connection conn = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
-	            PreparedStatement pstmt = conn.prepareStatement(E);
-	            			
-	            // 사용자 nickname 설정
-	            pstmt.setString(1, nickname);	
-//	            ResultSet rs = pstmt.executeQuery();
-	            ResultSet rs = pstmt.executeQuery(); 
-      	
-	                if (rs.next()) {  
-	                if ( passableNickname = rs.getInt(1) == 0) {
-	                	passableNickname = false;	
-	                	
-	                }
-	                    //passableNickname = rs.getInt(1) == 0; 
-	                     
-	                    	
-	                    conn.close();
-	                }	
-	            	
-	        } catch (SQLException | ClassNotFoundException e) {
-	            passableNickname = true;
-	            e.printStackTrace();
-	        }
-
-	        return passableNickname;
-	    }
-			
+		}
 		
-//	public boolean nickNameCheck() {
-//		boolean passableNickname = true;
-//		String query = "select nickname from user where nickname = '" + nickname + "'";
-//		
-//		try {
-//			Class.forName("com.mysql.cj.jdbc.Driver");
-//			Connection conn = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
-//			Statement st = conn.createStatement();
-//			
-//			ResultSet rs = st.executeQuery(query);
-//			
-//			if (rs.next()) {
-//				passableNickname = false;
-//			}
-//			conn.close();
-//			
-//		}
-//		catch (Exception e ) {
-//			e.printStackTrace();
-//		}
-//		return passableNickname;
-//	}
+	}
+	
 		
 		
+	public boolean nickNameCheck(String nickname) {
+	//	public boolean nickNameCheck() {
+		boolean boolCheck = true;
 		
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection conn = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+			Statement st = conn.createStatement();
+			String query = "select nickname from user where nickname = '" + nickname + "'";
+			ResultSet rs = st.executeQuery(query);
+			// 사용자 nickname 설정
+			if (rs.next()) {
+				String strCheck = rs.getString(1);
+				if (strCheck.trim().equals(nickname.trim())) {
+					boolCheck = false;
+				}
+			}
+			conn.close();
+		} catch (SQLException | ClassNotFoundException e) {
+			boolCheck = true;
+		}
+		return boolCheck;
+	}
 		
-		
-//	            if (rs.next()) {
-//	                passableNickname = false;
-//	            } 
-//	            			
-//
-//	            
-//	            conn.close();
-//	        }  catch (Exception e) {
-//	            e.printStackTrace();
-//	            passableNickname = true;
-//	        }
-//
-//	        return passableNickname;
-//	    }
-			
 	//id 찾기
 	public boolean findId() {
 			boolean searchId = false;
@@ -366,4 +346,11 @@ public class Dao_Login {
 	    }
 
 	}
+	
+	
+	
+	
+	
+	
+	
 }
