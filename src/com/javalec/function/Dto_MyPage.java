@@ -10,19 +10,20 @@ public class Dto_MyPage {
 	String address;
 	String join_date;
 	String delect_date;
-	byte[] profileimage;
+	double rating;
 	
 	public Dto_MyPage() {
 		
 	}
 
-	public Dto_MyPage(String userid, String pw, String phone, String email, String nickname, String address) {
+	public Dto_MyPage(String userid, String pw, String phone, String email, String nickname, String address,double rating) {
 		this.userid = userid;
 		this.pw = pw;
 		this.phone = phone;
 		this.email = email;
 		this.nickname = nickname;
 		this.address = address;
+		this.rating = rating;
 	}
 
 	public String getUserid() {
@@ -89,13 +90,15 @@ public class Dto_MyPage {
 		this.address = address;
 	}
 
-	public byte[] getProfileimage() {
-		return profileimage;
+	public double getRating() {
+		return rating;
 	}
 
-	public void setProfileimage(byte[] profileimage) {
-		this.profileimage = profileimage;
+	public void setRating(double rating) {
+		this.rating = rating;
 	}
+
+	
 	
 	
 	

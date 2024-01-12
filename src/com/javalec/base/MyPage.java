@@ -41,6 +41,7 @@ public class MyPage extends JDialog {
 	private JSeparator separator_1_1;
 	private JSeparator separator_1_1_1;
 	private JLabel lblImage;
+	private JLabel lblRating;
 
 	/**
 	 * Launch the application.
@@ -79,6 +80,7 @@ public class MyPage extends JDialog {
 		getContentPane().add(getBtnWrite());
 		getContentPane().add(getLblUserImage());
 		getContentPane().add(getLblUserNick());
+		getContentPane().add(getLblRating());
 		getContentPane().add(getBtnEdit());
 		getContentPane().add(getSeparator_1());
 		getContentPane().add(getLblMyProduct());
@@ -137,7 +139,7 @@ public class MyPage extends JDialog {
 					Write wrt = new Write();
 					wrt.setVisible(true);
 					dispose();
-					
+
 				}
 			});
 			btnWrite.setBounds(330, 55, 70, 34);
@@ -266,6 +268,14 @@ public class MyPage extends JDialog {
 		return lblImage;
 	}
 
+	private JLabel getLblRating() {
+		if (lblRating == null) {
+			lblRating = new JLabel("");
+			lblRating.setBounds(211, 192, 200, 16);
+		}
+		return lblRating;
+	}
+
 	// ------------------function
 
 	private void insertInfo() {
@@ -273,6 +283,7 @@ public class MyPage extends JDialog {
 		Dto_MyPage dto = dao.insertInfo();
 
 		lblUserNick.setText(dto.getNickname() + "님 안녕하세요 :)");
+		lblRating.setText("별점 : " + Double.toString(dto.getRating()));
 
 		String filePath = Integer.toString(Share.filename);
 		// 파일이 존재하는지 확인

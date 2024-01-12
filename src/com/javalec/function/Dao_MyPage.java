@@ -32,8 +32,9 @@ public class Dao_MyPage {
 
 		Dto_MyPage dto = null;
 
-		String A = "select userid, pw, phone, email, nickname, address, profile_image from user where userid = '"
-				+ Share.id + "'";
+		String A = "select u.userid, u.pw, u.phone, u.email, u.nickname, u.address, u.profile_image ,avg(r.rating) from user as u, rating as r"
+				+ " where u.userid = '"
+				+ Share.id + "' and u.userid = r.userid";
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection conn_mysql = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
@@ -48,6 +49,7 @@ public class Dao_MyPage {
 				String email = rs.getString(4);
 				String nickname = rs.getString(5);
 				String address = rs.getString(6);
+				double rating = rs.getDouble(8);
 
 				// file
 				Share.filename = Share.filename + 1;
@@ -59,7 +61,7 @@ public class Dao_MyPage {
 					output.write(buffer);
 				}
 
-				dto = new Dto_MyPage(userid, pw, phone, email, nickname, address);
+				dto = new Dto_MyPage(userid, pw, phone, email, nickname, address,rating);
 			}
 			conn_mysql.close();
 
@@ -157,7 +159,7 @@ public class Dao_MyPage {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void updateImage(FileInputStream input) {
 		PreparedStatement ps = null;
 
