@@ -65,6 +65,8 @@ public class Register extends JDialog {
 	private Dao_Login daoLogin;
 	private int idcount = 0;
 	private int namecount = 0;
+	private boolean passableNickname = false;
+	//private int passalbeNickname = 0;
 	
 	/**
 	 * Launch the application.
@@ -291,10 +293,10 @@ public class Register extends JDialog {
 			btnIdchek = new JButton("중복확인");
 			btnIdchek.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					 String userID = tfid.getText();
+				//	 String userID = tfid.getText();
 	                    Dao_Login dao = new Dao_Login();
 					  		idDoubleCheck();
-					  int i =0;
+			//		  int i =0;
 					  
 					  if ( dao.Idcheck()  )
 					  		idcount++;
@@ -310,8 +312,8 @@ public class Register extends JDialog {
 			btnnickNamechek = new JButton("중복확인");
 			btnnickNamechek.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-						String usernickname = tfnickname.getText();
-					Dao_Login dao = new Dao_Login();					
+//						String usernickname = tfnickname.getText();
+//					Dao_Login dao = new Dao_Login();					
 						nickNameDoubleCheck();
 						namecount++;
 		            }
@@ -448,67 +450,67 @@ public class Register extends JDialog {
 						
 		  if (tfid.getText().isEmpty()) {
 	            JOptionPane.showMessageDialog(this, "ID를 입력하세요.", "알림", JOptionPane.WARNING_MESSAGE);
-	            return false;
+	           // return false;
 	        }
-		  	  else if (idcount < 1 ) {
+		  	  else if (dao.Idcheck() == false ) {
 	            JOptionPane.showMessageDialog(this, "ID 중복확인을 수행하세요.", "알림", JOptionPane.WARNING_MESSAGE);
-	            return false;
+	          //  return false;
 	        }
 
 		      else	if (tfpw.getText().isEmpty()) {
 	            JOptionPane.showMessageDialog(this, "비밀번호를 입력하세요.", "알림", JOptionPane.WARNING_MESSAGE);
-	            return false;
+	          //  return false;
 	        }
 
 		      else  if (tfpwRe.getText().isEmpty()) {
 	            JOptionPane.showMessageDialog(this, "비밀번호 재입력을 입력하세요.", "알림", JOptionPane.WARNING_MESSAGE);
-	            return false;
+	          //  return false;
 	        }
 		      else if (tfpw.getText().isEmpty() || tfpwRe.getText().isEmpty() || !tfpw.getText().equals(tfpwRe.getText())) {
 		    	  JOptionPane.showMessageDialog(this, "비밀번호를 확인해주세요.", "알림", JOptionPane.WARNING_MESSAGE);
-		    	  return false;
+		    	 // return false;
 		      }
 
 		      else  if (tfnickname.getText().isEmpty()) {	
 	            JOptionPane.showMessageDialog(this, "닉네임을 입력하세요.", "알림", JOptionPane.WARNING_MESSAGE);
-	            return false;						
+	         //   return false;						
 	        }
-		      else  if (namecount < 1) {
+		      else  if (dao.nickNameCheck() == false) {
 			  JOptionPane.showMessageDialog(this, "닉네임 중복확인을 수행하세요.", "알림", JOptionPane.WARNING_MESSAGE);
-			  return false;
+		//	  return false;
 		  }
 
 		   else  if (tfname.getText().isEmpty()) {
 	            JOptionPane.showMessageDialog(this, "이름을 입력하세요.", "알림", JOptionPane.WARNING_MESSAGE);
-	            return false;
+	      //      return false;
 		   }
 		   else  if (tfphone.getText().isEmpty()) {
 	            JOptionPane.showMessageDialog(this, "전화번호를 입력하세요.", "알림", JOptionPane.WARNING_MESSAGE);
-	            return false;
+	       //     return false;
 	        }
 
 		   else if (tfaddress1.getText().isEmpty() || tfaddress2.getText().isEmpty()) {
 			 	JOptionPane.showMessageDialog(this, "주소를 입력하세요.", "알림", JOptionPane.WARNING_MESSAGE);
-			 	return false;
+			// 	return false;
 	        }
 		   else if (!ckbagree.isSelected() ) {	
-			  
+			   
 	        	JOptionPane.showMessageDialog(this, "개인정보 수집에 대한 동의가 필요합니다.", "알림", JOptionPane.WARNING_MESSAGE);
-	        	return false;
+	        //	return false;
            }
 		  return true;
 		  		//Dao_Login Dao = new Dao_Login();
 		  		
 //		  			if (dao.Idcheck() )
 				
-		  
+		  	
 		   
 		  
 											
 	}
 	// 아이디 중복확인
 	public void idDoubleCheck() {
-		 String userId = tfid.getText();
+		 String userId = tfid.getText().trim();
 		 Dao_Login daoLogin = new Dao_Login(userId);
 		 			if ( tfid.getText().isEmpty()) {
 		 				JOptionPane.showMessageDialog(this, "ID를 입력해주세요.", "알림", JOptionPane.WARNING_MESSAGE);
@@ -526,27 +528,37 @@ public class Register extends JDialog {
 	}
 	//닉네임 중복 확인								
 	public void nickNameDoubleCheck() {
-		 String userNickname = tfnickname.getText();			
+				passableNickname = false;
+//				  passalbeNickname =0;
+		 String userNickname = tfnickname.getText().trim();			
 		 Dao_Login daoLogin = new Dao_Login(userNickname);		
 		 			if ( tfnickname.getText().isEmpty()) {			
 		 				JOptionPane.showMessageDialog(this, "닉네임을 입력해주세요.", "알림", JOptionPane.WARNING_MESSAGE);
 		 				return;	
-		 			}			
-		 			if (daoLogin.nickNameCheck()) {
-		        JOptionPane.showMessageDialog(this, "사용 가능한 닉네임 입니다.", "알림", JOptionPane.INFORMATION_MESSAGE);
-		          tfnickname.setEditable(false);
+		 		}			
+		 			 if (daoLogin.nickNameCheck() == false) {
+		              JOptionPane.showMessageDialog(this, "이미 사용 중인 닉네임 입니다. 다른 닉네임을 입력하세요.", "알림", JOptionPane.WARNING_MESSAGE);
+		               tfnickname.setEditable(true);
 		         
 	             }
-		 			else  
-		        JOptionPane.showMessageDialog(this, "이미 사용 중인 닉네임 입니다. 다른 닉네임을 입력하세요.", "알림", JOptionPane.WARNING_MESSAGE);
-		        
-		 				
+		 			else 
+		        JOptionPane.showMessageDialog(this, "사용 가능한 닉네임 입니다.", "알림", JOptionPane.INFORMATION_MESSAGE);
+		 			tfnickname.setEditable(false);
+		 			
+		 			
+		 					
 	}
-				
+					
 
 		
 	public void goPinfo() {
-			JOptionPane.showMessageDialog(null, "");				//약관 집어 넣기
+					Article article = new Article();
+					 
+						
+						
+								
+					
+//			JOptionPane.showMessageDialog(null, "");				//약관 집어 넣기
 	}
 	// 로그인 화면으로 돌아가기
 	public void goBack () {

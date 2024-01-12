@@ -191,7 +191,6 @@ public class Dao_Login {
 		public boolean nickNameCheck() {
 			 
 		boolean	passableNickname = true;
-	       // String E = "select nickname from user where nickname = ?";
 	        String E =  "SELECT COUNT(*) FROM user WHERE nickname = ?";
 	        				
 	        	
@@ -203,22 +202,55 @@ public class Dao_Login {
 	            // 사용자 nickname 설정
 	            pstmt.setString(1, nickname);	
 //	            ResultSet rs = pstmt.executeQuery();
-	            		
-	            try (ResultSet rs = pstmt.executeQuery()) {
-	                if (rs.next()) {   		
-	                    passableNickname = false;	
+	            ResultSet rs = pstmt.executeQuery(); 
+      	
+	                if (rs.next()) {  
+	                if ( passableNickname = rs.getInt(1) == 0) {
+	                	passableNickname = false;	
+	                	
+	                }
+	                    //passableNickname = rs.getInt(1) == 0; 
+	                     
+	                    	
+	                    conn.close();
 	                }	
-	            }	
-	        } catch (SQLException e) {	
-	            passableNickname = true;	
-	            e.printStackTrace();	
-	        } catch (ClassNotFoundException e) {
-				
-				e.printStackTrace();
-			}	
-	        return passableNickname;	
-	    }	
-					
+	            	
+	        } catch (SQLException | ClassNotFoundException e) {
+	            passableNickname = true;
+	            e.printStackTrace();
+	        }
+
+	        return passableNickname;
+	    }
+			
+		
+//	public boolean nickNameCheck() {
+//		boolean passableNickname = true;
+//		String query = "select nickname from user where nickname = '" + nickname + "'";
+//		
+//		try {
+//			Class.forName("com.mysql.cj.jdbc.Driver");
+//			Connection conn = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+//			Statement st = conn.createStatement();
+//			
+//			ResultSet rs = st.executeQuery(query);
+//			
+//			if (rs.next()) {
+//				passableNickname = false;
+//			}
+//			conn.close();
+//			
+//		}
+//		catch (Exception e ) {
+//			e.printStackTrace();
+//		}
+//		return passableNickname;
+//	}
+		
+		
+		
+		
+		
 //	            if (rs.next()) {
 //	                passableNickname = false;
 //	            } 
