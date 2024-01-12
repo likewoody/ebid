@@ -156,5 +156,27 @@ public class Dao_MyPage {
 			e.printStackTrace();
 		}
 	}
+	
+	public void updateImage(String image) {
+		PreparedStatement ps = null;
+
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection conn_mysql = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+			Statement stmt_mysql = conn_mysql.createStatement();
+
+			String A = "update user set = ? ";
+			String B = "where userid = '" + Share.id + "'";
+
+			ps = conn_mysql.prepareStatement(A + B);
+			ps.setString(1, image);
+			ps.executeUpdate();
+
+			conn_mysql.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 }

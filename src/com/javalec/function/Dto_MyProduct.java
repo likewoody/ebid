@@ -7,6 +7,7 @@ public class Dto_MyProduct {
 	String nick;
 	String status;
 	int postid;
+	int sellid;
 	int wish;
 	int chat;
 	byte[] postimage;
@@ -15,16 +16,17 @@ public class Dto_MyProduct {
 
 	}
 
-	public Dto_MyProduct(byte[] postimage, String title, int price, String nick, String status, int postid, int wish,
+	public Dto_MyProduct(byte[] postimage, String title, int price, String nick, String status, int postid,int sellid, int wish,
 			int chat) {
-		this.postimage = postimage;
 		this.title = title;
 		this.price = price;
 		this.nick = nick;
 		this.status = status;
 		this.postid = postid;
+		this.sellid = sellid;
 		this.wish = wish;
 		this.chat = chat;
+		this.postimage = postimage;
 	}
 
 	public String getTitle() {
@@ -89,6 +91,14 @@ public class Dto_MyProduct {
 
 	public void setPostimage(byte[] postimage) {
 		this.postimage = postimage;
+	}
+
+	public int getSellid() {
+		return sellid;
+	}
+
+	public void setSellid(int sellid) {
+		this.sellid = sellid;
 	}
 	
 

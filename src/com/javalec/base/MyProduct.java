@@ -182,16 +182,21 @@ public class MyProduct extends JFrame {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					innertable.setDefaultEditor(Object.class, null);
-					
+
 					if (e.getClickCount() == 2) {
 						// postid가 7부터 시작이기에 viewcount에 선택된 row번호에 +7을 객체로 넣어준다.
-						Dao_Home dao = new Dao_Home(innertable.getSelectedRow() + 9);
-						
-						// detail에서 사용하기 위함
-						Share.postId = innertable.getSelectedRow() + 9;
-						Share.sellId = innertable.getSelectedRow() + 5;
+						Dao_Home dao = new Dao_Home();
+						Dao_MyProduct mp = new Dao_MyProduct();
+						ArrayList<Dto_MyProduct> dto = mp.searchDB();
+
+						// for finding postid
+						Share.postId = dto.get(innertable.getSelectedRow()).getPostid();
+
+						// for find sellid
+						Share.sellId = dto.get(innertable.getSelectedRow()).getSellid();
+//							
 						Share.post_status = dao.findPostStatus();
-						
+
 						dao.viewCount();
 						Home_detail homeDetail = new Home_detail();
 						homeDetail.setVisible(true);

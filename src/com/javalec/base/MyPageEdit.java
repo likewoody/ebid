@@ -11,10 +11,13 @@ import java.awt.Color;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.javalec.function.*;
 
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
@@ -194,7 +197,7 @@ public class MyPageEdit extends JFrame {
 			btnEditImage = new JButton("사진수정");
 			btnEditImage.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					editImage();
+					filePath();
 				}
 			});
 			btnEditImage.setBounds(267, 190, 88, 29);
@@ -279,7 +282,7 @@ public class MyPageEdit extends JFrame {
 					updatecbAddress2();
 				}
 			});
-			cbAddress1.setModel(new DefaultComboBoxModel(new String[] {"-", "서울시", "경기도"}));
+			cbAddress1.setModel(new DefaultComboBoxModel(new String[] { "-", "서울시", "경기도" }));
 
 			cbAddress1.setBounds(115, 580, 100, 30);
 		}
@@ -476,7 +479,23 @@ public class MyPageEdit extends JFrame {
 		tfEditPw.setEditable(false);
 	}
 
-	private void editImage() {
+	private void filePath() {
+		Dao_MyPage dao = new Dao_MyPage();
+		
+		JFileChooser chooser = new JFileChooser();
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("Image Files", "jpg", "jpeg", "png", "bmp");
+		chooser.setFileFilter(filter);
+
+		int ret = chooser.showOpenDialog(null);
+		if (ret == JFileChooser.APPROVE_OPTION) {
+		    File selectedFile = chooser.getSelectedFile();
+		    
+		    // 선택한 파일의 경로를 얻어오고, 해당 경로를 사용하여 이미지를 설정
+		    String filePath = selectedFile.getPath();
+		    dao.updateImage(selectedFile.getPath());
+		} else {
+		    JOptionPane.showMessageDialog(null, "파일을 선택하지 않았습니다.");
+		}
 
 	}
 

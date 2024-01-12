@@ -208,7 +208,29 @@ public class MyLike extends JFrame {
 			innertable.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					 
+
+					innertable.setDefaultEditor(Object.class, null);
+
+					if (e.getClickCount() == 2) {
+						// postid가 7부터 시작이기에 viewcount에 선택된 row번호에 +7을 객체로 넣어준다.
+						Dao_Home dao = new Dao_Home();
+						Dao_Like daolike = new Dao_Like();
+						ArrayList<Dto_Like> dto = daolike.searchDB();
+
+						// for finding postid
+						Share.postId = dto.get(innertable.getSelectedRow()).getPostid();
+
+						// for find sellid
+						Share.sellId = dto.get(innertable.getSelectedRow()).getSellid();
+//							
+						Share.post_status = dao.findPostStatus();
+
+						dao.viewCount();
+						Home_detail homeDetail = new Home_detail();
+						homeDetail.setVisible(true);
+						dispose();
+
+					}
 				}
 			});
 			innertable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -249,12 +271,8 @@ public class MyLike extends JFrame {
 		for (Dto_Like dto : dao.searchDB()) {
 			outertable.addRow(new Object[] { dto.getPostimage(),
 					String.format(
-							"<html><b>[%s]</b>" 
-					+ "<br><br>" 
-					+ "%s<br>" 
-					+ "가격 : %s<br>" 
-					+ "판매자 : %s<br><br>"
-					+ "채팅 : %s  ㅣ  찜 : %s</html>",
+							"<html><b>[%s]</b>" + "<br><br>" + "%s<br>" + "가격 : %s<br>" + "판매자 : %s<br><br>"
+									+ "채팅 : %s  ㅣ  찜 : %s</html>",
 							dto.getStatus(), dto.getTitle(), Integer.toString(dto.getPrice()), dto.getNick(),
 							Integer.toString(dto.getChat()), Integer.toString(dto.getWish())) });
 			innertable.setRowHeight(row, 150);
@@ -295,6 +313,7 @@ public class MyLike extends JFrame {
 
 	private void deleteLike() {
 		Dao_Like dao = new Dao_Like();
+		dtolist = dao.searchDB();
 
 		int i = innertable.getSelectedRow();
 		int like = dtolist.get(i).getPostid();
