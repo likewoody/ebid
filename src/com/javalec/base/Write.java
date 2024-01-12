@@ -12,6 +12,7 @@ import com.javalec.function.Dto_Write;
 import javax.swing.JButton;
 import java.awt.Font;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import javax.swing.AbstractButton;
@@ -154,6 +155,11 @@ public class Write extends JFrame {
 		contentPane.add(lblimage);
 		
 		JButton btnPost = new JButton("게시하기");
+		btnPost.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				updateAction(); //******input***********
+			}
+		});
 		btnPost.setFont(new Font("Dialog", Font.PLAIN, 14));
 		btnPost.setBounds(111, 640, 210, 40);
 		contentPane.add(btnPost);
@@ -201,18 +207,6 @@ public class Write extends JFrame {
 	}
 	
 	
-	//--------functions----------
-	
-		private void insertInfo() {
-		
-			Dao_Write dao = new Dao_Write();
-			Dto_Write dto = dao.userIdinput();
-		
-			tfUserid.setText(dto.getUserid());
-		
-			
-		
-	}
 	private JTextArea getTexDescription() {
 		if (texDescription == null) {
 			texDescription = new JTextArea();
@@ -223,4 +217,37 @@ public class Write extends JFrame {
 		}
 		return texDescription;
 	}
+	
+	
+	//--------functions----------
+	
+	private void insertInfo() {
+	
+		Dao_Write dao = new Dao_Write();
+		Dto_Write dto = dao.userIdinput();
+	
+		tfUserid.setText(dto.getUserid());
+			
+	}
+	
+	// 정보 입력하기
+	private void updateAction() {
+		
+		// 작동됨******************
+		String title = tfTitle.getText();
+		String price = tfPrice.getText();  	                
+        String description = texDescription.getText();
+        // 추가 고정값
+     
+    
+    // 회원가입 처리
+    Dao_Write dao = new Dao_Write(title, description, price); 
+    // 사용자 등록 수행
+    dao.wUpdate();
+
+    // 사용자에게 성공적으로 등록되었음을 알림
+    JOptionPane.showMessageDialog(null, "게시글이 등록되었습니다.");
+   dispose();
+	}
+	
 }//--end--

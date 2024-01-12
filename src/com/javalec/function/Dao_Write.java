@@ -13,19 +13,58 @@ public class Dao_Write {
 	private final String id_mysql = Share.dbUser;
 	private final String pw_mysql = Share.dbPass;
 	
-	String userid;
-	String pw;
+	private String userid;
+	private String pw;
+	private String title;
+	private String description;
+	private String post_status;
+	private String sort;
+	private String price;
+	private String view_count;
+	private String start_date;
+	private String postid;	
 	
+
 	//Constructor
 	
 	public Dao_Write() {
 		
 	}
+	
+	
+	public Dao_Write(String title, String description, String post_status, String sort, String price, String view_count,
+			String start_date) {
+		super();
+		this.title = title;
+		this.description = description;
+		this.post_status = post_status;
+		this.sort = sort;
+		this.price = price;
+		this.view_count = view_count;
+		this.start_date = start_date;
+	}
+	
+	
+
+
+	public Dao_Write(String title, String description, String price) {
+		super();
+		this.title = title;
+		this.description = description;
+		this.price = price;
+	}
+
+
+	public Dao_Write(String userid) {
+		super();
+		this.userid = userid;
+	}
+
+
 	public Dto_Write userIdinput() {
 		
 		Dto_Write dto = null;
 		
-		//Share.id ="cici16"; //************test
 		String where1 = "select userid, pw from user where userid = '"+ Share.id +"'";
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -36,8 +75,7 @@ public class Dao_Write {
 			
 			while(rs.next()) {
 				String userid = rs.getString(1);
-			//	String pw = rs.getString(2);
-			
+						
 				dto = new Dto_Write(userid,pw);	
 		}
 		      
@@ -50,27 +88,40 @@ public class Dao_Write {
 		return dto;
 		
     }
-	
-	public void testing(String userid) {
+	 //회원 정보 업데이트
+	public void wUpdate() {
 		
-		PreparedStatement ps = null;
-				
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection conn_mysql = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
-			Statement stmt_mysql = conn_mysql.createStatement();
+		//글게시 완료 잘동됨.*****************************************
+		
+		String AA ="INSERT INTO ebid.post (title, description, post_status, sort, price, view_count, start_date) VALUES (?, ?, ?, ?, ?, ?, ?)";
+	
+    try {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection conn = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+    
+        //업데이트
+        PreparedStatement pstmt = conn.prepareStatement(AA);
+        pstmt.setString(1, title);
+        pstmt.setString(2, description);
+        pstmt.setString(3, "판매중");
+        pstmt.setString(4, "판매");
+        pstmt.setString(5,  price);
+        pstmt.setString(6, "0");
+       
+     // 현재의 timestamp 얻기
+        java.sql.Timestamp start_date = new java.sql.Timestamp(System.currentTimeMillis());
+        pstmt.setTimestamp(7, start_date);
+    	        
 
-			String whare1="where userid = '" + Share.id +"'";
-			
-			ps = conn_mysql.prepareStatement(whare1);
-			ps.setString(1,userid);
-			
-			conn_mysql.close();
-			
-		} catch (Exception e) {
-			e.printStackTrace(); // 어디서 오류가 났는지 출력
-		}
+        // 업데이트 실행
+        pstmt.executeUpdate();
 
+        conn.close();
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+
+  } 
 	}
 
-}
+

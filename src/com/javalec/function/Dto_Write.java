@@ -3,15 +3,50 @@ package com.javalec.function;
 public class Dto_Write {
 	
 	String userid;
-	String pw;
+	String pw;	
+	String title;
+	String description;
+	String post_status;
+	String sort;
+	String price;
+	String view_count;
+	String start_date;
+	String postid;
 	
-	
-	
+		
 	public Dto_Write() {
 		
 	}
-
 	
+	
+	public Dto_Write(String userid) {
+		super();
+		this.userid = userid;
+	}
+	
+
+	public Dto_Write(String title, String description, String price) {
+		super();
+		this.title = title;
+		this.description = description;
+		this.price = price;
+	}
+
+
+	public Dto_Write(String title, String description, String post_status, String sort, String price, String view_count,
+			String start_date, String postid) {
+		super();
+		this.title = title;
+		this.description = description;
+		this.post_status = post_status;
+		this.sort = sort;
+		this.price = price;
+		this.view_count = view_count;
+		this.start_date = start_date;
+		this.postid = postid;
+	}
+
+
 	public Dto_Write(String userid, String pw) {
 		super();
 		this.userid = userid;
@@ -34,6 +69,86 @@ public class Dto_Write {
 
 	public void setPw(String pw) {
 		this.pw = pw;
+	}
+
+
+	public String getTitle() {
+		return title;
+	}
+
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+
+	public String getDescription() {
+		return description;
+	}
+
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+
+	public String getPost_status() {
+		return post_status;
+	}
+
+
+	public void setPost_status(String post_status) {
+		this.post_status = post_status;
+	}
+
+
+	public String getSort() {
+		return sort;
+	}
+
+
+	public void setSort(String sort) {
+		this.sort = sort;
+	}
+
+
+	public String getPrice() {
+		return price;
+	}
+
+
+	public void setPrice(String price) {
+		this.price = price;
+	}
+
+
+	public String getView_count() {
+		return view_count;
+	}
+
+
+	public void setView_count(String view_count) {
+		this.view_count = view_count;
+	}
+
+
+	public String getStart_date() {
+		return start_date;
+	}
+
+
+	public void setStart_date(String start_date) {
+		this.start_date = start_date;
+	}
+
+
+	public String getPostid() {
+		return postid;
+	}
+
+
+	public void setPostid(String postid) {
+		this.postid = postid;
 	}
 	
 	
