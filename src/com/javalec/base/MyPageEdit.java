@@ -132,6 +132,13 @@ public class MyPageEdit extends JFrame {
 	private JButton getBtnHome() {
 		if (btnHome == null) {
 			btnHome = new JButton("홈");
+			btnHome.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Home home = new Home();
+					dispose();
+					home.setVisible(true);
+				}
+			});
 			btnHome.setBounds(33, 55, 70, 34);
 		}
 		return btnHome;
@@ -140,6 +147,13 @@ public class MyPageEdit extends JFrame {
 	private JButton getBtnWrite() {
 		if (btnWrite == null) {
 			btnWrite = new JButton("글쓰기");
+			btnWrite.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Write w = new Write();
+					dispose();
+					w.setVisible(true);
+				}
+			});
 			btnWrite.setBounds(330, 55, 70, 34);
 		}
 		return btnWrite;
@@ -148,6 +162,13 @@ public class MyPageEdit extends JFrame {
 	private JButton getBtnMy() {
 		if (btnMy == null) {
 			btnMy = new JButton("개인");
+			btnMy.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					MyPage mp = new MyPage();
+					dispose();
+					mp.setVisible(true);
+				}
+			});
 			btnMy.setBounds(130, 55, 70, 34);
 		}
 		return btnMy;
@@ -156,6 +177,13 @@ public class MyPageEdit extends JFrame {
 	private JButton getBtnChat() {
 		if (btnChat == null) {
 			btnChat = new JButton("채팅");
+			btnChat.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Chat chat = new Chat();
+					dispose();
+					chat.setVisible(true);
+				}
+			});
 			btnChat.setBounds(230, 55, 70, 34);
 		}
 		return btnChat;

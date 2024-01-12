@@ -136,6 +136,13 @@ public class MyProduct extends JFrame {
 	private JButton getBtnWrite() {
 		if (btnWrite == null) {
 			btnWrite = new JButton("글쓰기");
+			btnWrite.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Write w = new Write();
+					dispose();
+					w.setVisible(true);
+				}
+			});
 			btnWrite.setBounds(330, 55, 70, 34);
 		}
 		return btnWrite;
