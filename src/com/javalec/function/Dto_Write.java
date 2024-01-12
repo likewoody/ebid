@@ -18,12 +18,14 @@ public class Dto_Write {
 		
 	}
 	
+
 	
 	public Dto_Write(String userid) {
 		super();
 		this.userid = userid;
 	}
-	
+
+
 
 	public Dto_Write(String title, String description, String price) {
 		super();
@@ -150,6 +152,7 @@ public class Dto_Write {
 	public void setPostid(String postid) {
 		this.postid = postid;
 	}
+	
 	
 	
 	
