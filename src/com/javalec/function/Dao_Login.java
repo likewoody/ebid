@@ -16,7 +16,7 @@ import com.mysql.cj.exceptions.RSAException;
 public class Dao_Login {
 
 	
-	//Field 
+	//Field 	
 	
 	
 	private final String url_mysql = Share.dbName;
@@ -41,7 +41,7 @@ public class Dao_Login {
 	//Constructor
 	
 	public Dao_Login() {
-		// TODO Auto-generated constructor stub
+		// TODO Auto-generated constructor stub				
 	}
 
 	public Dao_Login(String userid, String pw, String phone, String email, String nickname, String join_date,
@@ -69,7 +69,19 @@ public class Dao_Login {
 		this.address = address;
 	}
 	 
-	 public Dao_Login(String pw, String phone, String nickname) {
+	 
+	 
+	 
+	 
+	 public Dao_Login(String userid, String pw, String phone, String email) {
+		super();
+		this.userid = userid;
+		this.pw = pw;
+		this.phone = phone;
+		this.email = email;
+	}
+
+	public Dao_Login(String pw, String phone, String nickname) {
 		 super();
 		 this.pw = pw;
 		 this.phone = phone;
@@ -110,10 +122,6 @@ public class Dao_Login {
 	//Method
 	
 	//	로그인 실행
-				
-	
-	
-
 	public boolean LoginAction() {
 	     boolean yesLogin = false;
 		String A = "SELECT pw FROM user WHERE userid = '" + userid + "'";
@@ -199,27 +207,24 @@ public class Dao_Login {
 								
 }
 			//회원가입 취소시 아이디 삭제
-	public void idDelete() {
-		String X = "delete from user where userid = ?";
-				
+	public void idDelete(String userid) {
+
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection conn = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
-			PreparedStatement D = conn.prepareStatement(X);
-		
-			
-					D.setString(1, this.userid);
-					D.executeUpdate();
-					conn.close();
-					 
-					
-		}catch (Exception e) {
-			e.printStackTrace();
-			 
-		}
-		
-	}
-	
+			Connection conn = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);		
+
+            String deleteQuery = "DELETE FROM user WHERE userid = ?";
+            try (PreparedStatement ps = conn.prepareStatement(deleteQuery)) {
+                ps.setString(1, userid);
+                ps.executeUpdate();
+            }
+
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 		
 		
 	public boolean nickNameCheck(String nickname) {
@@ -312,7 +317,7 @@ public class Dao_Login {
 
 	public void signUpdate() {
 		   // 회원 정보 업데이트 쿼리
-		
+			
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String currentDateAndTime = sdf.format(new Date());
 
