@@ -8,12 +8,17 @@ import javax.swing.border.EmptyBorder;
 
 import com.javalec.function.Dao_Write;
 import com.javalec.function.Dto_Write;
+import com.javalec.function.Share;
 
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
+
 import java.awt.Font;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import javax.swing.JTextField;
 import javax.swing.JTextArea;
 import javax.swing.ImageIcon;
@@ -21,6 +26,16 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.FileInputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class Writing extends JFrame {
 
@@ -42,6 +57,10 @@ public class Writing extends JFrame {
 	private JLabel lblNewLabel_3;
 	private JLabel lblUserid;
 	private JLabel lblBackgroud;
+	
+	private final String url_mysql = Share.dbName;
+	private final String id_mysql = Share.dbUser;
+	private final String pw_mysql = Share.dbPass;
 
 	/**
 	 * Launch the application.
@@ -213,6 +232,13 @@ public class Writing extends JFrame {
 	private JLabel getLbladdimage() {
 		if (lbladdimage == null) {
 			lbladdimage = new JLabel("");
+			lbladdimage.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					chooseImage(); //input
+					
+				}
+			});
 			lbladdimage.setHorizontalAlignment(SwingConstants.CENTER);
 			lbladdimage.setBounds(37, 548, 64, 59);
 		}
@@ -231,6 +257,7 @@ public class Writing extends JFrame {
 			btnPost = new JButton("게시하기");
 			btnPost.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					uploadImage();
 					updateAction(); //****input********
 				}
 			});
@@ -274,8 +301,85 @@ public class Writing extends JFrame {
 	
 		lblUserid.setText(dto.getUserid());
 	}
+	
+	//----포토---------------------
+	// 사진 선택 다이얼로그를 열고 선택된 파일의 경로를 표시하는 메서드
+	private void chooseImage() {
+		JFileChooser fileChooser = new JFileChooser();
+	    int result = fileChooser.showOpenDialog(this);
+
+	    if (result == JFileChooser.APPROVE_OPTION) {
+	        File selectedFile = fileChooser.getSelectedFile();
+
+	        if (selectedFile != null) {
+	            String imagePath = selectedFile.getAbsolutePath();
+	            System.out.println("Selected image path: " + imagePath);
+	            lblimage.setText(imagePath);
+	        } else {
+	            System.out.println("Selected file is null.");
+	            lblimage.setText("No image selected.");
+	           
+	        }
+	    } else {
+	        System.out.println("File selection canceled.");
+	        lblimage.setText("No image selected.");
+	        
+	    }
 		
+	}
+	//--------------------------------------
+	// 선택된 사진을 데이터베이스에 업로드하는 메서드
+	private void uploadImage() {
 		
+		 try (Connection connection = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql)){
+		        
+        	 // Retrieve the maximum postid
+            int maxPostId = getMaxPostId(connection);
+            
+            // tfImage가 null인지 확인
+            if (lblimage != null) {
+        	// SQL 쿼리를 사용하여 이미지를 데이터베이스에 삽입
+            String sql = "INSERT INTO ebid.image(postid, post_image) VALUES (?,?)";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+                // 선택된 이미지 파일을 바이트 배열로 읽어옴
+                File selectedFile = new File(lblimage.getText());
+                byte[] imageData = new byte[(int) selectedFile.length()];
+                try (FileInputStream fileInputStream = new FileInputStream(selectedFile)) {
+                    fileInputStream.read(imageData);
+                }
+
+                // 쿼리에 이미지 데이터와 maxPostId 삽입
+                preparedStatement.setInt(1, maxPostId);
+                preparedStatement.setBytes(2, imageData);
+               
+                // 실행
+                preparedStatement.executeUpdate();
+            }
+            
+            System.out.println("Image uploaded successfully.");
+            } else {
+                System.out.println("No image selected.");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+     		
+	}
+	
+	 private int getMaxPostId(Connection connection) throws SQLException {
+	        try (PreparedStatement ps = connection.prepareStatement("SELECT MAX(postid) FROM ebid.post");
+	             ResultSet resultSet = ps.executeQuery()) {
+	            if (resultSet.next()) {
+	                return resultSet.getInt(1);
+	            } else {
+	                throw new SQLException("Error retrieving max postid");
+	            }
+	        }
+	    }
+	    
+	 	
+	//------------------------------------
 	// 정보 입력하기
 	private void updateAction() {
 			
@@ -286,7 +390,7 @@ public class Writing extends JFrame {
         // 추가 고정값
 	     
 	    
-    // 회원가입 처리
+    // 글올리기 처리
     Dao_Write dao = new Dao_Write(title, description, price); 
     // 사용자 등록 수행
     dao.wUpdate();
@@ -296,6 +400,5 @@ public class Writing extends JFrame {
    dispose();
 	}
 
-	
-	
+		
 }// end
