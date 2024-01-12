@@ -528,14 +528,13 @@ public class Register extends JDialog {
 	}
 
 	public boolean signError() {
-					Dao_Login dao = new Dao_Login();
-															
+					Dao_Login dao = new Dao_Login();				
 									
 		  if (tfid.getText().isEmpty()) {
 	            JOptionPane.showMessageDialog(this, "ID를 입력하세요.", "알림", JOptionPane.WARNING_MESSAGE);
 	            return false;
 	        		
-		    }  else if (dao.Idcheck() ==  false	 ) {
+		    }  else if (btnnickNamechek.isEnabled() == false ) {
 	            JOptionPane.showMessageDialog(this, "ID 중복확인을 수행하세요.", "알림", JOptionPane.WARNING_MESSAGE);
 	            return false;
 	        }
@@ -548,7 +547,7 @@ public class Register extends JDialog {
 		      else  if (tfpwRe.getText().isEmpty()) {
 	            JOptionPane.showMessageDialog(this, "비밀번호 재입력을 입력하세요.", "알림", JOptionPane.WARNING_MESSAGE);
 	            return false;
-	        } else if (tfpw.getText().length() <= 6	 || tfpw.getText().length() >= 8 || !tfpw.getText().matches("^(?=.*[a-zA-Z])(?=.*[0-9]).*$")) {
+	        } else if (tfpw.getText().length() < 6	 || tfpw.getText().length() > 8 || !tfpw.getText().matches("^(?=.*[a-zA-Z])(?=.*[0-9]).*$")) {
 	            JOptionPane.showMessageDialog(this, "비밀번호는 6~8자리의 영문과 숫자를 혼용해야 합니다.", "알림", JOptionPane.WARNING_MESSAGE);
 	            return false;
 		  
@@ -561,7 +560,7 @@ public class Register extends JDialog {
 	            JOptionPane.showMessageDialog(this, "닉네임을 입력하세요.", "알림", JOptionPane.WARNING_MESSAGE);
 	           return false;						
 	        }
-		      else if (dao.nickNameCheck(getName()) == false) {
+		      else if ( btnnickNamechek.isEnabled() != false) {
 			  JOptionPane.showMessageDialog(this, "닉네임 중복확인을 수행하세요.", "알림", JOptionPane.WARNING_MESSAGE);
 			  return false;
 		  }	
