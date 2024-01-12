@@ -22,4 +22,6 @@ public class Share {
 	// chat id
 	public static int chatid;
 	
+	// image num
+	public static int imageNum;
 }

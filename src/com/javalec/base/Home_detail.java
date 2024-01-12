@@ -227,16 +227,11 @@ public class Home_detail extends JDialog {
 				public void mouseClicked(MouseEvent e) {
 					innerTableImage.setDefaultEditor(Object.class, null);
 					
-//					if (e.getClickCount() == 2) {
-//						// postid가 7부터 시작이기에 viewcount에 선택된 row번호에 +7을 객체로 넣어준다.
-//						Dao_Home dao = new Dao_Home(innerTableImage.getSelectedRow() + 7);
-//						//detail에서 사용하기 위해 static으로 저장해둔다.
-//						Share.postId = innerTableImage.getSelectedRow() + 7;
-//						dao.viewCount();
-//						Home_detail homeDetail = new Home_detail();
-//						homeDetail.setVisible(true);
-//						dispose();
-//					}
+					if (e.getClickCount() == 2) {
+						Share.imageNum = innerTableImage.getSelectedColumn();
+						ZoomImage zoom = new ZoomImage();
+						zoom.setVisible(true);
+					}
 				}
 			});
 		}

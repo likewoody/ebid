@@ -1,6 +1,7 @@
 package com.javalec.function;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -80,10 +81,9 @@ public class Dao_Chat {
 			
 			while(rs.next()) {
 				String texts = rs.getString(1);
-				String userids = rs.getString(2);
-				int dates = rs.getInt(3);
-				
-				Dto_Chat dto = new Dto_Chat(texts, userids, dates);
+				Date dates = rs.getDate(2);
+				String userids = rs.getString(3);
+				Dto_Chat dto = new Dto_Chat(texts, dates, userids);
 				
 				dtoList.add(dto);
 			}
@@ -127,15 +127,14 @@ public class Dao_Chat {
 			Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
 			Statement st = con.createStatement();
 			
-			String query = "select distinct(cd.userid) "
-					+ "from chat_text_detail cd "
-					+ "left join chat c on cd.chatid = c.chatid "
-					+ "left join sell s on s.sellid = c.sellid "
-					+ "where cd.chatid = " + Share.chatid;
+			String query = "select text, date, userid "
+					+ "from chat_text_detail "
+					+ "where chatid = " + Share.chatid;
 			
 			ResultSet rs = st.executeQuery(query);
-			
+			System.out.println(Share.chatid);
 			while(rs.next()) {
+				System.out.println("right");
 				Dto_Chat dto = new Dto_Chat(rs.getString(1));
 				dtoList.add(dto);
 				System.out.println(dtoList);
