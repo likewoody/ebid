@@ -22,7 +22,7 @@ public class Dao_Write {
 	private String price;
 	private String view_count;
 	private String start_date;
-	private String postid;	
+		
 	
 
 	//Constructor
@@ -76,7 +76,7 @@ public class Dao_Write {
 			while(rs.next()) {
 				String userid = rs.getString(1);
 						
-				dto = new Dto_Write(userid,pw);	
+				dto = new Dto_Write(userid);	
 		}
 		      
 			conn_mysql.close();
@@ -91,7 +91,7 @@ public class Dao_Write {
 	 //회원 정보 업데이트
 	public void wUpdate() {
 		
-		//글게시 완료 잘동됨.*****************************************
+		//글게시 완료 동됨.*****************************************
 		
 		String AA ="INSERT INTO ebid.post (title, description, post_status, sort, price, view_count, start_date) VALUES (?, ?, ?, ?, ?, ?, ?)";
 	
