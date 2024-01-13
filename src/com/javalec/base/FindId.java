@@ -161,10 +161,12 @@ public class FindId extends JDialog {
 		String name = tfname.getText().trim();
 		String phone = tfphone.getText().trim();
 		
+		
 		 if (name.isEmpty() && phone.isEmpty()) {
 		        JOptionPane.showMessageDialog(null, "닉네임과 전화번호를 작성해주세요.", "알림", JOptionPane.WARNING_MESSAGE);
 		        return;
 		    }
+		 
 
 		 com.javalec.function.Dao_Login dao = new com.javalec.function.Dao_Login();
 		 dao.setNickname(name);
@@ -173,6 +175,10 @@ public class FindId extends JDialog {
 		    
 		    if (!name.isEmpty() && phone.isEmpty()) {
 		        JOptionPane.showMessageDialog(null, "전화번호를 작성해주세요.", "알림", JOptionPane.WARNING_MESSAGE);
+		        return;
+		    }
+		    else if (!isValidPhoneNumber(phone)) {
+		        JOptionPane.showMessageDialog(null, "올바른 전화번호 형식이 아닙니다. (010-xxxx-xxxx)", "알림", JOptionPane.WARNING_MESSAGE);
 		        return;
 		    }
 
@@ -200,9 +206,9 @@ public class FindId extends JDialog {
 		    } else {
 		        JOptionPane.showMessageDialog(null, "일치하는 정보가 없습니다. 다시 입력해 주새요.", "알림", JOptionPane.ERROR_MESSAGE);
 		    }
-		}
+		
+		    }
 	}
-	
 	
 	public void cancelclick() {
 		int cancel = JOptionPane.showConfirmDialog(null, "아이디 찾기를 취소 하시겠습니까?", "알림", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
@@ -212,4 +218,10 @@ public class FindId extends JDialog {
 			
 		}
 	}
+	private boolean isValidPhoneNumber(String phoneNumber) {
+	    // 010-xxxx-xxxx 형식의 정규표현식
+	    String regex = "^010-[0-9]{4}-[0-9]{4}$";
+	    return phoneNumber.matches(regex);
+	}
+
 }

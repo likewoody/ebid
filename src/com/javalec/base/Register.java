@@ -7,6 +7,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
@@ -28,6 +29,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.FocusAdapter;
@@ -63,8 +65,9 @@ public class Register extends JDialog {
 	private JButton btnBack;
 	private JTextField tfpwmatch;
 	private Dao_Login daoLogin;
-	
-
+	  private int activationCount = 0; // 닉네임 중복확인 메세지 를 위한 변수
+	 
+	  private ArrayList<Character> passwordList;
 
 	
 	/**
@@ -233,6 +236,20 @@ public class Register extends JDialog {
 	private JTextField getTfpw() {
 		if (tfpw == null) {
 			tfpw = new JTextField();
+			tfpw.addFocusListener(new FocusAdapter() {
+				@Override
+				public void focusLost(FocusEvent e) {
+					 passwordList = getPasswordList(tfpw);
+	                    checkPasswordMatch();
+				}
+			});
+			tfpw.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyReleased(KeyEvent e) {
+					 passwordList = getPasswordList(tfpw);
+	                    checkPasswordMatch();
+				}
+			});
 				
 		
 			tfpw.addMouseListener(new MouseAdapter() {
@@ -281,20 +298,20 @@ public class Register extends JDialog {
 				public void mouseClicked(MouseEvent e) {
 										if ( tfpwRe.isEditable() == false) 
 												idFirst();
-										
+										 
 				}
 			});
 			tfpwRe.setEditable(false);
 			tfpwRe.addFocusListener(new FocusAdapter() {
 				@Override
 				public void focusLost(FocusEvent e) {
-					 checkPasswordMatch();
+					  checkPasswordMatch();
 				}
 			});
 			tfpwRe.addKeyListener(new KeyAdapter() {
 				@Override
 				public void keyReleased(KeyEvent e) {
-					checkPasswordMatch();
+					  checkPasswordMatch();
 				}
 			});
 			
@@ -365,6 +382,7 @@ public class Register extends JDialog {
 			btnIdchek = new JButton("중복확인");
 			btnIdchek.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+				
 					//btnIdchek.setEnabled(false);
 					  		idDoubleCheck();
 			  		//btnIdchek.setEnabled(true);
@@ -439,15 +457,9 @@ public class Register extends JDialog {
 	private JCheckBox getCkbagree() {
 		if (ckbagree == null) {
 			ckbagree = new JCheckBox("");
-			ckbagree.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-											Check();
-				}
-			});
+		
 			ckbagree.setEnabled(false);
-			
-			
-			
+		
 			ckbagree.setBounds(127, 575, 30, 23);
 		}
 		return ckbagree;
@@ -470,17 +482,13 @@ public class Register extends JDialog {
 				} 
 				@Override
 				public void mouseClicked(MouseEvent e) {									
-								if (tfPinfo.isEnabled() == false)
+								if (tfPinfo.isEnabled() == false) {
 										idFirst();
+								}
 									goPinfo();
 				}
 			});
-			tfPinfo.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-						
-						
-				}
-			});
+		
 			tfPinfo.setEditable(false);
 			tfPinfo.setText("(필수) 개인정보 수집에 대한 동의");
 			tfPinfo.setBounds(158, 575, 220, 23);
@@ -509,23 +517,71 @@ public class Register extends JDialog {
 	
 	//--------Function---------
 	
-	public void checkPasswordMatch() {
-		String password = tfpw.getText();
-		String reEnteredPassword = tfpwRe.getText();		
-		
-		if (password.equals(reEnteredPassword)) {
-			tfpwmatch.setForeground(Color.BLUE);
-			tfpwmatch.setText("비밀번호가 일치합니다.");
-		} else {
-			tfpwmatch.setForeground(Color.RED);
-			tfpwmatch.setText("비밀번호가 일치하지 않습니다.");
-		}
-		 if (password.isEmpty() && reEnteredPassword.isEmpty()) {
-		        tfpwmatch.setVisible(true);
-		 }
-		 
-		tfpwmatch.setVisible(true);
-	}
+	
+	   private ArrayList<Character> getPasswordList(JTextField textField) {
+	        ArrayList<Character> list = new ArrayList<>();
+	        String password = textField.getText();
+	        for (int i = 0; i < password.length(); i++) {
+	            list.add(password.charAt(i));
+	        }
+	        return list;
+	    }
+
+	    private void checkPasswordMatch() {
+	        if (tfpw.getText().isEmpty() || tfpwRe.getText().isEmpty()) {
+	            // 하나 이상의 입력 필드가 비어 있으면 메시지를 표시하지 않음
+	            tfpwmatch.setVisible(false);
+	            return;
+	        }
+	        ArrayList<Character> passwordReList = getPasswordList(tfpwRe);
+
+	        // 비밀번호 길이가 다르면 일치하지 않음
+	        if (passwordList.size() != passwordReList.size()) {
+	            displayPasswordMismatch();
+	            return;
+	        } 
+
+	        // 비밀번호 각 문자를 비교
+	        for (int i = 0; i < passwordList.size(); i++) {
+	            if (!passwordList.get(i).equals(passwordReList.get(i))) {
+	                displayPasswordMismatch();
+	                return;
+	            }
+	        }
+
+	        // 모든 조건이 일치하면 비밀번호 일치
+	        displayPasswordMatch();
+	    }
+
+	    private void displayPasswordMatch() {
+	        tfpwmatch.setText("비밀번호가 일치합니다.");
+	        tfpwmatch.setForeground(Color.GREEN);
+	        tfpwmatch.setVisible(true);
+	    }
+
+	    private void displayPasswordMismatch() {
+	        tfpwmatch.setText("비밀번호가 일치하지 않습니다.");
+	        tfpwmatch.setForeground(Color.RED);
+	        tfpwmatch.setVisible(true);
+	    }
+	  
+//	public void checkPasswordMatch() {
+//		String password = tfpw.getText();
+//		String reEnteredPassword = tfpwRe.getText();		
+//		if (password.isEmpty() && reEnteredPassword.isEmpty()) {
+//			tfpwmatch.setVisible(false);
+//		}
+//		
+//		else if (password.equals(reEnteredPassword)) {
+//			tfpwmatch.setForeground(Color.BLUE);
+//			tfpwmatch.setText("비밀번호가 일치합니다.");
+//		} else {
+//			tfpwmatch.setForeground(Color.RED);
+//			tfpwmatch.setText("비밀번호가 일치하지 않습니다.");
+//		}
+//		 
+//		tfpwmatch.setVisible(true);
+//	}
 
 	public boolean signError() {
 					Dao_Login dao = new Dao_Login();				
@@ -560,8 +616,8 @@ public class Register extends JDialog {
 	            JOptionPane.showMessageDialog(this, "닉네임을 입력하세요.", "알림", JOptionPane.WARNING_MESSAGE);
 	           return false;						
 	        }
-		      else if ( btnnickNamechek.isEnabled() != false) {
-			  JOptionPane.showMessageDialog(this, "닉네임 중복확인을 수행하세요.", "알림", JOptionPane.WARNING_MESSAGE);
+		      else if ( activationCount == 1) {
+			  JOptionPane.showMessageDialog(this, "닉네임 중복확인을 수행하세요.", "알림", JOptionPane.WARNING_MESSAGE);			 
 			  return false;
 		  }	
 
@@ -578,7 +634,7 @@ public class Register extends JDialog {
 	            return false;	
 	        }
 		      else if (tfphone.getText().isEmpty() || !tfphone.getText().matches("^010-[0-9]{4}-[0-9]{4}$")) {
-			        JOptionPane.showMessageDialog(this, "전화번호는 010-0000-0000 형식으로 입력하세요.", "알림", JOptionPane.WARNING_MESSAGE);
+			        JOptionPane.showMessageDialog(this, "전화번호는 (010-xxxx-xxxx) 형식으로 입력하세요.", "알림", JOptionPane.WARNING_MESSAGE);
 			        return false;
 			    }
 
@@ -586,7 +642,7 @@ public class Register extends JDialog {
 			 	JOptionPane.showMessageDialog(this, "주소를 입력하세요.", "알림", JOptionPane.WARNING_MESSAGE);
 			 	return false;
 	        }
-		   else if (tfaddress1.getText().isEmpty() || !tfaddress1.getText().matches("^[가-힣]+$")) {
+		   else if (!tfaddress1.getText().matches("^[가-힣]$")) {
 		        JOptionPane.showMessageDialog(this, "주소를 한글로 입력하세요.", "알림", JOptionPane.WARNING_MESSAGE);
 		        return false;
 		    }
@@ -616,7 +672,7 @@ public class Register extends JDialog {
 		 			tfnickname.setEditable(true);
 		 			tfphone.setEditable(true);		 		
 		 			tfpwRe.setEditable(true);
-		 			tfaddress1.setEditable(true);
+		 		//	tfaddress1.setEditable(true);
 		 			tfaddress2.setEditable(true);
 		 			ckbagree.setEnabled(true);
 		 			btnnickNamechek.setEnabled(true);
@@ -625,7 +681,7 @@ public class Register extends JDialog {
 		 			tfid.setEditable(false);
 		 			tfid.setEnabled(false);
 		 			btnIdchek.setEnabled(false);
-		 			
+		 			activationCount++;
 //		 			daoLogin.Id();
 		 			
 		 			}
@@ -657,15 +713,18 @@ public class Register extends JDialog {
 		JOptionPane.showMessageDialog(this, "사용 가능한 닉네임 입니다.", "알림", JOptionPane.ERROR_MESSAGE);
 		btnnickNamechek.setEnabled(false);
 		tfnickname.setEditable(false);
+		activationCount = 2;
 		return;
 	
 	}
 }
 		
-	public void goPinfo() {
-	Article a	  = new Article();
-	       a.setVisible(true);				
+	public void goPinfo() {		
+	ArticlePage art = new ArticlePage();
+			art.setVisible(true);
+	       		
 	       
+	     
 
 				
 	}
@@ -694,10 +753,7 @@ public class Register extends JDialog {
 													
 										
 	}	
-							
-	public void	 Check () {
-					ckbagree.isSelected();
-	}
+	
 	}
 	
 	

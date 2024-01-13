@@ -188,6 +188,14 @@ public class FindPw extends JDialog {
 	            JOptionPane.showMessageDialog(null, "아이디, 이름, 전화번호를 모두 입력해주세요.", "알림", JOptionPane.WARNING_MESSAGE);
 	            return;
 	        }
+	        else if (!tfname.getText().matches("^[가-힣]{3}$")) {
+		        JOptionPane.showMessageDialog(this, "이름을 한글 3글자로 입력해 주세요.", "알림", JOptionPane.WARNING_MESSAGE);
+		        return;
+		    }
+	        else if (!isValidPhoneNumber(phone)) {
+		        JOptionPane.showMessageDialog(null, "올바른 전화번호 형식이 아닙니다. (010-xxxx-xxxx)", "알림", JOptionPane.WARNING_MESSAGE);
+		        return;
+		    }
 
 	        com.javalec.function.Dao_Login dao = new com.javalec.function.Dao_Login(id);
 	        dao.setNickname(name);
@@ -215,6 +223,11 @@ public class FindPw extends JDialog {
 			
 			
 		}
+	}
+	private boolean isValidPhoneNumber(String phoneNumber) {
+	    // 010-xxxx-xxxx 형식의 정규표현식
+	    String regex = "^010-[0-9]{4}-[0-9]{4}$";
+	    return phoneNumber.matches(regex);
 	}
 }
 	
