@@ -5,11 +5,14 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.javalec.function.Dao_Write;
 import com.javalec.function.Dto_Write;
 
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
+
 import java.awt.Font;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -19,10 +22,14 @@ import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.FileInputStream;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextPane;
 import javax.swing.JTextArea;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class Write extends JFrame {
 
@@ -146,6 +153,12 @@ public class Write extends JFrame {
 		contentPane.add(lblNewLabel_1);
 		
 		JLabel lbladdimage = new JLabel("");
+		lbladdimage.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				inputimage();
+			}
+		});
 		lbladdimage.setHorizontalAlignment(SwingConstants.CENTER);
 		lbladdimage.setBounds(37, 548, 64, 59);
 		contentPane.add(lbladdimage);
@@ -250,4 +263,28 @@ public class Write extends JFrame {
    dispose();
 	}
 	
+	private void inputimage() {
+		JFileChooser chooser = new JFileChooser();
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("Image Files", "jpg", "jpeg", "png", "bmp");
+		chooser.setFileFilter(filter);
+
+		int ret = chooser.showOpenDialog(null);
+		if (ret == JFileChooser.APPROVE_OPTION) {
+			// 내가 선택한 사진 파일 경로 찾기
+		    File selectedFile = chooser.getSelectedFile();
+		    String filePath = selectedFile.getPath();
+		    
+		    FileInputStream input = null;
+		    File file = new File(filePath);
+		    
+		    try {
+		    	input = new FileInputStream(file);
+		    }catch(Exception e) {
+		    	e.printStackTrace();
+		    }
+		    
+		} else {
+		    JOptionPane.showMessageDialog(null, "파일을 선택하지 않았습니다.");
+		}
+	}
 }//--end--

@@ -138,7 +138,7 @@ public class MyProduct extends JFrame {
 			btnWrite = new JButton("글쓰기");
 			btnWrite.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					Write w = new Write();
+					Writing w = new Writing();
 					dispose();
 					w.setVisible(true);
 				}

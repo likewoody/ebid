@@ -141,7 +141,9 @@ public class MyCutoff extends JFrame {
 			btnWrite = new JButton("글쓰기");
 			btnWrite.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-
+					Writing w = new Writing();
+					dispose();
+					w.setVisible(true);
 				}
 			});
 			btnWrite.setBounds(330, 55, 70, 34);
