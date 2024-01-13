@@ -287,7 +287,7 @@ public class Writing extends JFrame {
 	private JLabel getLblBackgroud() {
 		if (lblBackgroud == null) {
 			lblBackgroud = new JLabel("");
-			lblBackgroud.setIcon(new ImageIcon(Writing.class.getResource("/com/javalec/images/writingBackgroundnew.png")));
+			lblBackgroud.setIcon(new ImageIcon(Writing.class.getResource("/com/javalec/images/writeBackImage.png")));
 			lblBackgroud.setBounds(0, 0, 430, 704);
 		}
 		return lblBackgroud;
@@ -397,8 +397,12 @@ public class Writing extends JFrame {
 
     // 사용자에게 성공적으로 등록되었음을 알림
     JOptionPane.showMessageDialog(null, "게시글이 등록되었습니다.");
-   dispose();
+   
+    dispose();
+        
+    MyPage mypage = new MyPage();
+    mypage.setVisible(true);
 	}
-
+  
 		
 }// end
