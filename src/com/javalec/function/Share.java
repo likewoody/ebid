@@ -24,4 +24,7 @@ public class Share {
 	
 	// image num
 	public static int imageNum;
+	
+	// check if chat is new?
+	public static boolean checkNewChat;
 }

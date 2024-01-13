@@ -7,12 +7,14 @@ public class Dto_Chat {
 	private byte[] profile_image;
 	private String nickname;
 	private String title;
-	private int chatDate;
-	private int chatid;
+	private Date chatDate;
+	private int chatId;
 	private String detailtext;
 	private Date detailDate;
 	private String detailUser;
-	
+	private int sellId;
+	private String sellUser;
+	private String chatUser;
 	
 	public Dto_Chat() {
 		// TODO Auto-generated constructor stub
@@ -25,26 +27,49 @@ public class Dto_Chat {
 		this.detailUser = deatilUser;
 	}
 
+	public Dto_Chat(byte[] profile_image, int sellId) {
+		this.profile_image = profile_image;
+		this.sellId = sellId;
+	}
+	
+	public Dto_Chat(byte[] profile_image, String sellUser) {
+		this.profile_image = profile_image;
+		this.sellUser = sellUser;
+	}
 
-	public Dto_Chat(String detailtext, Date detailDate, String detailUser) {
+//	public Dto_Chat(String detailtext, Date detailDate, String detailUser) {
+//		this.detailtext = detailtext;
+//		this.detailDate = detailDate;
+//		this.detailUser = detailUser;
+//	}
+	
+
+
+	public Dto_Chat(byte[] profile_image, String detailtext, Date detailDate, String detailUser) {
+		this.profile_image = profile_image;
 		this.detailtext = detailtext;
 		this.detailDate = detailDate;
 		this.detailUser = detailUser;
 	}
 
 
-	public Dto_Chat(byte[] profile_image, String nickname, String title, int chatid) {
+	public Dto_Chat(byte[] profile_image, String nickname, String title, Date chatDate, int chatId, String chatUser, String sellUser) {
 		this.profile_image = profile_image;
 		this.nickname = nickname;
 		this.title = title;
-		this.chatid = chatid;
+		this.chatDate = chatDate;
+		this.chatId = chatId;
+		this.chatUser = chatUser;
+		this.sellUser = sellUser;
 	}
 //	public Dto_Chat(byte[] profile_image, String nickname, String title, int chatDate) {
 //		this.profile_image = profile_image;
 //		this.nickname = nickname;
 //		this.title = title;
 //		this.chatDate = chatDate;
-//	}
+//}	
+
+
 
 
 	public byte[] getProfile_image() {
@@ -89,29 +114,29 @@ public class Dto_Chat {
 
 
 
-	public int getChatDate() {
+	public Date getChatDate() {
 		return chatDate;
 	}
 
 
 
 
-	public void setChatDate(int chatDate) {
+	public void setChatDate(Date chatDate) {
 		this.chatDate = chatDate;
 	}
 
 
 
 
-	public int getChatid() {
-		return chatid;
+	public int getChatId() {
+		return chatId;
 	}
 
 
 
 
-	public void setChatid(int chatid) {
-		this.chatid = chatid;
+	public void setChatId(int chatId) {
+		this.chatId = chatId;
 	}
 
 
@@ -154,6 +179,48 @@ public class Dto_Chat {
 
 	public void setDetailUser(String detailUser) {
 		this.detailUser = detailUser;
+	}
+
+
+
+
+	public int getSellId() {
+		return sellId;
+	}
+
+
+
+
+	public void setSellId(int sellId) {
+		this.sellId = sellId;
+	}
+
+
+
+
+	public String getSellUser() {
+		return sellUser;
+	}
+
+
+
+
+	public void setSellUser(String sellUser) {
+		this.sellUser = sellUser;
+	}
+
+
+
+
+	public String getChatUser() {
+		return chatUser;
+	}
+
+
+
+
+	public void setChatUser(String chatUser) {
+		this.chatUser = chatUser;
 	}
 	
 }

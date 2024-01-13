@@ -53,6 +53,32 @@ public class Dao_Home {
 	
 	// Method
 	
+	// Create
+	
+	public void createChatRoom() {
+		PreparedStatement ps = null;
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+			
+			String query = "insert into chat (userid, nickname, date, sellid) values (?, ?, now(), ?)";
+			
+			ps = con.prepareStatement(query);
+			
+			ps.setString(1, Share.id);
+			ps.setString(2, findUserNickname());
+			ps.setInt(3, Share.sellId);
+			
+			ps.executeUpdate();
+			
+			con.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	// Read
 	public ArrayList<Dto_Home> searchDB() {
 		ArrayList<Dto_Home> dtoList = new ArrayList<Dto_Home>();
 		Dto_Home dto = null;
@@ -322,6 +348,7 @@ public class Dao_Home {
 		}
 	}
 	
+	
 	// 클릭한 wish_list의 status를 불러온다.
 	public int findWishStatus() {
 		int Flag = 0;
@@ -498,6 +525,71 @@ public class Dao_Home {
 			e.printStackTrace();
 		}
 		return dtoL;
+	}
+	
+	private String findUserNickname() {
+		String userNickname = "";
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+			Statement st = con.createStatement();
+			
+			String query = "select nickname from user where userid = '" + Share.id + "'";
+			
+			ResultSet rs = st.executeQuery(query);
+			
+			if(rs.next()) {
+				userNickname = rs.getString(1);
+			}
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return userNickname;
+	}
+	
+	public int findChatId() {
+		int newChatId = 0;
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+			Statement st = con.createStatement();
+			
+			String query = "select chatid from chat where userid = '" + Share.id + "' and sellid = " + Share.sellId;
+			
+			ResultSet rs = st.executeQuery(query);
+		
+			if(rs.next()) {
+				System.out.println("get in if ");
+				newChatId = rs.getInt(1);
+			}
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return newChatId;
+	}
+	// find if chat already exist
+	public boolean findChatExist() {
+		boolean checkExist = false;
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+			Statement st = con.createStatement();
+			
+			String query = "select * from chat where userid = '" + Share.id + "' and sellid = " + Share.sellId;
+			
+			ResultSet rs = st.executeQuery(query);
+			
+			if(rs.next()) {
+				checkExist = true;
+			}
+			con.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return checkExist;
 	}
 
 	// 고객이 클릭 시 제품 카운트를 센다

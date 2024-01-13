@@ -89,6 +89,7 @@ public class Chat extends JDialog {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowActivated(WindowEvent e) {
+				System.out.println(Share.id);
 				tableInit();
 				searchChat();
 			}
@@ -217,8 +218,12 @@ public class Chat extends JDialog {
 						ArrayList<Dto_Chat> dto = dao.searchChat();
 						
 						int i = innerTable.getSelectedRow();
-						Share.chatid = dto.get(i).getChatid();
+						Share.chatid = dto.get(i).getChatId();
 						
+						asdasdasdasd
+						// chatuser 와 share.id와 비교 같다면 sellUserId을 chatdeatil로 보내주고 같지 않다면 chatuser을 보내준다.
+						System.out.println(dto.get(i).getChatUser());
+						System.out.println(dto.get(i).getSellUser());
 						ChatDetail cd = new ChatDetail();
 						cd.setVisible(true);
 						dispose();
@@ -282,25 +287,23 @@ public class Chat extends JDialog {
 		Dao_Chat dao = new Dao_Chat();
 		int count = 0;
 		for (Dto_Chat dto : dao.searchChat()) {
-			outerTable.addRow(new Object[0]);
-			outerTable.setValueAt(false, count, 0);
-			outerTable.setValueAt(dto.getProfile_image(), count, 1);
-			outerTable.setValueAt(String.format("<html>"
-					+ "<h2>%s</h2>"
-					+ "%s<br>"
-					+ "</html>", dto.getNickname(), dto.getTitle()), count, 2);
+				outerTable.addRow(new Object[0]);
+				outerTable.setValueAt(false, count, 0);
+				outerTable.setValueAt(dto.getProfile_image(), count, 1);
+				outerTable.setValueAt(String.format("<html>"
+						+ "<h2>%s</h2>"
+						+ "%s<br>"
+						+ "</html>", dto.getNickname(), dto.getTitle()), count, 2);
+				
+				count++;
 			
-			count++;
+			
 		}
-		
-		
-		
 		innerTable.getTableHeader().setReorderingAllowed(false);
 		innerTable.getColumnModel().getColumn(1).setCellRenderer(new ImageRender());
 		//test
 //		innerTable.getColumnModel().getColumn(2).setCellRenderer(new FramePanel());
 		innerTable.setRowHeight(80);
-		
 	}
 	
 	private void deleteChat() {
@@ -309,8 +312,8 @@ public class Chat extends JDialog {
 		ArrayList<Dto_Chat> dto = dao.searchChat();
 		
 		int i = innerTable.getSelectedRow();
-		Share.chatid = dto.get(i).getChatid();
-		dao.deleteChat(dto.get(i).getChatid());
+		Share.chatid = dto.get(i).getChatId();
+		dao.deleteChat(dto.get(i).getChatId());
 		tableInit();
 		searchChat();
 		

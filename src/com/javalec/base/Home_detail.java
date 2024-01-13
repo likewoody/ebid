@@ -60,6 +60,7 @@ public class Home_detail extends JDialog {
 	private JLabel lbUserRating;
 	private JLabel lbPrice;
 	private JLabel lbClickWish;
+	private Dao_Home dao = new Dao_Home();
 
 	/**
 	 * Launch the application.
@@ -115,7 +116,7 @@ public class Home_detail extends JDialog {
 			homeBackImage = new JLabel("");
 			homeBackImage.setBounds(0, 0, 430, 704);
 			
-			Dao_Home dao = new Dao_Home();		
+//			Dao_Home dao = new Dao_Home();		
 			// 불러온 wish_status가 1이라면 초기 배경값 설정
 			if (dao.findWishStatus() == 1) homeBackImage.setIcon(new ImageIcon(Main.class.getResource("/com/javalec/images/changeWishListColor.png")));
 			else homeBackImage.setIcon(new ImageIcon(Main.class.getResource("/com/javalec/images/HomeDetailBackground.png")));
@@ -268,6 +269,14 @@ public class Home_detail extends JDialog {
 			lbBid.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
+					if (!dao.findChatExist()) {
+						createChatRoom();
+						Share.chatid = dao.findChatId();
+						Share.checkNewChat = true;
+					}
+					ChatDetail cd = new ChatDetail();
+					cd.setVisible(true);
+					dispose();
 				}
 			});
 			lbBid.setHorizontalAlignment(SwingConstants.CENTER);
@@ -306,7 +315,7 @@ public class Home_detail extends JDialog {
 			lbClickWish.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					Dao_Home dao = new Dao_Home();
+//					Dao_Home dao = new Dao_Home();
 					
 					// findWishStatus가 0이라면 1로 바꿔주면서 이미지를 바꿔준다.
 					// 그리고 데이터가 없다면 데이터를 생성해준다.
@@ -330,7 +339,7 @@ public class Home_detail extends JDialog {
 	// ---- Function ----
 	
 	private void tableInit() {
-		Dao_Home dao = new Dao_Home();
+//		Dao_Home dao = new Dao_Home();
 		ArrayList<Dto_Home> dto = dao.findPostImage();
 		
 		// 사진 갯수에 따라 컬럼 갯수를 다르게 설정
@@ -384,7 +393,7 @@ public class Home_detail extends JDialog {
 	}
 	
 	private void searchDB() {
-		Dao_Home dao = new Dao_Home();
+//		Dao_Home dao = new Dao_Home();
 		ArrayList<Dto_Home> dto = dao.findPostImage();
 		
 		// 테이블 (최대 이미지 3개) 이미지 넣기 
@@ -441,11 +450,6 @@ public class Home_detail extends JDialog {
 		
 	}
 	
-	private void clickHeart() {
-		
-		
-	}
-	
 	private class ImageRender extends DefaultTableCellRenderer {
 
 		@Override
@@ -468,6 +472,12 @@ public class Home_detail extends JDialog {
 			
 			return this;
 		}
+		
+	}
+	
+	private void createChatRoom() {
+//		Dao_Home dao = new Dao_Home();
+		dao.createChatRoom();
 		
 	}
 	

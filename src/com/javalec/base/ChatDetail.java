@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -23,6 +24,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableModel;
 
 import com.javalec.function.Dao_Chat;
 import com.javalec.function.Dto_Chat;
@@ -90,9 +92,13 @@ public class ChatDetail extends JDialog {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowActivated(WindowEvent e) {
-				tableInit();
-				searchDB();
-					
+				if (Share.checkNewChat) {
+					newChatInit();
+				}
+				else {
+					tableInit();
+					searchDB();
+				}
 			}
 		});
 		setFont(new Font("Lucida Grande", Font.BOLD, 27));
@@ -296,6 +302,11 @@ public class ChatDetail extends JDialog {
 	private JButton getBtnBlock() {
 		if (btnBlock == null) {
 			btnBlock = new JButton("차단하기");
+			btnBlock.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					block();
+				}
+			});
 			btnBlock.setFont(new Font("Helvetica", Font.BOLD, 14));
 			btnBlock.setBounds(230, 650, 128, 34);
 		}
@@ -306,11 +317,16 @@ public class ChatDetail extends JDialog {
 	
 	private void tableInit() {
 		outerTable.addColumn("닉넴");
-		outerTable.setColumnCount(1);
+		outerTable.addColumn("닉넴");
+		outerTable.setColumnCount(2);
 		
-//		TableColumn col = innerTable.getColumnModel().getColumn(0);
-//		int width = 430;
-//		col.setPreferredWidth(width);
+		TableColumn col = innerTable.getColumnModel().getColumn(0);
+		int width = 100;
+		col.setPreferredWidth(width);
+		
+		col = innerTable.getColumnModel().getColumn(1);
+		width = 330;
+		col.setPreferredWidth(width);
 		
 		int i = innerTable.getRowCount();
 		for (int j = 0; j < i; j++) {
@@ -325,15 +341,46 @@ public class ChatDetail extends JDialog {
 		
 		for (Dto_Chat dto : dao.findChatDeatil()) {
 			outerTable.addRow(new Object[] {
+					dto.getProfile_image(),
 					String.format("%s : %s", dto.getDetailUser(), dto.getDetailtext())
 			});
 		}
 		innerTable.getTableHeader().setReorderingAllowed(false); // true값과 false값의 차이를 모르겠음 *******
 		
-		innerTable.getColumnModel().getColumn(0).setCellRenderer(new JText());
-		innerTable.setRowHeight(30);
+		innerTable.getColumnModel().getColumn(0).setCellRenderer(new ImageRender());
+		innerTable.getColumnModel().getColumn(1).setCellRenderer(new JText());
+		innerTable.setRowHeight(50);
+		
 	}
 	
+	private class ImageRender extends DefaultTableCellRenderer {
+
+		@Override
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+				int row, int column) {
+			if (value == null || !(value instanceof byte[])) {
+	            // Handle the case where value is null or not a byte array
+	            // You can customize this part based on your requirements
+	            setIcon(null); // Clear the icon
+	            setText("");
+	            setHorizontalAlignment(JLabel.CENTER);
+	            setBackground(getBackground());
+	        } else {
+	            byte[] bytes = (byte[]) value;
+	            ImageIcon imageIcon = new ImageIcon(bytes);
+	            Image img = imageIcon.getImage();
+	            Image setImg = img.getScaledInstance(100, 75, Image.SCALE_SMOOTH);
+	            ImageIcon image = new ImageIcon(setImg);
+	            
+	            setIcon(image);
+	            setHorizontalAlignment(JLabel.CENTER);
+	            setBackground(getBackground());
+	        }
+
+	        return this;
+		}
+		
+	}
 	private class JText extends DefaultTableCellRenderer {
 
 		@Override
@@ -354,13 +401,50 @@ public class ChatDetail extends JDialog {
 		
 	}
 	
-	private void insertChat() {
+	private void newChatInit() {
+		outerTable.addColumn("");
+		outerTable.addColumn("");
+		
+		outerTable.setColumnCount(2);
+		
+		TableColumn col = innerTable.getColumnModel().getColumn(0);
+		int width = 100;
+		col.setPreferredWidth(width);
+		
+		col = innerTable.getColumnModel().getColumn(1);
+		col.setPreferredWidth(330);
+		
 		Dao_Chat dao = new Dao_Chat();
+		for (Dto_Chat dto : dao.findUserImageId()) {
+			outerTable.addRow(new Object[] {
+					dto.getProfile_image(),
+					String.format("<html>%s님과의 대화가 시작 되었습니다.</html>", dto.getSellUser(), dto.getSellUser())
+			});
+		}
+		innerTable.getTableHeader().setReorderingAllowed(false);
+		innerTable.getColumnModel().getColumn(0).setCellRenderer(new ImageRender());
+		innerTable.setRowHeight(100);
+		
+	}
+	
+	private void insertChat() {
+		// 입력시 새로운 채팅일 때 true였던 체크뉴챗을 false로 바꾸면 tableinti, serachDB 활성화
+		Share.checkNewChat = false;
+		Dao_Chat dao = new Dao_Chat();
+		// insert 
 		dao.insertChat(tfText.getText());
+		// 채팅방에 똑같이 업데이트 해주기 위함
+		dao.updateChatRoom(tfText.getText());
+		// 입력 후 텍스트 필드 초기화
 		tfText.setText("");
 		tableInit();
 		searchDB();
 	}
+	
+	private void block() {
+		
+	}
+	
 	
 	
 }
