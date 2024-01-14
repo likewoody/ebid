@@ -1,5 +1,6 @@
 package com.javalec.base;
 
+import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -11,9 +12,12 @@ import com.javalec.function.Dto_Write;
 import com.javalec.function.Share;
 
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 
 import java.awt.Font;
+import java.awt.Image;
+
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
@@ -61,6 +65,7 @@ public class Writing extends JFrame {
 	private final String url_mysql = Share.dbName;
 	private final String id_mysql = Share.dbUser;
 	private final String pw_mysql = Share.dbPass;
+	private JLabel imagePreviewLabel;
 
 	/**
 	 * Launch the application.
@@ -110,6 +115,7 @@ public class Writing extends JFrame {
 		contentPane.add(getBtnPost());
 		contentPane.add(getLblNewLabel_3());
 		contentPane.add(getLblUserid());
+		contentPane.add(getImagePreviewLabel());
 		contentPane.add(getLblBackgroud());
 	}
 	private JButton getBtnHome() {
@@ -249,8 +255,8 @@ public class Writing extends JFrame {
 	private JLabel getLblimage() {
 		if (lblimage == null) {
 			lblimage = new JLabel("");
-			lblimage.setHorizontalAlignment(SwingConstants.CENTER);
-			lblimage.setBounds(127, 548, 64, 59);
+			lblimage.setFont(new Font("Dialog", Font.PLAIN, 11));
+			lblimage.setBounds(210, 580, 170, 20);
 		}
 		return lblimage;
 	}
@@ -294,6 +300,14 @@ public class Writing extends JFrame {
 		}
 		return lblBackgroud;
 	}
+	private JLabel getImagePreviewLabel() {
+		if (imagePreviewLabel == null) {
+			imagePreviewLabel = new JLabel("");
+			imagePreviewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+			imagePreviewLabel.setBounds(127, 548, 65, 60);
+		}
+		return imagePreviewLabel;
+	}
 	//-------functions------------
 	
 	private void insertInfo() {
@@ -304,8 +318,65 @@ public class Writing extends JFrame {
 		lblUserid.setText(dto.getUserid());
 	}
 	
+	//***************추가입력 미리보기*******************
+	//이미지 미리보기 기능 추가.
+	private JComponent createImagePreviewAccessory(JFileChooser fileChooser) {
+	    JPanel panel = new JPanel(new BorderLayout());
+	    imagePreviewLabel = new JLabel();
+	    panel.add(imagePreviewLabel, BorderLayout.CENTER);
+
+	    fileChooser.addPropertyChangeListener("selectedFileChanged", evt -> {
+	        File selectedFile = fileChooser.getSelectedFile();
+	        try {
+	        if (selectedFile != null && selectedFile.isFile()) {
+	            // 선택된 파일에 대한 이미지 프리뷰 업데이트 및 자동 크기 조절
+	            ImageIcon icon = createImageIcon(selectedFile.getAbsolutePath(), imagePreviewLabel.getWidth(), imagePreviewLabel.getHeight());
+	            imagePreviewLabel.setIcon(icon);
+	        } else {
+                imagePreviewLabel.setIcon(null);
+	        	}
+            }  catch (Exception e) {
+	            e.printStackTrace();
+	            System.err.println("Error setting image preview: " + e.getMessage());
+	            // 예외가 발생한 경우에 대한 처리를 추가할 수 있습니다.
+	            // 예를 들어, 사용자에게 오류 메시지를 표시하거나, 기본 이미지를 설정할 수 있습니다.
+	        } 
+	        
+	    });
+
+	    return panel;
+	}
+
 	//----포토---------------------
+	//이미지 미리보기 기능
+	private ImageIcon createImageIcon(String path, int width, int height) {
+	      try {  
+	    	  if (width <= 0 || height <= 0) {
+	            // 너비 또는 높이가 0 이하인 경우, 기본 크기(100x100)로 설정
+	            width = 100;
+	            height = 100;
+	        }
+	    	  
+	    	  // 이미지 아이콘 생성 및 자동 크기 조절
+	          ImageIcon originalIcon = new ImageIcon(path);
+	          Image originalImage = originalIcon.getImage();
+
+	          // 이미지를 지정된 크기로 스케일링
+	          Image resizedImage = originalImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+
+	          // 스케일링된 이미지로 ImageIcon 생성
+	          return new ImageIcon(resizedImage);
+	      } catch (Exception e) {
+	          e.printStackTrace();
+	          System.err.println("Error creating ImageIcon: " + e.getMessage());
+	          return null; // 이미지 생성에 실패한 경우 null 반환
+	      }
+	  }
+	
+		
+	//-----------------------------
 	// 사진 선택 다이얼로그를 열고 선택된 파일의 경로를 표시하는 메서드
+	// 미리보 코드 수정.
 	private void chooseImage() {
 		JFileChooser fileChooser = new JFileChooser();
 	    int result = fileChooser.showOpenDialog(this);
@@ -314,21 +385,35 @@ public class Writing extends JFrame {
 	        File selectedFile = fileChooser.getSelectedFile();
 
 	        if (selectedFile != null) {
+	        	
 	            String imagePath = selectedFile.getAbsolutePath();
 	            System.out.println("Selected image path: " + imagePath);
 	            lblimage.setText(imagePath);
+	            
+	            // 이미지 프리뷰 업데이트 및 자동 크기 조절
+	            ImageIcon icon = createImageIcon(imagePath, 50, 15); // 레이블 크기에 맞게 설정
+	            if (icon != null) {
+	                imagePreviewLabel.setIcon(icon);            
 	        } else {
 	            System.out.println("Selected file is null.");
 	            lblimage.setText("No image selected.");
+	            imagePreviewLabel.setIcon(null);
 	           
-	        }
+	    }
 	    } else {
 	        System.out.println("File selection canceled.");
 	        lblimage.setText("No image selected.");
+	        imagePreviewLabel.setIcon(null);
 	        
 	    }
-		
+		} else {
+	        System.out.println("File selection canceled.");
+	        lblimage.setText("No image selected.");
+	        imagePreviewLabel.setIcon(null);
+	    }
 	}
+	
+	//*************************************************************
 	//--------------------------------------
 	// 선택된 사진을 데이터베이스에 업로드하는 메서드
 	private void uploadImage() {
@@ -442,6 +527,7 @@ public class Writing extends JFrame {
     MyPage mypage = new MyPage();
     mypage.setVisible(true);
 	}
-  
-		
+
+
+
 }// end
