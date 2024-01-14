@@ -410,7 +410,16 @@ public class Writing extends JFrame {
 	    if (lblimage.getText().isEmpty()) {
 	        JOptionPane.showMessageDialog(null, "사진을 첨부하세요.", "입력 오류", JOptionPane.ERROR_MESSAGE);
 	        return; // 입력이 누락되었으므로 메서드를 더 이상 진행하지 않고 종료
-	      }		
+	      }	
+	     
+	  // 파일 폴더를 열었지만 파일을 첨부하지 않은 경우
+	       File attachedFile = new File(lblimage.getText());
+	       if (!attachedFile.exists() || !attachedFile.isFile()) {
+	           JOptionPane.showMessageDialog(null, "올바른 파일을 첨부하세요.", "입력 오류", JOptionPane.ERROR_MESSAGE);
+	           return; // 파일이 존재하지 않거나 파일이 아닌 경우 메서드를 종료
+	       }  
+	    
+	    
 	//-----------------------------------------------    
 			
 	// 작동됨******************
