@@ -27,4 +27,11 @@ public class Share {
 	
 	// check if chat is new?
 	public static boolean checkNewChat;
+	
+	// 블락 할 유저 체크
+	public static String checkUser;
+	
+	// 채팅이 이미지인지 확인
+	public static boolean checktextImage;
+	
 }

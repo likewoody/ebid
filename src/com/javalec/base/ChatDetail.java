@@ -2,24 +2,29 @@ package com.javalec.base;
 
 import java.awt.EventQueue;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
@@ -31,11 +36,16 @@ import com.javalec.function.Dto_Chat;
 import com.javalec.function.Dto_Home;
 import com.javalec.function.Share;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.sql.Date;
 import java.util.ArrayList;
 
@@ -46,6 +56,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 public class ChatDetail extends JDialog {
 
@@ -55,9 +67,6 @@ public class ChatDetail extends JDialog {
 	private JButton btnMypage;
 	private JButton btnChat;
 	private JButton btnWrite;
-	private JLabel lbUserImage;
-	private JLabel lbUserNickname;
-	private JLabel lbEnterMessage;
 	private JScrollPane scrollPane;
 	private JPanel innerPanel;
 	private JButton btnInsert;
@@ -67,6 +76,13 @@ public class ChatDetail extends JDialog {
 	private JTable innerTable;
 	private DefaultTableModel outerTable = new DefaultTableModel();
 	private JButton btnBlock;
+	private Dao_Chat dao = new Dao_Chat();
+	private ImageIcon image;
+	private JLabel lbUserImage_1;
+	private JTextField textField;
+	private JLabel lbText;
+	private boolean fileExist;
+	private byte[] bytes = null;
 
 	/**
 	 * Launch the application.
@@ -112,12 +128,10 @@ public class ChatDetail extends JDialog {
 		getContentPane().add(getBtnCb());
 		getContentPane().add(getBtnInsert());
 		getContentPane().add(getBtnRating());
+		getContentPane().add(getLbText());
 		getContentPane().add(getTfText());
 		getContentPane().add(getBtnBlock());
 		getContentPane().add(getScrollPane());
-		getContentPane().add(getLbUserImage());
-		getContentPane().add(getLbUserNickname());
-		getContentPane().add(getLbEnterMessage());
 		getContentPane().add(getChatDeatilBackground());
 
 	}
@@ -194,32 +208,6 @@ public class ChatDetail extends JDialog {
 		}
 		return btnWrite;
 	}
-	private JLabel getLbUserImage() {
-		if (lbUserImage == null) {
-			lbUserImage = new JLabel("");
-			lbUserImage.setBackground(new Color(4, 50, 255));
-			lbUserImage.setBounds(165, 130, 90, 70);
-		}
-		return lbUserImage;
-	}
-	private JLabel getLbUserNickname() {
-		if (lbUserNickname == null) {
-			lbUserNickname = new JLabel("");
-			lbUserNickname.setFont(new Font("Lucida Grande", Font.BOLD, 14));
-			lbUserNickname.setHorizontalAlignment(SwingConstants.CENTER);
-			lbUserNickname.setBounds(130, 212, 170, 16);
-		}
-		return lbUserNickname;
-	}
-	private JLabel getLbEnterMessage() {
-		if (lbEnterMessage == null) {
-			lbEnterMessage = new JLabel("");
-			lbEnterMessage.setHorizontalAlignment(SwingConstants.CENTER);
-			lbEnterMessage.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
-			lbEnterMessage.setBounds(130, 240, 170, 16);
-		}
-		return lbEnterMessage;
-	}
 	private JScrollPane getScrollPane() {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
@@ -243,7 +231,15 @@ public class ChatDetail extends JDialog {
 			btnInsert = new JButton("전송");
 			btnInsert.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					insertChat();
+					
+					if (fileExist) {
+						dao.insertImage(bytes);
+						tfText.setBounds(56, 575, 290, 30);
+						tfText.setText("");
+						lbText.setIcon(null);
+						fileExist = false;
+					}
+					else insertChat(); 
 				}
 			});
 			btnInsert.setFont(new Font("Helvetica", Font.BOLD, 14));
@@ -252,6 +248,7 @@ public class ChatDetail extends JDialog {
 		return btnInsert;
 	}
 	private JTextField getTfText() {
+		
 		if (tfText == null) {
 			tfText = new JTextField();
 			tfText.setBounds(56, 575, 290, 30);
@@ -259,11 +256,19 @@ public class ChatDetail extends JDialog {
 			tfText.setBorder(new LineBorder(new Color(214, 203, 216), 2));
 			
 		}
+		
 		return tfText;
 	}
+
 	private JButton getBtnCb() {
 		if (btnCb == null) {
 			btnCb = new JButton("+");
+			btnCb.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					insertImage();
+				}
+			});
 			btnCb.setFont(new Font("Helvetica", Font.PLAIN, 14));
 			btnCb.setBounds(10, 575, 36, 30);
 		}
@@ -276,6 +281,7 @@ public class ChatDetail extends JDialog {
 				public void actionPerformed(ActionEvent e) {
 					WriteRating wr = new WriteRating();
 					wr.setVisible(true);
+					
 				}
 			});
 			btnRating.setFont(new Font("Helvetica", Font.BOLD, 14));
@@ -313,19 +319,34 @@ public class ChatDetail extends JDialog {
 		return btnBlock;
 	}
 	
+	private JLabel getLbText() {
+		if (lbText == null) {
+			lbText = new JLabel("");
+			lbText.setBackground(new Color(4, 50, 255));
+			lbText.setBounds(65, 555, 290, 50);
+		}
+		return lbText;
+	}
+	
 	// ---- Fucntion ----
 	
+	// 테이블 초기값
 	private void tableInit() {
-		outerTable.addColumn("닉넴");
-		outerTable.addColumn("닉넴");
-		outerTable.setColumnCount(2);
+		outerTable.addColumn("");
+		outerTable.addColumn("");
+		outerTable.addColumn("");
+		outerTable.setColumnCount(3);
 		
 		TableColumn col = innerTable.getColumnModel().getColumn(0);
 		int width = 100;
 		col.setPreferredWidth(width);
 		
 		col = innerTable.getColumnModel().getColumn(1);
-		width = 330;
+		width = 60;
+		col.setPreferredWidth(width);
+		
+		col = innerTable.getColumnModel().getColumn(2);
+		width = 230;
 		col.setPreferredWidth(width);
 		
 		int i = innerTable.getRowCount();
@@ -334,53 +355,92 @@ public class ChatDetail extends JDialog {
 		}
 	}
 	
+	// db 데이터 load
 	private void searchDB() {
-		Dao_Chat dao = new Dao_Chat();
-		
-		// 이미지 사진 첫 메시지에만 사진이 나온다 특히 상대방의 그게 아니라면 사진이 안나옴 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@22
-		
-		for (Dto_Chat dto : dao.findChatDeatil()) {
-			outerTable.addRow(new Object[] {
-					dto.getProfile_image(),
-					String.format("%s : %s", dto.getDetailUser(), dto.getDetailtext())
-			});
-		}
-		innerTable.getTableHeader().setReorderingAllowed(false); // true값과 false값의 차이를 모르겠음 *******
-		
-		innerTable.getColumnModel().getColumn(0).setCellRenderer(new ImageRender());
-		innerTable.getColumnModel().getColumn(1).setCellRenderer(new JText());
-		innerTable.setRowHeight(50);
-		
+	    outerTable.setRowCount(0);
+
+	    for (Dto_Chat dto : dao.findChatDeatil()) {
+	        Object[] rowData;
+	        if (dto.getDetailtext() != null) {
+	            rowData = new Object[]{
+	                    dto.getProfile_image(),
+	                    String.format("%s : ", dto.getDetailUser()),
+	                    dto.getDetailtext()
+	            };
+	        } else {
+	            rowData = new Object[]{
+	                    dto.getProfile_image(),
+	                    String.format("%s : ", dto.getDetailUser()),
+	                    dto.getDetailtextImage()
+	            };
+	        }
+
+	        // Add the row data to the outer table
+	        outerTable.addRow(rowData);
+	    }
+
+	    // Set cell renderer for column 2 (outside the loop)
+	    innerTable.getColumnModel().getColumn(2).setCellRenderer(new ImageRender());
+
+	    // Set other table properties
+	    innerTable.getTableHeader().setReorderingAllowed(false);
+	    innerTable.getColumnModel().getColumn(0).setCellRenderer(new ImageRender());
+	    innerTable.setRowHeight(50);
 	}
+
 	
+	// 이미지 세팅
 	private class ImageRender extends DefaultTableCellRenderer {
 
 		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 				int row, int column) {
-			if (value == null || !(value instanceof byte[])) {
-	            // Handle the case where value is null or not a byte array
-	            // You can customize this part based on your requirements
-	            setIcon(null); // Clear the icon
-	            setText("");
-	            setHorizontalAlignment(JLabel.CENTER);
-	            setBackground(getBackground());
-	        } else {
-	            byte[] bytes = (byte[]) value;
-	            ImageIcon imageIcon = new ImageIcon(bytes);
-	            Image img = imageIcon.getImage();
-	            Image setImg = img.getScaledInstance(100, 75, Image.SCALE_SMOOTH);
-	            ImageIcon image = new ImageIcon(setImg);
-	            
-	            setIcon(image);
-	            setHorizontalAlignment(JLabel.CENTER);
-	            setBackground(getBackground());
+			if (column == 0) {
+				if (value == null || !(value instanceof byte[])) {
+		            // Handle the case where value is null or not a byte array
+		            // You can customize this part based on your requirements
+		            setIcon(null); // Clear the icon
+		            setText("");
+		            setHorizontalAlignment(JLabel.CENTER);
+		            setBackground(getBackground());
+		        } else {
+		            byte[] bytes = (byte[]) value;
+		            ImageIcon imageIcon = new ImageIcon(bytes);
+		            Image img = imageIcon.getImage();
+		            Image setImg = img.getScaledInstance(100, 75, Image.SCALE_SMOOTH);
+		            ImageIcon image = new ImageIcon(setImg);
+		            
+		            setIcon(image);
+		            setHorizontalAlignment(JLabel.CENTER);
+		            setBackground(getBackground());
+		        }
+			}
+			if (column == 2) {
+	            if (value instanceof ImageIcon) {
+	                // Handle rendering for ImageIcon (image)
+	            	byte[] bytes = (byte[]) value;
+		            ImageIcon imageIcon = new ImageIcon(bytes);
+		            Image img = imageIcon.getImage();
+		            Image setImg = img.getScaledInstance(100, 75, Image.SCALE_SMOOTH);
+		            ImageIcon image = new ImageIcon(setImg);
+		            
+		            setIcon(image);
+		            setHorizontalAlignment(JLabel.CENTER);
+		            setBackground(getBackground());
+	                setText("");
+	            } else {
+	                // Handle rendering for text
+	                setIcon(null);
+	                setText(value != null ? value.toString() : "");
+	            }
 	        }
 
 	        return this;
 		}
 		
 	}
+	
+	// chat text 설정
 	private class JText extends DefaultTableCellRenderer {
 
 		@Override
@@ -401,6 +461,7 @@ public class ChatDetail extends JDialog {
 		
 	}
 	
+	// 새로운 채팅 일 때 초기화면
 	private void newChatInit() {
 		outerTable.addColumn("");
 		outerTable.addColumn("");
@@ -414,8 +475,14 @@ public class ChatDetail extends JDialog {
 		col = innerTable.getColumnModel().getColumn(1);
 		col.setPreferredWidth(330);
 		
-		Dao_Chat dao = new Dao_Chat();
+//		Dao_Chat dao = new Dao_Chat();
 		for (Dto_Chat dto : dao.findUserImageId()) {
+//			ImageIcon imageIcon =  new ImageIcon(dto.getProfile_image());
+//			Image img = imageIcon.getImage();
+//			Image setImg = img.getScaledInstance(90, 7, DO_NOTHING_ON_CLOSE);
+//			ImageIcon image = new ImageIcon(setImg);
+//			lbUserImage.setIcon(image);
+//			lbUserNickname.setText(dto.getSellUser() + "님과의 대화가 시작 되었습니다.");
 			outerTable.addRow(new Object[] {
 					dto.getProfile_image(),
 					String.format("<html>%s님과의 대화가 시작 되었습니다.</html>", dto.getSellUser(), dto.getSellUser())
@@ -427,10 +494,11 @@ public class ChatDetail extends JDialog {
 		
 	}
 	
+	// 채팅 입력
 	private void insertChat() {
 		// 입력시 새로운 채팅일 때 true였던 체크뉴챗을 false로 바꾸면 tableinti, serachDB 활성화
 		Share.checkNewChat = false;
-		Dao_Chat dao = new Dao_Chat();
+//		Dao_Chat dao = new Dao_Chat();
 		// insert 
 		dao.insertChat(tfText.getText());
 		// 채팅방에 똑같이 업데이트 해주기 위함
@@ -441,10 +509,69 @@ public class ChatDetail extends JDialog {
 		searchDB();
 	}
 	
+	// 차단하기
 	private void block() {
-		
+		if (dao.searchBlock()) {
+			JOptionPane.showMessageDialog(this, "이미 차단된 유저입니다", "알림", JOptionPane.ERROR_MESSAGE);
+		}
+		else {
+			dao.block();
+			JOptionPane.showMessageDialog(this, "차단이 등록 되었습니다", "알림", JOptionPane.ERROR_MESSAGE);
+		}
 	}
 	
+	private byte[] insertImage() {
+		JFileChooser chooser = new JFileChooser();
+		
+		bytes = null;
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("Image Files", "jpg", "png", "bmp");
+        chooser.setFileFilter(filter);
+		int result = chooser.showOpenDialog(null);
+		
+		if (result == JFileChooser.APPROVE_OPTION) {
+			File selectedFile = chooser.getSelectedFile();
+			
+			if (selectedFile != null) {
+				fileExist = true;
+				String imagePath = chooser.getSelectedFile().getPath();
+				
+				// 이미지 크기 세팅
+				ImageIcon imageIcon = new ImageIcon(imagePath);
+				Image img = imageIcon.getImage();
+				Image setImg = img.getScaledInstance(70, 55, Image.SCALE_SMOOTH);
+				ImageIcon image2 = new ImageIcon(setImg);
+				
+				// 이미지아이콘 타입을 바이트로 전환
+				bytes = convertImageIconToByteArray(image2);
+				
+				// 텍스트를 이미지 아이콘으로 입력
+				lbText.setIcon(image2);
+				// tfText 이미지 크기만큼 크기 변경
+				tfText.setBounds(56, 545, 290, 70);
+				lbText.setHorizontalAlignment(SwingConstants.LEFT);
+				
+				// typing 모양 가리기 위함
+				tfText.setText("                ");
+				
+			}
+		}
+		return bytes;
+	}
 	
-	
+
+	// 이미지아이콘 타입을 바이트로 전환하기 위한 
+	private byte[] convertImageIconToByteArray(ImageIcon icon) {
+	    BufferedImage image = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_RGB);
+	    Graphics g = image.getGraphics();
+	    icon.paintIcon(null, g, 0, 0);
+	    g.dispose();
+
+	    try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+	        ImageIO.write(image, "png", baos);
+	        return baos.toByteArray();
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	        return null;
+	    }
+	}
 }

@@ -220,10 +220,10 @@ public class Chat extends JDialog {
 						int i = innerTable.getSelectedRow();
 						Share.chatid = dto.get(i).getChatId();
 						
-						asdasdasdasd
 						// chatuser 와 share.id와 비교 같다면 sellUserId을 chatdeatil로 보내주고 같지 않다면 chatuser을 보내준다.
-						System.out.println(dto.get(i).getChatUser());
-						System.out.println(dto.get(i).getSellUser());
+						if (! Share.id.equals(dto.get(i).getChatUser())) Share.checkUser = dto.get(i).getChatUser();
+						else Share.checkUser = dto.get(i).getSellUser();
+					
 						ChatDetail cd = new ChatDetail();
 						cd.setVisible(true);
 						dispose();

@@ -10,6 +10,7 @@ public class Dto_Chat {
 	private Date chatDate;
 	private int chatId;
 	private String detailtext;
+	private byte[] detailtextImage;
 	private Date detailDate;
 	private String detailUser;
 	private int sellId;
@@ -48,6 +49,14 @@ public class Dto_Chat {
 	public Dto_Chat(byte[] profile_image, String detailtext, Date detailDate, String detailUser) {
 		this.profile_image = profile_image;
 		this.detailtext = detailtext;
+		this.detailDate = detailDate;
+		this.detailUser = detailUser;
+	}
+	
+	
+	public Dto_Chat(byte[] profile_image, byte[] detailtextImage, Date detailDate, String detailUser) {
+		this.profile_image = profile_image;
+		this.detailtextImage = detailtextImage;
 		this.detailDate = detailDate;
 		this.detailUser = detailUser;
 	}
@@ -222,5 +231,21 @@ public class Dto_Chat {
 	public void setChatUser(String chatUser) {
 		this.chatUser = chatUser;
 	}
+
+
+
+
+	public byte[] getDetailtextImage() {
+		return detailtextImage;
+	}
+
+
+
+
+	public void setDetailtextImage(byte[] detailtextImage) {
+		this.detailtextImage = detailtextImage;
+	}
+	
+	
 	
 }
