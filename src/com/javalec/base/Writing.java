@@ -231,7 +231,9 @@ public class Writing extends JFrame {
 	}
 	private JLabel getLbladdimage() {
 		if (lbladdimage == null) {
-			lbladdimage = new JLabel("");
+			lbladdimage = new JLabel("사진첨부");
+			lbladdimage.setFont(new Font("굴림", Font.BOLD, 10));
+			lbladdimage.setVerticalAlignment(SwingConstants.BOTTOM);
 			lbladdimage.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
@@ -257,8 +259,8 @@ public class Writing extends JFrame {
 			btnPost = new JButton("게시하기");
 			btnPost.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					uploadImage();
 					updateAction(); //****input********
+					uploadImage();
 				}
 			});
 			btnPost.setFont(new Font("Dialog", Font.PLAIN, 14));
@@ -382,6 +384,34 @@ public class Writing extends JFrame {
 	//------------------------------------
 	// 정보 입력하기
 	private void updateAction() {
+		
+	//예외처리
+	// 데이터 입력 여부 확인
+	   if (tfTitle.getText().isEmpty()) {
+	        JOptionPane.showMessageDialog(null, "제목을 입력하세요.", "입력 오류", JOptionPane.ERROR_MESSAGE);
+	        return; // 입력이 누락되었으므로 메서드를 더 이상 진행하지 않고 종료
+	       }
+	   if (tfPrice.getText().isEmpty()) {
+	        JOptionPane.showMessageDialog(null, "가격을 입력하세요.", "입력 오류", JOptionPane.ERROR_MESSAGE);
+	        return; // 입력이 누락되었으므로 메서드를 더 이상 진행하지 않고 종료
+	       } else {
+	         try {
+	         // 가격이 숫자로 변환이 가능한지 확인
+	         double price = Double.parseDouble(tfPrice.getText());
+	       } catch (NumberFormatException e) {
+	           JOptionPane.showMessageDialog(null, "가격은 숫자로 입력하세요.", "입력 오류", JOptionPane.ERROR_MESSAGE);
+	           return; // 숫자가 아니라면 메서드를 더 이상 진행하지 않고 종료
+	       }
+	    }	
+	    if (texDescription.getText().isEmpty()) {
+	        JOptionPane.showMessageDialog(null, "작성중인 글을 입력하세요.", "입력 오류", JOptionPane.ERROR_MESSAGE);
+	        return; // 입력이 누락되었으므로 메서드를 더 이상 진행하지 않고 종료
+	      }	
+	    if (lblimage.getText().isEmpty()) {
+	        JOptionPane.showMessageDialog(null, "사진을 첨부하세요.", "입력 오류", JOptionPane.ERROR_MESSAGE);
+	        return; // 입력이 누락되었으므로 메서드를 더 이상 진행하지 않고 종료
+	      }		
+	//-----------------------------------------------    
 			
 	// 작동됨******************
 		String title = tfTitle.getText();
