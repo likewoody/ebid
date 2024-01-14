@@ -183,38 +183,41 @@ public class MyProduct extends JFrame {
 	}
 
 	private JTable getInnertable() {
-		if (innertable == null) {
-			innertable = new JTable();
-			innertable.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					innertable.setDefaultEditor(Object.class, null);
+	    if (innertable == null) {
+	        innertable = new JTable();
 
-					if (e.getClickCount() == 2) {
-						// postid가 7부터 시작이기에 viewcount에 선택된 row번호에 +7을 객체로 넣어준다.
-						Dao_Home dao = new Dao_Home();
-						Dao_MyProduct mp = new Dao_MyProduct();
-						ArrayList<Dto_MyProduct> dto = mp.searchDB();
+	        // 기본 에디터를 설정하고, 더블 클릭 시 행을 선택하도록 마우스 이벤트를 추가
+	        innertable.setDefaultEditor(Object.class, null);
 
-						// for finding postid
-						Share.postId = dto.get(innertable.getSelectedRow()).getPostid();
+	        innertable.addMouseListener(new MouseAdapter() {
+	            @Override
+	            public void mouseClicked(MouseEvent e) {
+	                if (e.getClickCount() == 2) {
+	                    // 더블 클릭 이벤트 처리 코드
+	                    Dao_Home dao = new Dao_Home();
+	                    Dao_MyProduct mp = new Dao_MyProduct();
+	                    ArrayList<Dto_MyProduct> dto = mp.searchDB();
 
-						// for find sellid
-						Share.sellId = dto.get(innertable.getSelectedRow()).getSellid();
-//							
-						Share.post_status = dao.findPostStatus();
+	                    // for finding postid
+	                    Share.postId = dto.get(innertable.getSelectedRow()).getPostid();
 
-						dao.viewCount();
-						Home_detail homeDetail = new Home_detail();
-						homeDetail.setVisible(true);
-						dispose();
-					}
-				}
-			});
-			innertable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			innertable.setModel(outertable);
-		}
-		return innertable;
+	                    // for find sellid
+	                    Share.sellId = dto.get(innertable.getSelectedRow()).getSellid();
+//								
+	                    Share.post_status = dao.findPostStatus();
+
+	                    dao.viewCount();
+	                    Home_detail homeDetail = new Home_detail();
+	                    homeDetail.setVisible(true);
+	                    dispose();
+	                }
+	            }
+	        });
+
+	        innertable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+	        innertable.setModel(outertable);
+	    }
+	    return innertable;
 	}
 
 	private JSeparator getSeparator() {

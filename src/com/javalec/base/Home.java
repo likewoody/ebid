@@ -218,34 +218,35 @@ public class Home extends JDialog {
 	}
 	
 	private JTable getInnerTable() {
-		if (innerTable == null) {
-			innerTable = new JTable();
-			innerTable.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					innerTable.setDefaultEditor(Object.class, null);
-					
-					if (e.getClickCount() == 2) {
-						// postid가 7부터 시작이기에 viewcount에 선택된 row번호에 +7을 객체로 넣어준다.
-						Dao_Home dao = new Dao_Home();
-						ArrayList<Dto_Home> dto = dao.searchDB();
-						
-						// for finding postid
-						Share.postId = dto.get(innerTable.getSelectedRow()).getPostId();
-						
-						// for find sellid
-						Share.sellId = dto.get(innerTable.getSelectedRow()).getSellid();
-//						
-						Share.post_status = dao.findPostStatus();
-						
-						dao.viewCount();
-						Home_detail homeDetail = new Home_detail();
-						homeDetail.setVisible(true);
-						dispose();
-						
-					}
-				}
-			});
+	    if (innerTable == null) {
+	        innerTable = new JTable();
+
+	        // 마우스 클릭 이벤트 처리 이전에 Object 클래스에 대한 기본 에디터를 null로 설정
+	        innerTable.setDefaultEditor(Object.class, null);
+
+	        innerTable.addMouseListener(new MouseAdapter() {
+	            @Override
+	            public void mouseClicked(MouseEvent e) {
+	                if (e.getClickCount() == 2) {
+	                    // 더블 클릭 이벤트 처리 코드
+	                    Dao_Home dao = new Dao_Home();
+	                    ArrayList<Dto_Home> dto = dao.searchDB();
+
+	                    // postid 찾기
+	                    Share.postId = dto.get(innerTable.getSelectedRow()).getPostId();
+
+	                    // sellid 찾기
+	                    Share.sellId = dto.get(innerTable.getSelectedRow()).getSellid();
+	                    
+	                    Share.post_status = dao.findPostStatus();
+
+	                    dao.viewCount();
+	                    Home_detail homeDetail = new Home_detail();
+	                    homeDetail.setVisible(true);
+	                    dispose();
+	                }
+	            }
+	        });
 			innerTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			innerTable.setModel(outerTable);
 			innerTable.setFont(new Font("Helvetica", Font.PLAIN, 14));
