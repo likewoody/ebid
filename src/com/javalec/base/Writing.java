@@ -399,12 +399,12 @@ public class Writing extends JFrame {
 	         // 가격이 숫자로 변환이 가능한지 확인
 	         double price = Double.parseDouble(tfPrice.getText());
 	       } catch (NumberFormatException e) {
-	           JOptionPane.showMessageDialog(null, "올바른 가격을 입력하세요.", "입력 오류", JOptionPane.ERROR_MESSAGE);
+	           JOptionPane.showMessageDialog(null, "가격은 숫자로 입력하세요.", "입력 오류", JOptionPane.ERROR_MESSAGE);
 	           return; // 숫자가 아니라면 메서드를 더 이상 진행하지 않고 종료
 	       }
 	    }	
 	    if (texDescription.getText().isEmpty()) {
-	        JOptionPane.showMessageDialog(null, "작성중인 글일 입력하세요.", "입력 오류", JOptionPane.ERROR_MESSAGE);
+	        JOptionPane.showMessageDialog(null, "작성중인 글을 입력하세요.", "입력 오류", JOptionPane.ERROR_MESSAGE);
 	        return; // 입력이 누락되었으므로 메서드를 더 이상 진행하지 않고 종료
 	      }	
 	    if (lblimage.getText().isEmpty()) {
