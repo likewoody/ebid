@@ -304,7 +304,7 @@ public class Writing extends JFrame {
 		if (imagePreviewLabel == null) {
 			imagePreviewLabel = new JLabel("");
 			imagePreviewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-			imagePreviewLabel.setBounds(127, 548, 65, 60);
+			imagePreviewLabel.setBounds(125, 549, 80, 54);
 		}
 		return imagePreviewLabel;
 	}
@@ -391,7 +391,7 @@ public class Writing extends JFrame {
 	            lblimage.setText(imagePath);
 	            
 	            // 이미지 프리뷰 업데이트 및 자동 크기 조절
-	            ImageIcon icon = createImageIcon(imagePath, 50, 15); // 레이블 크기에 맞게 설정
+	            ImageIcon icon = createImageIcon(imagePath, 80, 54); // 레이블 크기에 맞게 설정
 	            if (icon != null) {
 	                imagePreviewLabel.setIcon(icon);            
 	        } else {
