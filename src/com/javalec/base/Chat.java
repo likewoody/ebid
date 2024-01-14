@@ -235,8 +235,6 @@ public class Chat extends JDialog {
 			innerTable.setGridColor(Color.LIGHT_GRAY);
 			innerTable.setShowGrid(false);
 			innerTable.setShowHorizontalLines(true);
-
-			
 		}
 		return innerTable;
 	}
@@ -275,8 +273,6 @@ public class Chat extends JDialog {
 		
 		innerTable.setAutoResizeMode(innerTable.AUTO_RESIZE_OFF);
 		
-		
-		
 		int i = outerTable.getRowCount();
 		for (int j = 0; j < i; j++) {
 			outerTable.removeRow(0);
@@ -285,19 +281,22 @@ public class Chat extends JDialog {
 	
 	private void searchChat() {
 		Dao_Chat dao = new Dao_Chat();
-		int count = 0;
+//		int count = 0;
 		for (Dto_Chat dto : dao.searchChat()) {
-				outerTable.addRow(new Object[0]);
-				outerTable.setValueAt(false, count, 0);
-				outerTable.setValueAt(dto.getProfile_image(), count, 1);
-				outerTable.setValueAt(String.format("<html>"
-						+ "<h2>%s</h2>"
-						+ "%s<br>"
-						+ "</html>", dto.getNickname(), dto.getTitle()), count, 2);
-				
-				count++;
-			
-			
+			outerTable.addRow(new Object[] {
+					false,
+					dto.getProfile_image(),
+					String.format("<html><<h2>%s</h2>"
+							+ "%s<h4 style = 'font-weight:normal;text-align:right';>%s</h4></html>",  dto.getNickname(), dto.getTitle(), dto.getChatDate())
+			});
+//				outerTable.addRow(new Object[0]);
+//				outerTable.setValueAt(false, count, 0);
+//				outerTable.setValueAt(dto.getProfile_image(), count, 1);
+//				outerTable.setValueAt(String.format("<html>"
+//						+ "<h2>%s</h2>"
+//						+ "%s%nbsp;%nbsp;%nbsp;%nbsp;<br>"
+//						+ "</html>", dto.getNickname(), dto.getTitle()), count, 2);
+//				count++;
 		}
 		innerTable.getTableHeader().setReorderingAllowed(false);
 		innerTable.getColumnModel().getColumn(1).setCellRenderer(new ImageRender());
@@ -318,7 +317,6 @@ public class Chat extends JDialog {
 		searchChat();
 		
 	}
-	
 	
 	// image render
 	private class ImageRender extends DefaultTableCellRenderer {
@@ -350,41 +348,4 @@ public class Chat extends JDialog {
             return checkbox;
 		}
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	// TEst
-//	private class FramePanel extends DefaultTableCellRenderer {
-//
-//		@Override
-//		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
-//				int row, int column) {
-//	    	JPanel jp = new JPanel(new FlowLayout(FlowLayout.LEFT));
-//	    	 JLabel[] labels = (JLabel[]) jlabelTest();
-//	    	for (JLabel label : labels) {
-//	    		jp.add(label);
-//	    	}
-//	    	jp.setBackground(getBackground());
-//	    	jp.setFont(new Font("Lucida Grande", Font.BOLD, 14));
-//	    	
-//	    	return jp;
-//		}
-//
-//		private Component[] jlabelTest() {
-//			JLabel panel = new JLabel("nickname");
-//			JLabel panel2 = new JLabel("title");
-//			JLabel[] panelArr = {panel, panel2};
-//			panel.setFont(new Font("Lucida Grande", Font.BOLD, 14));
-//			
-//			return panelArr;
-//		}
-//		
-//		
-//	}
 }

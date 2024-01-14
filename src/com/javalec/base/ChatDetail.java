@@ -83,6 +83,7 @@ public class ChatDetail extends JDialog {
 	private JLabel lbText;
 	private boolean fileExist;
 	private byte[] bytes = null;
+	private int previousCount = 0;
 
 	/**
 	 * Launch the application.
@@ -112,8 +113,14 @@ public class ChatDetail extends JDialog {
 					newChatInit();
 				}
 				else {
-					tableInit();
-					searchDB();
+					int currentCount = dao.findChatCount();
+					
+					// 이전 현재 카운트와 이전 카운트 비교 이전 카운트가 더 작다면 테이블 초기화, serachDB
+					if (currentCount > previousCount) {
+						tableInit();
+						searchDB();
+						previousCount = currentCount;
+					}
 				}
 			}
 		});
@@ -365,7 +372,7 @@ public class ChatDetail extends JDialog {
 	            rowData = new Object[]{
 	                    dto.getProfile_image(),
 	                    String.format("%s : ", dto.getDetailUser()),
-	                    dto.getDetailtext()
+	                    String.format("%s     %s", dto.getDetailtext(), dto.getDetailDate())
 	            };
 	        } else {
 	            rowData = new Object[]{
@@ -557,7 +564,6 @@ public class ChatDetail extends JDialog {
 		}
 		return bytes;
 	}
-	
 
 	// 이미지아이콘 타입을 바이트로 전환하기 위한 
 	private byte[] convertImageIconToByteArray(ImageIcon icon) {

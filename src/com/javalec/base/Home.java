@@ -305,7 +305,7 @@ public class Home extends JDialog {
 								+ "<br>"
 								+ "<br>판매금액 : %,d원"
 								+ "<br>작성자 &nbsp;&nbsp;&nbsp;: %s"
-								+ "<br><h3 style = 'font-weight:normal;text-align:right;'>채팅 : %d&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;찜 : %d</html>",
+								+ "<br><h3 style = 'font-weight:normal;text-align:right;'>채팅 : %d&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;찜 : %d</h3></html>",
 							dto.getSort(), dto.getTitle(), dto.getStart_price(), dto.getNickname(), dto.getChatCount(), dto.getWishListCount())
 						
 				});

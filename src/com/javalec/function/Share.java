@@ -5,8 +5,10 @@ public class Share {
 	public static String dbUser = "root";
 	public static String dbPass = "qwer1234";
 	
-	public static String id = "cici16";
-	public static String pw = "cici127";
+//	public static String id = "cici16";
+//	public static String pw = "cici127";
+	public static String id = "john3";
+	public static String pw = "john1234";
 	
 	public static int filename = 0;
 	

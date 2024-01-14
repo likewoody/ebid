@@ -14,6 +14,7 @@ import javax.sql.rowset.serial.SerialBlob;
 
 import com.mysql.cj.x.protobuf.MysqlxPrepare.Prepare;
 
+
 public class Dao_Chat {
 	
 	
@@ -152,12 +153,13 @@ public class Dao_Chat {
 			Connection con = DriverManager.getConnection(url_mysql,id_mysql,pw_mysql);
 			Statement st = con.createStatement();
 			
-//			@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 작동안됨
-			String query = "SELECT u.profile_image, c.nickname, c.title, c.date, c.chatid, c.userid, c.selluserid "
-					+ "FROM user u "
-					+ "LEFT JOIN sell s ON u.userid = s.userid "
-					+ "LEFT JOIN chat c ON c.sellid = s.sellid "
-					+ "WHERE s.userid = '" + Share.id + "' OR c.userid = '" + Share.id + "'" ;
+//			@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 이미지 작동안됨
+			String query = "SELECT u.profile_image, c.nickname, c.title, date_format(c.date, '%y.%m.%d %H:%i'), c.chatid, c.userid, c.selluserid "
+					+ "					FROM user u "
+					+ "					LEFT JOIN sell s ON u.userid = s.userid "
+					+ "					LEFT JOIN chat c ON c.sellid = s.sellid "
+					+ "					WHERE s.userid = '" +Share.id+ "' OR c.userid = '" + Share.id + "' "
+							+ "order by c.date desc" ;
 //			@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 작동안됨
 			ResultSet rs = st.executeQuery(query);
 			
@@ -165,7 +167,7 @@ public class Dao_Chat {
 				byte[] profile_img = rs.getBytes(1);
 				String nick = rs.getString(2);
 				String post_title = rs.getString(3);
-				Date chatDate = rs.getDate(4);
+				String chatDate = rs.getString(4);
 				int chatId = rs.getInt(5);
 				String userId = rs.getString(6);
 				String sellUserId = rs.getString(7);
@@ -181,6 +183,7 @@ public class Dao_Chat {
 		return dtoList;
 	}
 	
+	// 채팅방 안에 들어갔을 때 채팅 상황
 	public ArrayList<Dto_Chat> findChatDeatil() {
 	    ArrayList<Dto_Chat> dtoList = new ArrayList<>();
 
@@ -188,7 +191,7 @@ public class Dao_Chat {
 	        Class.forName("com.mysql.cj.jdbc.Driver");
 	        Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
 
-	        String textQuery = "SELECT u.profile_image, cd.text, cd.date, c.nickname "
+	        String textQuery = "SELECT u.profile_image, cd.text, date_format(cd.date, '%y.%m.%d %H:%i'), c.nickname "
 	                + "FROM chat_text_detail cd "
 	                + "JOIN chat c ON c.chatid = cd.chatid "
 	                + "JOIN sell s ON s.sellid = c.sellid "
@@ -202,13 +205,15 @@ public class Dao_Chat {
 	                Dto_Chat dto = new Dto_Chat();
 	                byte[] img = textRs.getBytes(1);
 	                String texts = textRs.getString(2);
-	                Date dates = textRs.getDate(3);
+	                String dates = textRs.getString(3);
 	                String usernickname = textRs.getString(4);
 
+	                
 	                if (texts != null) {
 	                    dto = new Dto_Chat(img, texts, dates, usernickname);
+	                 // text가 아니라면 이미지인데 이미지일 때 쿼리
 	                } else {
-	                    String imageQuery = "SELECT u.profile_image, cd.image, cd.date, c.nickname "
+	                    String imageQuery = "SELECT u.profile_image, cd.image, date_format(cd.date, '%y.%m.%d %H:%i'), c.nickname "
 	                            + "FROM chat_text_detail cd "
 	                            + "JOIN chat c ON c.chatid = cd.chatid "
 	                            + "JOIN sell s ON s.sellid = c.sellid "
@@ -220,7 +225,7 @@ public class Dao_Chat {
 	                        if (imageRs.next()) {
 	                            byte[] img2 = imageRs.getBytes(1);
 	                            byte[] image = imageRs.getBytes(2);
-	                            Date date2 = imageRs.getDate(3);
+	                            String date2 = imageRs.getString(3);
 	                            String usernickname2 = imageRs.getString(4);
 
 	                            dto = new Dto_Chat(img2, image, date2, usernickname2);
@@ -235,6 +240,33 @@ public class Dao_Chat {
 	    }
 
 	    return dtoList;
+	}
+	
+	// 챗 카운트 
+	public int findChatCount() {
+		int chatCoun = 0;
+		try {
+	        Class.forName("com.mysql.cj.jdbc.Driver");
+	        Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+	        Statement st = con.createStatement();
+	        
+	        String query = "SELECT count(*) "
+	        		+ "	                FROM chat_text_detail cd "
+	        		+ "	                JOIN chat c ON c.chatid = cd.chatid "
+	        		+ "	                JOIN sell s ON s.sellid = c.sellid "
+	        		+ "	                JOIN user u ON u.userid = s.userid "
+	        		+ "	                AND c.chatid = " + Share.chatid;
+	        
+	        ResultSet rs = st.executeQuery(query);
+	        if(rs.next()) {
+	        	chatCoun = rs.getInt(1);
+	        }
+	        con.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return chatCoun;
 	}
 	
 	// chat detail 유저 정보 찾기
@@ -363,28 +395,4 @@ public class Dao_Chat {
 			e.printStackTrace();
 		}
 	}
-	// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-	
-	// 클릭한 wish_list의 status를 불러온다.
-//	public int findChatUserId() {
-//		int Flag = 0;
-//		try {
-//			Class.forName("com.mysql.cj.jdbc.Driver");
-//			Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
-//			Statement st = con.createStatement();
-//			
-//			String query = "select userid from chat where userid = ;
-//			
-//			ResultSet rs = st.executeQuery(query);
-//			
-//			if (rs.next()) {
-//				Flag = rs.getInt(1);
-//			}
-//			con.close();
-//		}
-//		catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//		return Flag;
-//	}
 }

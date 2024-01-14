@@ -405,17 +405,18 @@ public class Dao_Home {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
 			Statement st = con.createStatement();
-			
-			String query = "select avg(rating) "
-					+ "from rating r, user u, sell s "
-					+ "where r.userid = u.userid "
-					+ "and s.userid= u.userid "
-					+ "and s.sellid = " + Share.sellId;
+			System.out.println(Share.sellId);
+			String query = "SELECT ROUND(AVG(r.rating), 1) "
+					+ "FROM rating r "
+					+ "JOIN user u ON r.userid = u.userid "
+					+ "JOIN sell s ON s.userid = u.userid "
+					+ "WHERE s.sellid = '" + Share.sellId + "'";
 			
 			ResultSet rs = st.executeQuery(query);
 			
 			if (rs.next()) {
-				str = Double.toString(rs.getDouble(1));
+				str = String.format("%.1f", rs.getDouble(1));
+//				str = Double.toString();
 			}
 			con.close();
 		}

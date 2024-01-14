@@ -7,11 +7,11 @@ public class Dto_Chat {
 	private byte[] profile_image;
 	private String nickname;
 	private String title;
-	private Date chatDate;
+	private String chatDate;
 	private int chatId;
 	private String detailtext;
 	private byte[] detailtextImage;
-	private Date detailDate;
+	private String detailDate;
 	private String detailUser;
 	private int sellId;
 	private String sellUser;
@@ -46,7 +46,7 @@ public class Dto_Chat {
 	
 
 
-	public Dto_Chat(byte[] profile_image, String detailtext, Date detailDate, String detailUser) {
+	public Dto_Chat(byte[] profile_image, String detailtext, String detailDate, String detailUser) {
 		this.profile_image = profile_image;
 		this.detailtext = detailtext;
 		this.detailDate = detailDate;
@@ -54,7 +54,7 @@ public class Dto_Chat {
 	}
 	
 	
-	public Dto_Chat(byte[] profile_image, byte[] detailtextImage, Date detailDate, String detailUser) {
+	public Dto_Chat(byte[] profile_image, byte[] detailtextImage, String detailDate, String detailUser) {
 		this.profile_image = profile_image;
 		this.detailtextImage = detailtextImage;
 		this.detailDate = detailDate;
@@ -62,7 +62,7 @@ public class Dto_Chat {
 	}
 
 
-	public Dto_Chat(byte[] profile_image, String nickname, String title, Date chatDate, int chatId, String chatUser, String sellUser) {
+	public Dto_Chat(byte[] profile_image, String nickname, String title, String chatDate, int chatId, String chatUser, String sellUser) {
 		this.profile_image = profile_image;
 		this.nickname = nickname;
 		this.title = title;
@@ -123,14 +123,14 @@ public class Dto_Chat {
 
 
 
-	public Date getChatDate() {
+	public String getChatDate() {
 		return chatDate;
 	}
 
 
 
 
-	public void setChatDate(Date chatDate) {
+	public void setChatDate(String chatDate) {
 		this.chatDate = chatDate;
 	}
 
@@ -165,14 +165,14 @@ public class Dto_Chat {
 
 
 
-	public Date getDetailDate() {
+	public String getDetailDate() {
 		return detailDate;
 	}
 
 
 
 
-	public void setDetailDate(Date detailDate) {
+	public void setDetailDate(String detailDate) {
 		this.detailDate = detailDate;
 	}
 
