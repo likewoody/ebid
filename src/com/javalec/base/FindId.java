@@ -198,8 +198,8 @@ public class FindId extends JDialog {
 		            null,
 		            options,
 		            options[0]
-		        );
-
+		        );			
+		        		
 		        if (choice == 0) {
 		        
 		            dispose();
@@ -209,7 +209,28 @@ public class FindId extends JDialog {
 		
 		    }
 	}
-	
+//	
+//	   if (dao.findId()) {
+//	        String foundUserId = dao.getUserid();
+//	        // 아이디를 알려주는 메시지 창에 닫기 버튼 추가
+//	        Object[] options = {"닫기"};
+//	        int choice = JOptionPane.showOptionDialog(null,"아이디는 " + foundUserId + " 입니다.", "아이디 찾기 결과",
+//	            JOptionPane.DEFAULT_OPTION,
+//	            JOptionPane.INFORMATION_MESSAGE,
+//	            null,
+//	            options,
+//	            options[0]
+//	        );			
+//	        		
+//	        if (choice == 0) {
+//	        
+//	            dispose();
+//	    } else {
+//	        JOptionPane.showMessageDialog(null, "일치하는 정보가 없습니다. 다시 입력해 주새요.", "알림", JOptionPane.ERROR_MESSAGE);
+//	    }
+//	
+//	    }
+//}
 	public void cancelclick() {
 		int cancel = JOptionPane.showConfirmDialog(null, "아이디 찾기를 취소 하시겠습니까?", "알림", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
 		if (cancel == JOptionPane.YES_OPTION) {
@@ -223,5 +244,5 @@ public class FindId extends JDialog {
 	    String regex = "^010-[0-9]{4}-[0-9]{4}$";
 	    return phoneNumber.matches(regex);
 	}
-
+				
 }
