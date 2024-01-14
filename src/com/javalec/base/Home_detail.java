@@ -269,6 +269,7 @@ public class Home_detail extends JDialog {
 			lbBid.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
+					System.out.println(Share.sellId);
 					if (!dao.findChatExist()) {
 						createChatRoom();
 						Share.chatid = dao.findChatId();
@@ -427,7 +428,7 @@ public class Home_detail extends JDialog {
 		ArrayList<Dto_Home> getUserInfo = dao.findUserInfo();
 		
 		// 1. 이미지 설정
-		ImageIcon imageIcon = new ImageIcon(dao.findUserImage());
+		ImageIcon imageIcon = new ImageIcon(dao.findSellerImage());
 		Image img = imageIcon.getImage();
 		Image setImg = img.getScaledInstance(58, 58, Image.SCALE_SMOOTH);
 		ImageIcon image = new ImageIcon(setImg);

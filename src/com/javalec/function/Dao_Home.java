@@ -1,6 +1,7 @@
 package com.javalec.function;
 
 import java.awt.Image;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -61,13 +62,17 @@ public class Dao_Home {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
 			
-			String query = "insert into chat (userid, nickname, date, sellid) values (?, ?, now(), ?)";
+			String query = "insert into chat (userid, nickname, selluserid, date, sellid, userImage) values (?, ?, ?, now(), ?, ?)";
 			
 			ps = con.prepareStatement(query);
 			
 			ps.setString(1, Share.id);
 			ps.setString(2, findUserNickname());
-			ps.setInt(3, Share.sellId);
+			ps.setString(3, findSellerId());
+			ps.setInt(4, Share.sellId);
+			
+			ByteArrayInputStream inputStream = new ByteArrayInputStream(findBuyerImage());
+			ps.setBlob(5, inputStream);
 			
 			ps.executeUpdate();
 			
@@ -373,8 +378,8 @@ public class Dao_Home {
 	}
 	
 	// 유저의 image를 가져온다
-	public byte[] findUserImage() {
-		byte[] userImage = null;
+	public byte[] findSellerImage() {
+		byte[] sellerImage = null;
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
@@ -387,16 +392,38 @@ public class Dao_Home {
 			ResultSet rs = st.executeQuery(query);
 			
 			if (rs.next()) {
-				userImage = rs.getBytes(1);
+				sellerImage = rs.getBytes(1);
 			}
 			con.close();
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-		return userImage;
+		return sellerImage;
 	}
 	
+	public byte[] findBuyerImage() {
+		byte[] buyerImage = null;
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+			Statement st = con.createStatement();
+			
+			String query = "select profile_image from user u "
+					+ "where u.userid = '"+Share.id+"'";
+			
+			ResultSet rs = st.executeQuery(query);
+			
+			if (rs.next()) {
+				buyerImage = rs.getBytes(1);
+			}
+			con.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return buyerImage;
+	}
 	
 	// find user rating
 	public String findUserRating() {
@@ -516,8 +543,6 @@ public class Dao_Home {
 			
 			if(rs.next()) {
 				Dto_Home dto = new Dto_Home(rs.getInt(1));
-				System.out.println(rs.getInt(1));
-				System.out.println(dto);
 				dtoL.add(dto);
 			}
 			con.close();
@@ -561,7 +586,6 @@ public class Dao_Home {
 			ResultSet rs = st.executeQuery(query);
 		
 			if(rs.next()) {
-				System.out.println("get in if ");
 				newChatId = rs.getInt(1);
 			}
 		}
@@ -570,6 +594,29 @@ public class Dao_Home {
 		}
 		return newChatId;
 	}
+	
+	//
+	public String findSellerId() {
+		String sellerId = "";
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+			Statement st = con.createStatement();
+			
+			String query = "select userid from sell where postid = " + Share.postId;
+			
+			ResultSet rs = st.executeQuery(query);
+		
+			if(rs.next()) {
+				sellerId = rs.getString(1);
+			}
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return sellerId;
+	} 
+	
 	// find if chat already exist
 	public boolean findChatExist() {
 		boolean checkExist = false;

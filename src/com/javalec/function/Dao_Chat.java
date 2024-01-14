@@ -154,7 +154,7 @@ public class Dao_Chat {
 			Statement st = con.createStatement();
 			
 //			@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 이미지 작동안됨
-			String query = "SELECT u.profile_image, c.nickname, c.title, date_format(c.date, '%y.%m.%d %H:%i'), c.chatid, c.userid, c.selluserid "
+			String query = "SELECT c.userImage, c.nickname, c.title, date_format(c.date, '%y.%m.%d %H:%i'), c.chatid, c.userid, c.selluserid "
 					+ "					FROM user u "
 					+ "					LEFT JOIN sell s ON u.userid = s.userid "
 					+ "					LEFT JOIN chat c ON c.sellid = s.sellid "
@@ -191,12 +191,21 @@ public class Dao_Chat {
 	        Class.forName("com.mysql.cj.jdbc.Driver");
 	        Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
 
-	        String textQuery = "SELECT u.profile_image, cd.text, date_format(cd.date, '%y.%m.%d %H:%i'), c.nickname "
-	                + "FROM chat_text_detail cd "
-	                + "JOIN chat c ON c.chatid = cd.chatid "
-	                + "JOIN sell s ON s.sellid = c.sellid "
-	                + "JOIN user u ON u.userid = s.userid "
-	                + "AND c.chatid = " + Share.chatid;
+	        String textQuery = "SELECT "
+	        		+ "    c.userImage, "
+	        		+ "    cd.text,  "
+	        		+ "    DATE_FORMAT(cd.date, '%y.%m.%d %H:%i') as formatted_date, "
+	        		+ "    u.nickname "
+	        		+ "FROM "
+	        		+ "    chat c "
+	        		+ "JOIN "
+	        		+ "    sell s ON s.sellid = c.sellid "
+	        		+ "JOIN "
+	        		+ "    chat_text_detail cd ON cd.chatid = c.chatid "
+	        		+ "JOIN "
+	        		+ "    user u ON u.userid = cd.userid "
+	        		+ "WHERE "
+	        		+ "    c.chatid = " + Share.chatid;
 
 	        try (Statement st = con.createStatement();
 	             ResultSet textRs = st.executeQuery(textQuery)) {
@@ -213,7 +222,7 @@ public class Dao_Chat {
 	                    dto = new Dto_Chat(img, texts, dates, usernickname);
 	                 // text가 아니라면 이미지인데 이미지일 때 쿼리
 	                } else {
-	                    String imageQuery = "SELECT u.profile_image, cd.image, date_format(cd.date, '%y.%m.%d %H:%i'), c.nickname "
+	                    String imageQuery = "SELECT c.userImage, cd.image, date_format(cd.date, '%y.%m.%d %H:%i'), c.nickname "
 	                            + "FROM chat_text_detail cd "
 	                            + "JOIN chat c ON c.chatid = cd.chatid "
 	                            + "JOIN sell s ON s.sellid = c.sellid "

@@ -246,7 +246,7 @@ public class ChatDetail extends JDialog {
 						lbText.setIcon(null);
 						fileExist = false;
 					}
-					else insertChat(); 
+					else insertChat();
 				}
 			});
 			btnInsert.setFont(new Font("Helvetica", Font.BOLD, 14));
