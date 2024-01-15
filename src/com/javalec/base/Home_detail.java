@@ -270,7 +270,7 @@ public class Home_detail extends JDialog {
 			lbBid.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					if (! Share.chatUserId.equals(Share.chatSellerId)) {
+					if (Share.id != Share.chatSellerId) {
 						if (! dao.checkBlock()) {
 							if (!dao.findChatExist()) {
 								dao.createChatRoom();
