@@ -28,7 +28,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.JPasswordField;
 
 public class Login extends JDialog {
-
+							
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
 	private JLabel loginBackground;
@@ -268,7 +268,7 @@ public class Login extends JDialog {
 	public void Findpwclick() {
 		FindPw findPw = new FindPw();				//패스워드 찾기 클릭
 		findPw.setVisible(true);
-
+			
 
 	}
 	public void FindpwMouseEnter() {
@@ -315,8 +315,7 @@ public class Login extends JDialog {
 		        JOptionPane.showMessageDialog(null, "비밀번호를 입력하세요", "알림", JOptionPane.ERROR_MESSAGE);
 		        return;
 		    }
-		    	 
-		    
+	    
 		    	 Dao_Login dao = new Dao_Login(inputid, inputPw);
 		    	 
 		    	

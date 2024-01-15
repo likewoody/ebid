@@ -382,10 +382,13 @@ public class Dao_Login {
 	        pstmt.setString(4, nickname);
 	        pstmt.setString(5, currentDateAndTime);
 	        pstmt.setString(6, address);
-	        // 이미지 파일을 Blob으로 변환
-	        File imageFile = new File(getClass().getResource("/com/javalec/images/Registerimage.jpg").getFile());
-	        InputStream inputStream = new FileInputStream(imageFile);
-	        pstmt.setBinaryStream(7, inputStream, (int) imageFile.length());
+	     
+//	        File imageFile = new File(getClass().getResource("/com/javalec/images/Registerimage.jpg").getFile());
+//	        InputStream inputStream = new FileInputStream(imageFile);
+//	        pstmt.setBinaryStream(7, inputStream, (int) imageFile.length());
+	        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("com/javalec/images/Registerimage.jpg");
+	        pstmt.setBinaryStream(7, inputStream, inputStream.available());
+
 	        pstmt.setString(8, userid);
 
 	        

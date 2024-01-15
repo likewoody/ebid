@@ -725,8 +725,7 @@ public class Register extends JDialog {
 	}
 	if (daoLogin.nickNameCheck(userNickname) == false) {
 		JOptionPane.showMessageDialog(this, "이미 사용 중인 닉네임 입니다. 다른 닉네임을 입력하세요.", "알림",
-				JOptionPane.ERROR_MESSAGE);
-	//	tfnickname.setEditable(true);		
+				JOptionPane.ERROR_MESSAGE);		
 		return;
 	}				
 	else 
@@ -751,7 +750,6 @@ public class Register extends JDialog {
 			
 		}
 								
-	
 	// 로그인 화면으로 돌아가기
 	public void goBack () {
 		int back = JOptionPane.showConfirmDialog(null, "로그인 화면으로 돌아가시갰습니까?", "알림", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
@@ -759,9 +757,6 @@ public class Register extends JDialog {
 			String userid = tfid.getText();
 		Dao_Login dao = new Dao_Login();		
 		  dao.idDelete(userid);
-//		Login login = new Login();
-//		login.setVisible(true);
-//		
 						
 		dispose();
 		}
