@@ -624,7 +624,7 @@ public class ChatDetail extends JDialog {
 				searchDB();
 				
 				try {
-					Thread.sleep(1000);
+					Thread.sleep(7000);
 				}
 				catch (Exception e) {
 					e.printStackTrace();

@@ -235,7 +235,8 @@ public class Dao_Chat {
 	        		+ "JOIN sell s ON s.sellid = c.sellid "
 	        		+ "JOIN chat_text_detail cd ON cd.chatid = c.chatid "
 	        		+ "JOIN user u ON u.userid = cd.userid "
-	        		+ "WHERE c.chatid = " + Share.chatid;
+	        		+ "WHERE c.chatid = " + Share.chatid + " "
+	        				+ "order by formatted_date desc";
 
 	        try (Statement st = con.createStatement();
 	             ResultSet textRs = st.executeQuery(textQuery)) {
