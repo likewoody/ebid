@@ -270,7 +270,12 @@ public class Home_detail extends JDialog {
 			lbBid.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					if (Share.id != Share.chatSellerId) {
+					Share.chatSellerId = dao.findSellerId();
+					
+					if (Share.id.equals(Share.chatSellerId)) {
+						JOptionPane.showMessageDialog(getRootPane(), "채팅을 실행할 수 없습니다", "알림", JOptionPane.ERROR_MESSAGE);
+					}
+					else {
 						if (! dao.checkBlock()) {
 							if (!dao.findChatExist()) {
 								dao.createChatRoom();

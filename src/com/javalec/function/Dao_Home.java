@@ -583,6 +583,7 @@ public class Dao_Home {
 			Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
 			Statement st = con.createStatement();
 			
+//			String query = "select chatid, userid, sellerid from chat where userid = '" + Share.id + "' and sellid = " + Share.sellId;
 			String query = "select chatid, userid, sellerid from chat where userid = '" + Share.id + "' and sellid = " + Share.sellId;
 			
 			ResultSet rs = st.executeQuery(query);
