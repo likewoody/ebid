@@ -93,8 +93,8 @@ public class ChatDetail extends JDialog {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-//					TestThread th = new TestThread();
-//					th.start();
+					TestThread th = new TestThread();
+					th.start();
 					ChatDetail dialog = new ChatDetail();
 					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 					dialog.setVisible(true);
