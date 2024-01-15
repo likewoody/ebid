@@ -93,8 +93,8 @@ public class ChatDetail extends JDialog {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					TestThread th = new TestThread();
-					th.start();
+//					TestThread th = new TestThread();
+//					th.start();
 					ChatDetail dialog = new ChatDetail();
 					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 					dialog.setVisible(true);
@@ -123,7 +123,7 @@ public class ChatDetail extends JDialog {
 					if (currentCount > previousCount) {
 						tableInit();
 						searchDB();
-						
+						Share.count = currentCount - previousCount;
 						previousCount = currentCount;
 					}
 				}
@@ -381,7 +381,7 @@ public class ChatDetail extends JDialog {
 	}
 	
 	// db 데이터 load
-	private void searchDB() {
+	public void searchDB() {
 	    outerTable.setRowCount(0);
 
 	    for (Dto_Chat dto : dao.findChatDeatil()) {
