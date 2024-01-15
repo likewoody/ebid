@@ -202,13 +202,14 @@ public class FindId extends JDialog {
 		        if (choice == 0) {
 		        
 		            dispose();
-		    } else {
+		        }
+		    }  else 
 		    		
 		        JOptionPane.showMessageDialog(null, "일치하는 정보가 없습니다. 다시 입력해 주새요.", "알림", JOptionPane.ERROR_MESSAGE);
 		    }
 		        							
-		    }
-	}
+		    
+	
 
 	public void cancelclick() {
 		int cancel = JOptionPane.showConfirmDialog(null, "아이디 찾기를 취소 하시겠습니까?", "알림", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
