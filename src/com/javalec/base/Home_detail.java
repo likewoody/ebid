@@ -177,7 +177,7 @@ public class Home_detail extends JDialog {
 			btnWrite = new JButton("글쓰기");
 			btnWrite.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					Write wrt = new Write();
+					Writing wrt = new Writing();
 					wrt.setVisible(true);
 					dispose();
 				}
