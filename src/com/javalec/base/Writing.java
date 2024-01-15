@@ -111,12 +111,12 @@ public class Writing extends JFrame {
 		contentPane.add(getTexDescription());
 		contentPane.add(getLblNewLabel_2());
 		contentPane.add(getLbladdimage());
-		contentPane.add(getLblimage());
 		contentPane.add(getBtnPost());
 		contentPane.add(getLblNewLabel_3());
 		contentPane.add(getLblUserid());
 		contentPane.add(getImagePreviewLabel());
 		contentPane.add(getLblBackgroud());
+		contentPane.add(getLblimage());
 	}
 	private JButton getBtnHome() {
 		if (btnHome == null) {
