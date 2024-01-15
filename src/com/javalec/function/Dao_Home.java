@@ -66,10 +66,6 @@ public class Dao_Home {
 			
 			ps = con.prepareStatement(query);
 			
-//			System.out.println(Share.id + ": inside create chatroom id");
-//			System.out.println(findUserNickname() + " : user nick");
-//			System.out.println(findSellerId() + " : seller id");
-//			System.out.println(Share.sellId + " : sellid");
 			ps.setString(1, Share.id);
 			ps.setString(2, findUserNickname());
 //			ps.setString(3, findSellerId());
@@ -587,6 +583,7 @@ public class Dao_Home {
 			Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
 			Statement st = con.createStatement();
 			
+//			String query = "select chatid, userid, sellerid from chat where userid = '" + Share.id + "' and sellid = " + Share.sellId;
 			String query = "select chatid, userid, sellerid from chat where userid = '" + Share.id + "' and sellid = " + Share.sellId;
 			
 			ResultSet rs = st.executeQuery(query);

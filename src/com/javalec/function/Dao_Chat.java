@@ -46,8 +46,6 @@ public class Dao_Chat {
 					+ "values(?, ?, now(), ?)";
 			
 			ps = con.prepareStatement(query);
-//			System.out.println(Share.chatid + "adsasdasdasdasdasd chatid");
-//			System.out.println(Share.id);
 			ps.setInt(1, Share.chatid);
 			ps.setString(2, chatText);
 			ps.setString(3, Share.id);
@@ -72,8 +70,6 @@ public class Dao_Chat {
 					+ "values(?, ?, now(), ?)";
 			
 			ps = con.prepareStatement(query);
-//			System.out.println(Share.chatid + "adsasdasdasdasdasd chatid");
-//			System.out.println(Share.id);
 			ps.setInt(1, Share.chatid);
 			
 			// Create a ByteArrayInputStream from the byte array
@@ -103,9 +99,6 @@ public class Dao_Chat {
 					+ "values(?, ?)";
 			
 			ps = con.prepareStatement(query);
-//			System.out.println(Share.chatid + "adsasdasdasdasdasd chatid");
-//			System.out.println(Share.id);
-			System.out.println(Share.checkUser);
 			ps.setString(1, Share.id);
 			ps.setString(2, Share.checkUser);
 			
@@ -235,7 +228,8 @@ public class Dao_Chat {
 	        		+ "JOIN sell s ON s.sellid = c.sellid "
 	        		+ "JOIN chat_text_detail cd ON cd.chatid = c.chatid "
 	        		+ "JOIN user u ON u.userid = cd.userid "
-	        		+ "WHERE c.chatid = " + Share.chatid;
+	        		+ "WHERE c.chatid = " + Share.chatid + " "
+	        				+ "order by formatted_date desc";
 
 	        try (Statement st = con.createStatement();
 	             ResultSet textRs = st.executeQuery(textQuery)) {
@@ -282,31 +276,31 @@ public class Dao_Chat {
 	}
 	
 	// 챗 카운트 
-	public int findChatCount() {
-		int chatCoun = 0;
-		try {
-	        Class.forName("com.mysql.cj.jdbc.Driver");
-	        Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
-	        Statement st = con.createStatement();
-	        
-	        String query = "SELECT count(*) "
-	        		+ "	                FROM chat_text_detail cd "
-	        		+ "	                JOIN chat c ON c.chatid = cd.chatid "
-	        		+ "	                JOIN sell s ON s.sellid = c.sellid "
-	        		+ "	                JOIN user u ON u.userid = s.userid "
-	        		+ "	                AND c.chatid = " + Share.chatid;
-	        
-	        ResultSet rs = st.executeQuery(query);
-	        if(rs.next()) {
-	        	chatCoun = rs.getInt(1);
-	        }
-	        con.close();
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-		return chatCoun;
-	}
+//	public int findChatCount() {
+//		int chatCoun = 0;
+//		try {
+//	        Class.forName("com.mysql.cj.jdbc.Driver");
+//	        Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+//	        Statement st = con.createStatement();
+//	        
+//	        String query = "SELECT count(*) "
+//	        		+ "	                FROM chat_text_detail cd "
+//	        		+ "	                JOIN chat c ON c.chatid = cd.chatid "
+//	        		+ "	                JOIN sell s ON s.sellid = c.sellid "
+//	        		+ "	                JOIN user u ON u.userid = s.userid "
+//	        		+ "	                AND c.chatid = " + Share.chatid;
+//	        
+//	        ResultSet rs = st.executeQuery(query);
+//	        if(rs.next()) {
+//	        	chatCoun = rs.getInt(1);
+//	        }
+//	        con.close();
+//		}
+//		catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		return chatCoun;
+//	}
 	
 	
 	
@@ -325,10 +319,8 @@ public class Dao_Chat {
 			
 			ResultSet rs = st.executeQuery(query);
 			while(rs.next()) {
-				System.out.println("right");
 				Dto_Chat dto = new Dto_Chat(rs.getString(1));
 				dtoList.add(dto);
-				System.out.println(dtoList);
 			}
 			
 			con.close();
@@ -376,8 +368,6 @@ public class Dao_Chat {
 			Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
 			Statement st = con.createStatement();
 			
-			System.out.println(Share.checkUser + "    1");
-			System.out.println(Share.id);
 			String query = "select userid, block_user from block_list "
 					+ "where userid = '"+Share.checkUser+"' and block_user = '" + Share.id+ "'";
 					
