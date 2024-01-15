@@ -13,13 +13,30 @@ public class Dto_Write {
 	String start_date;
 	String postid;
 	
+	// 추가
+	String nickname;
+	String profile_image;
+	String sellerImage;
+	
+	
 		
 	public Dto_Write() {
 		
 	}
 	
-
+	// 추가
 	
+	public Dto_Write(String userid, String postid, String nickname, String profile_image) {
+		super();
+		this.userid = userid;
+		this.postid = postid;
+		this.nickname = nickname;
+		this.profile_image = profile_image;
+	}
+
+
+
+
 	public Dto_Write(String userid) {
 		super();
 		this.userid = userid;
@@ -152,6 +169,34 @@ public class Dto_Write {
 	public void setPostid(String postid) {
 		this.postid = postid;
 	}
+	// 추가
+
+	public String getNickname() {
+		return nickname;
+	}
+
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
+
+	public String getProfile_image() {
+		return profile_image;
+	}
+
+	public void setProfile_image(String profile_image) {
+		this.profile_image = profile_image;
+	}
+
+	public String getSellerImage() {
+		return sellerImage;
+	}
+
+	public void setSellerImage(String sellerImage) {
+		this.sellerImage = sellerImage;
+	}
+	
+	
+	
 	
 	
 	
