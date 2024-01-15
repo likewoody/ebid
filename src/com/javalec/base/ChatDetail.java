@@ -109,6 +109,8 @@ public class ChatDetail extends JDialog {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowActivated(WindowEvent e) {
+				Thread th = new TestThread();
+				th.start();
 				if (Share.checkNewChat) {
 					newChatInit();
 					
@@ -120,9 +122,11 @@ public class ChatDetail extends JDialog {
 					if (currentCount > previousCount) {
 						tableInit();
 						searchDB();
+						
 						previousCount = currentCount;
 					}
 				}
+				
 			}
 
 			@Override
@@ -592,5 +596,15 @@ public class ChatDetail extends JDialog {
 	        e.printStackTrace();
 	        return null;
 	    }
+	}
+	
+	private class TestThread extends Thread {
+
+		@Override
+		public void run() {
+			tableInit();
+			searchDB();
+		}
+		
 	}
 }
