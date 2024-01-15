@@ -441,6 +441,27 @@ public class Dao_Chat {
 		}
 	}
 	
+	// 먼저 chat_text_detail 삭제
+	public void deleteChatDetail(int chatId) {
+		PreparedStatement ps = null;
+		
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+			
+			String query = "delete from chat_text_detail where chatid = " + chatId;
+			
+			ps = con.prepareStatement(query);
+			
+			ps.executeUpdate();
+			
+			con.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	// delete chat 삭제
 	public void deleteChat(int chatId) {
 		
@@ -450,7 +471,7 @@ public class Dao_Chat {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
 			
-			String query = "Delete from chat where chatid = '" + chatId + "'";
+			String query = "Delete from chat where chatid = " + chatId;
 			
 			ps = con.prepareStatement(query);
 			

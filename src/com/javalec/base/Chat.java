@@ -332,9 +332,18 @@ public class Chat extends JDialog {
 		Dao_Chat dao = new Dao_Chat();
 		ArrayList<Dto_Chat> dto = dao.searchChat();
 		
+		
+		
 		int i = innerTable.getSelectedRow();
+		// chatid 저장
 		Share.chatid = dto.get(i).getChatId();
-		dao.deleteChat(dto.get(i).getChatId());
+		
+		
+		// 먼저 detail의 텍스트들을 삭제 한 후 밑에 chatting room을 삭제한다.
+		dao.deleteChatDetail(Share.chatid);
+		
+		// deleteChat에 인자값 chatId 넣어주면서 chatId 삭제
+		dao.deleteChat(Share.chatid);
 		tableInit();
 		searchChat();
 		

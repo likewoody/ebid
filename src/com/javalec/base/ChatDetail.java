@@ -85,6 +85,7 @@ public class ChatDetail extends JDialog {
 	private boolean fileExist;
 	private byte[] bytes = null;
 	private int previousCount = 0;
+	private int currentCount = 0;
 
 	/**
 	 * Launch the application.
@@ -116,18 +117,17 @@ public class ChatDetail extends JDialog {
 						
 					}
 					else {
-						int currentCount = dao.findChatCount();
+						currentCount = dao.findChatCount();
 						
 						// 이전 현재 카운트와 이전 카운트 비교 이전 카운트가 더 작다면 테이블 초기화, serachDB
-						for (int i = previousCount; previousCount < currentCount; i++) {
-							tableInit();
-							searchDB();
+						if (currentCount > previousCount) {
+//							tableInit();
+//							searchDB();
 							
-//							TestThread th = new TestThread();
-//							th.start();
+							TestThread th = new TestThread();
+							th.start();
+							previousCount++;
 						}
-						Share.count = currentCount - previousCount;
-						previousCount = currentCount;
 					}
 					
 				}
@@ -610,13 +610,22 @@ public class ChatDetail extends JDialog {
 	    }
 	}
 	
-//	private class TestThread extends Thread {
-//
-//		@Override
-//		public void run() {
-//			tableInit();
-//			searchDB();
-//		}
-//		
-//	}
+	private class TestThread extends Thread {
+
+		@Override
+		public void run() {
+			while(previousCount != currentCount) {
+				tableInit();
+				searchDB();
+				
+				try {
+					Thread.sleep(1000);
+				}
+				catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+	}
 }
