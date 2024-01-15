@@ -122,8 +122,8 @@ public class ChatDetail extends JDialog {
 						
 						// 이전 현재 카운트와 이전 카운트 비교 이전 카운트가 더 작다면 테이블 초기화, serachDB
 //						if (currentCount > previousCount) {
-						tableInit();
-						searchDB();
+//						tableInit();
+//						searchDB();
 							
 						thread th = new thread();
 						th.start();
