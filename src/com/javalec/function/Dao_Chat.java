@@ -150,11 +150,11 @@ public class Dao_Chat {
 			Connection con = DriverManager.getConnection(url_mysql,id_mysql,pw_mysql);
 			Statement st = con.createStatement();
 			
-			String query = "SELECT s.sellerImage, s.nickname, c.title, date_format(c.date, '%y.%m.%d %H:%i'), c.chatid "
-					+ "					from chat c, sell s "
-					+ "					where c.sellid = s.sellid "
-					+ "                    and c.userid = '" + Share.id+ "' "
-					+ "					order by c.date desc;" ;
+			String query = "SELECT s.sellerImage, s.nickname, c.title, DATE_FORMAT(c.date, '%y.%m.%d %H:%i'), c.chatid  "
+					+ "FROM chat c, sell s "
+					+ "WHERE (c.userid = '" + Share.id + "' OR c.sellerid = '" + Share.id + "') "
+					+ "AND c.sellid = s.sellid "
+					+ "ORDER BY c.date DESC;" ;
 			
 			ResultSet rs = st.executeQuery(query);
 			
@@ -178,41 +178,41 @@ public class Dao_Chat {
 		return dtoList;
 	}
 	
-	public ArrayList<Dto_Chat> searchChatforSeller() {
-		ArrayList<Dto_Chat> dtoList = new ArrayList<Dto_Chat>();
-		
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection con = DriverManager.getConnection(url_mysql,id_mysql,pw_mysql);
-			Statement st = con.createStatement();
-			
-			String query = "SELECT s.sellerImage, s.nickname, c.title, date_format(c.date, '%y.%m.%d %H:%i'), c.chatid "
-					+ "					from chat c, sell s "
-					+ "					where c.sellid = s.sellid "
-					+ "					and c.sellerid = '" + Share.chatSellerId + "'"
-					+ "					order by c.date desc" ;
-			
-			ResultSet rs = st.executeQuery(query);
-			
-			while(rs.next()) {
-				byte[] profile_img = rs.getBytes(1);
-				String nick = rs.getString(2);
-				String post_title = rs.getString(3);
-				String chatDate = rs.getString(4);
-				int chatId = rs.getInt(5);
-//				String userId = rs.getString(6);
-//				String sellUserId = rs.getString(7);
-//				int date = rs.getInt(6);
-				
-				Dto_Chat dto = new Dto_Chat(profile_img, nick, post_title, chatDate, chatId);
-				dtoList.add(dto);
-			}
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-		return dtoList;
-	}
+//	public ArrayList<Dto_Chat> searchChatforSeller() {
+//		ArrayList<Dto_Chat> dtoList = new ArrayList<Dto_Chat>();
+//		
+//		try {
+//			Class.forName("com.mysql.cj.jdbc.Driver");
+//			Connection con = DriverManager.getConnection(url_mysql,id_mysql,pw_mysql);
+//			Statement st = con.createStatement();
+//			
+//			String query = "SELECT s.sellerImage, s.nickname, c.title, date_format(c.date, '%y.%m.%d %H:%i'), c.chatid "
+//					+ "					from chat c, sell s "
+//					+ "					where c.sellid = s.sellid "
+//					+ "					and c.sellerid = '" + Share.chatSellerId + "'"
+//					+ "					order by c.date desc" ;
+//			
+//			ResultSet rs = st.executeQuery(query);
+//			
+//			while(rs.next()) {
+//				byte[] profile_img = rs.getBytes(1);
+//				String nick = rs.getString(2);
+//				String post_title = rs.getString(3);
+//				String chatDate = rs.getString(4);
+//				int chatId = rs.getInt(5);
+////				String userId = rs.getString(6);
+////				String sellUserId = rs.getString(7);
+////				int date = rs.getInt(6);
+//				
+//				Dto_Chat dto = new Dto_Chat(profile_img, nick, post_title, chatDate, chatId);
+//				dtoList.add(dto);
+//			}
+//		}
+//		catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		return dtoList;
+//	}
 	
 	// 채팅방 안에 들어갔을 때 채팅 상황
 	public ArrayList<Dto_Chat> findChatDeatil() {
@@ -433,5 +433,33 @@ public class Dao_Chat {
 		catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public boolean deleteNoneTitle() {
+		boolean checkNoneData = false;
+		PreparedStatement ps = null;
+		
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+			
+			String query = "delete from chat where title is null and chatid = " + Share.chatid;
+			
+			ps = con.prepareStatement(query);
+			
+			try {
+				ps.executeUpdate();
+				checkNoneData = true;
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			con.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return checkNoneData;
 	}
 }

@@ -214,7 +214,7 @@ public class Chat extends JDialog {
 					if (e.getClickCount() == 2) {
 						// 챗 아이디를 찾기 위함
 						Dao_Chat dao = new Dao_Chat();
-						if (Share.id.equals(Share.chatUserId)) {
+//						if (Share.id.equals(Share.chatUserId)) {
 							ArrayList<Dto_Chat> dto = dao.searchChatforUser();
 							
 							
@@ -228,22 +228,22 @@ public class Chat extends JDialog {
 							ChatDetail cd = new ChatDetail();
 							cd.setVisible(true);
 							dispose();
-						}
-						if (Share.id.equals(Share.chatSellerId)) {
-							ArrayList<Dto_Chat> dto = dao.searchChatforSeller();
-							
-							
-							int i = innerTable.getSelectedRow();
-							Share.chatid = dto.get(i).getChatId();
-							
-							// chatuser 와 share.id와 비교 같다면 sellUserId을 chatdeatil로 보내주고 같지 않다면 chatuser을 보내준다.
-							if (! Share.id.equals(dto.get(i).getChatUser())) Share.checkUser = dto.get(i).getChatUser();
-							else Share.checkUser = dto.get(i).getSellUser();
-						
-							ChatDetail cd = new ChatDetail();
-							cd.setVisible(true);
-							dispose();
-						}
+//						}
+//						if (Share.id.equals(Share.chatSellerId)) {
+//							ArrayList<Dto_Chat> dto = dao.searchChatforSeller();
+//							
+//							
+//							int i = innerTable.getSelectedRow();
+//							Share.chatid = dto.get(i).getChatId();
+//							
+//							// chatuser 와 share.id와 비교 같다면 sellUserId을 chatdeatil로 보내주고 같지 않다면 chatuser을 보내준다.
+//							if (! Share.id.equals(dto.get(i).getChatUser())) Share.checkUser = dto.get(i).getChatUser();
+//							else Share.checkUser = dto.get(i).getSellUser();
+//						
+//							ChatDetail cd = new ChatDetail();
+//							cd.setVisible(true);
+//							dispose();
+//						}
 					}
 				}
 			});
@@ -300,7 +300,7 @@ public class Chat extends JDialog {
 		Dao_Chat dao = new Dao_Chat();
 		
 		// 유저가 일반 사용자 일 때
-		if (Share.id.equals(Share.chatUserId)) { 
+//		if (Share.id.equals(Share.chatUserId)) { 
 			for (Dto_Chat dto : dao.searchChatforUser()) {
 				outerTable.addRow(new Object[] {
 						false,
@@ -309,18 +309,18 @@ public class Chat extends JDialog {
 								+ "%s<h4 style = 'font-weight:normal;text-align:right';>%s</h4></html>",  dto.getNickname(), dto.getTitle(), dto.getChatDate())
 				});
 			}
-		}
+//		}
 		// 유저가 일반 판매자 일 때
-		if(Share.id.equals(Share.chatSellerId)) {
-			for (Dto_Chat dto : dao.searchChatforSeller()) {
-				outerTable.addRow(new Object[] {
-						false,
-						dto.getProfile_image(),
-						String.format("<html><<h2>%s</h2>"
-								+ "%s<h4 style = 'font-weight:normal;text-align:right';>%s</h4></html>",  dto.getNickname(), dto.getTitle(), dto.getChatDate())
-				});
-			}
-		}
+//		if(Share.id.equals(Share.chatSellerId)) {
+//			for (Dto_Chat dto : dao.searchChatforSeller()) {
+//				outerTable.addRow(new Object[] {
+//						false,
+//						dto.getProfile_image(),
+//						String.format("<html><<h2>%s</h2>"
+//								+ "%s<h4 style = 'font-weight:normal;text-align:right';>%s</h4></html>",  dto.getNickname(), dto.getTitle(), dto.getChatDate())
+//				});
+//			}
+//		}
 		innerTable.getTableHeader().setReorderingAllowed(false);
 		innerTable.getColumnModel().getColumn(1).setCellRenderer(new ImageRender());
 		innerTable.setRowHeight(80);

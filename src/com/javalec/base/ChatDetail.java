@@ -111,6 +111,7 @@ public class ChatDetail extends JDialog {
 			public void windowActivated(WindowEvent e) {
 				if (Share.checkNewChat) {
 					newChatInit();
+					
 				}
 				else {
 					int currentCount = dao.findChatCount();
@@ -123,6 +124,16 @@ public class ChatDetail extends JDialog {
 					}
 				}
 			}
+
+			@Override
+			// 화면이 꺼진 후 데이터가 아무 것도 입력되지 않았다면 삭제
+			public void windowDeactivated(WindowEvent e) {
+				if (dao.deleteNoneTitle()) {
+					dao.deleteNoneTitle();
+				}
+			}
+			
+			
 		});
 		setFont(new Font("Lucida Grande", Font.BOLD, 27));
 		setTitle("채팅방");
@@ -500,6 +511,8 @@ public class ChatDetail extends JDialog {
 		innerTable.setRowHeight(100);
 		
 	}
+	
+	// new chat 아무것도 입력 안하고 나갈 시 삭제하기
 	
 	// 채팅 입력
 	private void insertChat() {
