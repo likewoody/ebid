@@ -619,7 +619,7 @@ public class ChatDetail extends JDialog {
 
 		@Override
 		public void run() {
-			while(true) {
+			while(getInChattingRoom) {
 				tableInit();
 				searchDB();
 				
