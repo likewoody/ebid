@@ -109,8 +109,6 @@ public class ChatDetail extends JDialog {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowActivated(WindowEvent e) {
-				Thread th = new TestThread();
-				th.start();
 				if (Share.checkNewChat) {
 					newChatInit();
 					
@@ -261,7 +259,11 @@ public class ChatDetail extends JDialog {
 						lbText.setIcon(null);
 						fileExist = false;
 					}
-					else insertChat();
+					else  {
+						insertChat();
+						tableInit();
+						searchDB();
+					}
 				}
 			});
 			btnInsert.setFont(new Font("Helvetica", Font.BOLD, 14));
