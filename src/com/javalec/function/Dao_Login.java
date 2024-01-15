@@ -10,8 +10,8 @@ import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.javalec.base.Register;
-import com.mysql.cj.exceptions.RSAException;
+//import com.javalec.base.Register;
+//import com.mysql.cj.exceptions.RSAException;
 
 public class Dao_Login {
 
@@ -73,7 +73,29 @@ public class Dao_Login {
 	 
 	 
 	 
-	 public Dao_Login(String userid, String pw, String phone, String email) {
+	 public Dao_Login(String userid, String pw, String phone, String email, String nickname, String join_date,
+			String address) {
+		super();
+		this.userid = userid;
+		this.pw = pw;
+		this.phone = phone;
+		this.email = email;
+		this.nickname = nickname;
+		this.join_date = join_date;
+		this.address = address;
+	}
+
+	public Dao_Login(String userid, String pw, String phone, String email, String nickname, String address) {
+		super();
+		this.userid = userid;
+		this.pw = pw;
+		this.phone = phone;
+		this.email = email;
+		this.nickname = nickname;
+		this.address = address;
+	}
+
+	public Dao_Login(String userid, String pw, String phone, String email) {
 		super();
 		this.userid = userid;
 		this.pw = pw;
@@ -163,10 +185,7 @@ public class Dao_Login {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection conn = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
-			PreparedStatement pstmt = conn.prepareStatement(B);
-
-						
-			
+			PreparedStatement pstmt = conn.prepareStatement(B);		
 					
 			  											// 사용자 ID를 설정
 			pstmt.setString(1, this.userid);
@@ -175,20 +194,18 @@ public class Dao_Login {
 					
 				if ( rs.next()) {
 						passableId = false;					        
-				
-					//	System.out.println("Duplicate ID found: " + this.userid);
+
 				}else { 
-									
-							
+						
 			    // 아이디가 중복되지 않으면 데이터베이스에 등록
-				 //   System.out.println("ID not found. Registering: " + this.userid);
+
 			if ( this.userid != null) {   
 	            String insertQuery = "INSERT INTO user (userid) VALUES (?)";
 	            PreparedStatement insertPstmt = conn.prepareStatement(insertQuery);
 	            insertPstmt.setString(1, this.userid);
 	            insertPstmt.executeUpdate();
 			}else {
-//				 System.out.println("Error: this.userid is null");
+
 			}
 				}
 	        
@@ -322,25 +339,21 @@ public class Dao_Login {
         String currentDateAndTime = sdf.format(new Date());
 
 		
-	    String A = "UPDATE user SET pw = ?, phone = ?, nickname = ?, join_date = ?, address = ? WHERE userid = ?";
+	    String A = "UPDATE user SET pw = ?, phone = ?, email = ?, nickname = ?, join_date = ?, address = ? WHERE userid = ?";
 	   
 	    try {
 	        Class.forName("com.mysql.cj.jdbc.Driver");
 	        Connection conn = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
-	        
-	        
-
-	        
-	        
-	        
+	 
 	        //업데이트
 	        PreparedStatement pstmt = conn.prepareStatement(A);
 	        pstmt.setString(1, pw);
 	        pstmt.setString(2, phone);
-	        pstmt.setString(3, nickname);
-	        pstmt.setString(4, currentDateAndTime);
-	        pstmt.setString(5, address);
-	        pstmt.setString(6, userid);
+	        pstmt.setString(3, email);
+	        pstmt.setString(4, nickname);
+	        pstmt.setString(5, currentDateAndTime);
+	        pstmt.setString(6, address);
+	        pstmt.setString(7, userid);
 
 	        // 업데이트 실행
 	        pstmt.executeUpdate();

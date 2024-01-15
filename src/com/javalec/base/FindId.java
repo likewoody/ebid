@@ -11,6 +11,8 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
+import com.javalec.function.Dao_Login;
+
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -42,8 +44,8 @@ public class FindId extends JDialog {
 				}
 			}
 		});
-	}
-
+	}		
+	
 	/**
 	 * Create the dialog.
 	 */
@@ -85,7 +87,7 @@ public class FindId extends JDialog {
 			fIdBackground.setIcon(new ImageIcon(Main.class.getResource("/com/javalec/images/logindetailBackground.png")));
 		}
 		return fIdBackground;
-	}
+	}	
 	private JLabel getLblNewLabel() {
 		if (lblNewLabel == null) {
 			lblNewLabel = new JLabel("아이디 찾기");
@@ -167,13 +169,18 @@ public class FindId extends JDialog {
 		        return;
 		    }
 		 
-
-		 com.javalec.function.Dao_Login dao = new com.javalec.function.Dao_Login();
+		 			
+		 	
+		 Dao_Login dao = new Dao_Login();
 		 dao.setNickname(name);
 		 dao.setPhone(phone);
 
 		    
-		    if (!name.isEmpty() && phone.isEmpty()) {
+		 if (name.isEmpty() ) {
+			 JOptionPane.showMessageDialog(null, "닉네임을 작성해주세요.", "알림", JOptionPane.WARNING_MESSAGE);
+			 return;
+		 }
+		     else if ( phone.isEmpty()) {
 		        JOptionPane.showMessageDialog(null, "전화번호를 작성해주세요.", "알림", JOptionPane.WARNING_MESSAGE);
 		        return;
 		    }
@@ -182,10 +189,6 @@ public class FindId extends JDialog {
 		        return;
 		    }
 
-		    if (name.isEmpty() && !phone.isEmpty()) {
-		        JOptionPane.showMessageDialog(null, "닉네임을 작성해주세요.", "알림", JOptionPane.WARNING_MESSAGE);
-		        return;
-		    }
 
 		
 		    if (dao.findId()) {
@@ -199,7 +202,7 @@ public class FindId extends JDialog {
 		            options,
 		            options[0]
 		        );			
-		        		
+		        			
 		        if (choice == 0) {
 		        
 		            dispose();
@@ -209,28 +212,7 @@ public class FindId extends JDialog {
 		
 		    }
 	}
-//	
-//	   if (dao.findId()) {
-//	        String foundUserId = dao.getUserid();
-//	        // 아이디를 알려주는 메시지 창에 닫기 버튼 추가
-//	        Object[] options = {"닫기"};
-//	        int choice = JOptionPane.showOptionDialog(null,"아이디는 " + foundUserId + " 입니다.", "아이디 찾기 결과",
-//	            JOptionPane.DEFAULT_OPTION,
-//	            JOptionPane.INFORMATION_MESSAGE,
-//	            null,
-//	            options,
-//	            options[0]
-//	        );			
-//	        		
-//	        if (choice == 0) {
-//	        
-//	            dispose();
-//	    } else {
-//	        JOptionPane.showMessageDialog(null, "일치하는 정보가 없습니다. 다시 입력해 주새요.", "알림", JOptionPane.ERROR_MESSAGE);
-//	    }
-//	
-//	    }
-//}
+
 	public void cancelclick() {
 		int cancel = JOptionPane.showConfirmDialog(null, "아이디 찾기를 취소 하시겠습니까?", "알림", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
 		if (cancel == JOptionPane.YES_OPTION) {

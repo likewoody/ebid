@@ -125,7 +125,7 @@ public class Login extends JDialog {
 			btnLogin = new JButton("로그인");
 			btnLogin.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-										Login();
+										Loginin();
 				}
 			});
 			btnLogin.setFont(new Font("Lucida Grande", Font.BOLD, 14));
@@ -292,7 +292,7 @@ public class Login extends JDialog {
 	    }
 //	 // 중복되는 코드 모아주는 매소드   ************************************************
 	
-	public void Login() {
+	public void Loginin() {
 			Share s = new Share();
 			
 			char[] c = tfpw.getPassword();
@@ -321,7 +321,6 @@ public class Login extends JDialog {
 		    	 
 		    	
 		    	 if (dao.LoginAction()) {
-//		    	        JOptionPane.showMessageDialog(null, "환영합니다.", "알림", JOptionPane.INFORMATION_MESSAGE);
 
 		    	        // 로그인 성공 시 홈 화면으로 이동
 		    	        Home home = new Home();
@@ -329,7 +328,6 @@ public class Login extends JDialog {
 
 		    	        // 현재 로그인 창은 닫음
 		    	        dispose();
-//		    	        this.setVisible(false);
 		    	    } else {
 		    	        JOptionPane.showMessageDialog(null, "아이디 또는 비밀번호가 올바르지 않습니다", "알림", JOptionPane.ERROR_MESSAGE);
 

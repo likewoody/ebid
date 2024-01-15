@@ -185,20 +185,17 @@ public class FindPw extends JDialog {
 	        String phone = tfphone.getText().trim();
 
 	        if (id.isEmpty() || name.isEmpty() || phone.isEmpty()) {
-	            JOptionPane.showMessageDialog(null, "아이디, 이름, 전화번호를 모두 입력해주세요.", "알림", JOptionPane.WARNING_MESSAGE);
+	            JOptionPane.showMessageDialog(null, "아이디, 닉네임, 전화번호를 모두 입력해주세요.", "알림", JOptionPane.WARNING_MESSAGE);
 	            return;
 	        }
-	        else if (!tfname.getText().matches("^[가-힣]{3}$")) {
-		        JOptionPane.showMessageDialog(this, "이름을 한글 3글자로 입력해 주세요.", "알림", JOptionPane.WARNING_MESSAGE);
-		        return;
-		    }
+	   
 	        else if (!isValidPhoneNumber(phone)) {
 		        JOptionPane.showMessageDialog(null, "올바른 전화번호 형식이 아닙니다. (010-xxxx-xxxx)", "알림", JOptionPane.WARNING_MESSAGE);
 		        return;
 		    }
 
 	        com.javalec.function.Dao_Login dao = new com.javalec.function.Dao_Login(id);
-	        dao.setNickname(name);
+	        dao.setNickname(name);	        
 	        dao.setPhone(phone);
 
 	        if (dao.findPw()) {
@@ -221,7 +218,7 @@ public class FindPw extends JDialog {
 		if (cancel == JOptionPane.YES_OPTION) {
 		dispose();
 			
-			
+					
 		}
 	}
 	private boolean isValidPhoneNumber(String phoneNumber) {
