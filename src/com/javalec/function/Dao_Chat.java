@@ -48,7 +48,6 @@ public class Dao_Chat {
 			ps = con.prepareStatement(query);
 //			System.out.println(Share.chatid + "adsasdasdasdasdasd chatid");
 //			System.out.println(Share.id);
-			System.out.println(Share.chatid + " : insdie insert chat");
 			ps.setInt(1, Share.chatid);
 			ps.setString(2, chatText);
 			ps.setString(3, Share.id);
@@ -143,7 +142,7 @@ public class Dao_Chat {
 	
 	
 	// read
-	public ArrayList<Dto_Chat> searchChat() {
+	public ArrayList<Dto_Chat> searchChatforUser() {
 		ArrayList<Dto_Chat> dtoList = new ArrayList<Dto_Chat>();
 		
 		try {
@@ -156,6 +155,42 @@ public class Dao_Chat {
 					+ "					where c.sellid = s.sellid "
 					+ "                    and c.userid = '" + Share.id+ "' "
 					+ "					order by c.date desc;" ;
+			
+			ResultSet rs = st.executeQuery(query);
+			
+			while(rs.next()) {
+				byte[] profile_img = rs.getBytes(1);
+				String nick = rs.getString(2);
+				String post_title = rs.getString(3);
+				String chatDate = rs.getString(4);
+				int chatId = rs.getInt(5);
+//				String userId = rs.getString(6);
+//				String sellUserId = rs.getString(7);
+//				int date = rs.getInt(6);
+				
+				Dto_Chat dto = new Dto_Chat(profile_img, nick, post_title, chatDate, chatId);
+				dtoList.add(dto);
+			}
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return dtoList;
+	}
+	
+	public ArrayList<Dto_Chat> searchChatforSeller() {
+		ArrayList<Dto_Chat> dtoList = new ArrayList<Dto_Chat>();
+		
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection(url_mysql,id_mysql,pw_mysql);
+			Statement st = con.createStatement();
+			
+			String query = "SELECT s.sellerImage, s.nickname, c.title, date_format(c.date, '%y.%m.%d %H:%i'), c.chatid "
+					+ "					from chat c, sell s "
+					+ "					where c.sellid = s.sellid "
+					+ "					and c.sellerid = '" + Share.chatSellerId + "'"
+					+ "					order by c.date desc" ;
 			
 			ResultSet rs = st.executeQuery(query);
 			
@@ -288,7 +323,6 @@ public class Dao_Chat {
 					+ "where chatid = " + Share.chatid;
 			
 			ResultSet rs = st.executeQuery(query);
-			System.out.println(Share.chatid);
 			while(rs.next()) {
 				System.out.println("right");
 				Dto_Chat dto = new Dto_Chat(rs.getString(1));

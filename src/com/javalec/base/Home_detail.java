@@ -270,18 +270,19 @@ public class Home_detail extends JDialog {
 			lbBid.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					
-					if (! dao.checkBlock()) {
-						if (!dao.findChatExist()) {
-							dao.createChatRoom();
-							Share.chatid = dao.findChatId();
-							Share.checkNewChat = true;
+					if (Share.chatUserId != Share.chatSellerId) {
+						if (! dao.checkBlock()) {
+							if (!dao.findChatExist()) {
+								dao.createChatRoom();
+								Share.chatid = dao.findChatId();
+								Share.checkNewChat = true;
+							}
+							ChatDetail cd = new ChatDetail();
+							cd.setVisible(true);
+							dispose();
 						}
-						ChatDetail cd = new ChatDetail();
-						cd.setVisible(true);
-						dispose();
+						else JOptionPane.showMessageDialog(getRootPane(), "상대방에게 차단된 사용자입니다.", "알림", JOptionPane.ERROR_MESSAGE);
 					}
-					else JOptionPane.showMessageDialog(getRootPane(), "상대방에게 차단된 사용자입니다.", "알림", JOptionPane.ERROR_MESSAGE);
 				}
 			});
 			lbBid.setHorizontalAlignment(SwingConstants.CENTER);

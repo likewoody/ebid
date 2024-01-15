@@ -36,4 +36,7 @@ public class Share {
 	// 채팅이 이미지인지 확인
 	public static boolean checktextImage;
 	
+	public static String chatUserId;
+	public static String chatSellerId;
+	
 }

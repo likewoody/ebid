@@ -62,7 +62,7 @@ public class Dao_Home {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
 			
-			String query = "insert into chat (userid, nickname, date, sellid, userImage) values (?, ?, now(), ?, ?)";
+			String query = "insert into chat (userid, nickname, date, sellid, userImage, sellerid) values (?, ?, now(), ?, ?, ?)";
 			
 			ps = con.prepareStatement(query);
 			
@@ -77,6 +77,7 @@ public class Dao_Home {
 			
 			ByteArrayInputStream inputStream = new ByteArrayInputStream(findBuyerImage());
 			ps.setBlob(4, inputStream);
+			ps.setString(5, findSellerId());
 			
 			ps.executeUpdate();
 			
@@ -584,17 +585,20 @@ public class Dao_Home {
 			Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
 			Statement st = con.createStatement();
 			
-			String query = "select chatid from chat where userid = '" + Share.id + "' and sellid = " + Share.sellId;
+			String query = "select chatid, userid, sellerid from chat where userid = '" + Share.id + "' and sellid = " + Share.sellId;
 			
 			ResultSet rs = st.executeQuery(query);
 		
 			if(rs.next()) {
 				newChatId = rs.getInt(1);
+				Share.chatUserId = rs.getString(2);
+				Share.chatSellerId = rs.getString(3);
 			}
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
+		
 		return newChatId;
 	}
 	
