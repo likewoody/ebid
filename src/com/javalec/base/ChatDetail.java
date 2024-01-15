@@ -390,7 +390,7 @@ public class ChatDetail extends JDialog {
 	            rowData = new Object[]{
 	                    dto.getProfile_image(),
 	                    String.format("%s : ", dto.getDetailUser()),
-	                    String.format("%s     %s", dto.getDetailtext(), dto.getDetailDate())
+	                    String.format("<html>%s     <h5 style='text-align:right;'>%s</h5></html>", dto.getDetailtext(), dto.getDetailDate())
 	            };
 	        } else {
 	            rowData = new Object[]{
