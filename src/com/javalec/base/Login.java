@@ -293,9 +293,14 @@ public class Login extends JDialog {
 //	 // 중복되는 코드 모아주는 매소드   ************************************************
 	
 	public void Login() {
+			Share s = new Share();
+			
+			char[] c = tfpw.getPassword();
+			String password = new String(c);
+		Share.id = 	tfId.getText();
+		Share.pw =  password;
 		
-		
-		
+				
 		 String inputid = tfId.getText().trim();
 		    String inputPw = new String(tfpw.getPassword()).trim();
 		    			
