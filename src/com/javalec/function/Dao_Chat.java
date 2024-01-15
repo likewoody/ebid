@@ -150,7 +150,7 @@ public class Dao_Chat {
 			Connection con = DriverManager.getConnection(url_mysql,id_mysql,pw_mysql);
 			Statement st = con.createStatement();
 			
-			String query = "SELECT s.sellerImage, s.nickname, c.title, DATE_FORMAT(c.date, '%y.%m.%d %H:%i'), c.chatid  "
+			String query = "SELECT c.postimage, s.nickname, c.title, DATE_FORMAT(c.date, '%y.%m.%d %H:%i'), c.chatid  "
 					+ "FROM chat c, sell s "
 					+ "WHERE (c.userid = '" + Share.id + "' OR c.sellerid = '" + Share.id + "') "
 					+ "AND c.sellid = s.sellid "

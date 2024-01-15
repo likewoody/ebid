@@ -62,7 +62,7 @@ public class Dao_Home {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
 			
-			String query = "insert into chat (userid, nickname, date, sellid, userImage, sellerid) values (?, ?, now(), ?, ?, ?)";
+			String query = "insert into chat (userid, nickname, date, sellid, userImage, sellerid, postimage) values (?, ?, now(), ?, ?, ?, ?)";
 			
 			ps = con.prepareStatement(query);
 			
@@ -78,6 +78,8 @@ public class Dao_Home {
 			ByteArrayInputStream inputStream = new ByteArrayInputStream(findBuyerImage());
 			ps.setBlob(4, inputStream);
 			ps.setString(5, findSellerId());
+			ByteArrayInputStream inputStream2 = new ByteArrayInputStream(findChatPostImage());
+			ps.setBlob(6, inputStream2);
 			
 			ps.executeUpdate();
 			
@@ -602,7 +604,6 @@ public class Dao_Home {
 		return newChatId;
 	}
 	
-	//
 	public String findSellerId() {
 		String sellerId = "";
 		try {
@@ -622,6 +623,33 @@ public class Dao_Home {
 			e.printStackTrace();
 		}
 		return sellerId;
+	} 
+	
+	// chat table postimage instead of user image
+	public byte[] findChatPostImage() {
+		byte[] bytes = null;
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+			Statement st = con.createStatement();
+			
+			String query = "select max(post_image) from image i "
+					+ "left join post p on p.postid = i.postid "
+					+ "left join sell s on s.postid = p.postid "
+					+ "left join chat c on c.sellid = s.sellid "
+					+ "where s.sellid = " + Share.sellId;
+			
+			ResultSet rs = st.executeQuery(query);
+			
+			if(rs.next()) {
+				bytes = rs.getBytes(1);
+			}
+			con.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return bytes;
 	} 
 	
 	// find if chat already exist

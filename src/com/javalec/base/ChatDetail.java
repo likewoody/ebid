@@ -35,6 +35,7 @@ import com.javalec.function.Dao_Chat;
 import com.javalec.function.Dto_Chat;
 import com.javalec.function.Dto_Home;
 import com.javalec.function.Share;
+import com.javalec.function.TestThread;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -92,6 +93,8 @@ public class ChatDetail extends JDialog {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					TestThread th = new TestThread();
+					th.start();
 					ChatDetail dialog = new ChatDetail();
 					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 					dialog.setVisible(true);
@@ -261,8 +264,6 @@ public class ChatDetail extends JDialog {
 					}
 					else  {
 						insertChat();
-						tableInit();
-						searchDB();
 					}
 				}
 			});
@@ -600,13 +601,13 @@ public class ChatDetail extends JDialog {
 	    }
 	}
 	
-	private class TestThread extends Thread {
-
-		@Override
-		public void run() {
-			tableInit();
-			searchDB();
-		}
-		
-	}
+//	private class TestThread extends Thread {
+//
+//		@Override
+//		public void run() {
+//			tableInit();
+//			searchDB();
+//		}
+//		
+//	}
 }
