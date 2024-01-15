@@ -58,8 +58,6 @@ public class Writing extends JFrame {
 	private JLabel lbladdimage;
 	private JLabel lblimage;
 	private JButton btnPost;
-	private JLabel lblNewLabel_3;
-	private JLabel lblUserid;
 	private JLabel lblBackgroud;
 	
 	private final String url_mysql = Share.dbName;
@@ -113,8 +111,6 @@ public class Writing extends JFrame {
 		contentPane.add(getLbladdimage());
 		contentPane.add(getLblimage());
 		contentPane.add(getBtnPost());
-		contentPane.add(getLblNewLabel_3());
-		contentPane.add(getLblUserid());
 		contentPane.add(getImagePreviewLabel());
 		contentPane.add(getLblBackgroud());
 	}
@@ -274,24 +270,6 @@ public class Writing extends JFrame {
 		}
 		return btnPost;
 	}
-	private JLabel getLblNewLabel_3() {
-		if (lblNewLabel_3 == null) {
-			lblNewLabel_3 = new JLabel("아이디");
-			lblNewLabel_3.setFont(new Font("Dialog", Font.PLAIN, 10));
-			lblNewLabel_3.setHorizontalAlignment(SwingConstants.CENTER);
-			lblNewLabel_3.setBounds(289, 521, 47, 15);
-		}
-		return lblNewLabel_3;
-	}
-	private JLabel getLblUserid() {
-		if (lblUserid == null) {
-			lblUserid = new JLabel("");
-			lblUserid.setHorizontalAlignment(SwingConstants.CENTER);
-			lblUserid.setFont(new Font("Dialog", Font.PLAIN, 10));
-			lblUserid.setBounds(336, 520, 64, 16);
-		}
-		return lblUserid;
-	}
 	private JLabel getLblBackgroud() {
 		if (lblBackgroud == null) {
 			lblBackgroud = new JLabel("");
@@ -315,7 +293,7 @@ public class Writing extends JFrame {
 		Dao_Write dao = new Dao_Write();
 		Dto_Write dto = dao.userIdinput();
 	
-	//	lblUserid.setText(dto.getUserid());
+		lblUserid.setText(dto.getUserid());
 	}
 	
 	//***************추가입력 미리보기*******************
@@ -523,11 +501,9 @@ public class Writing extends JFrame {
     JOptionPane.showMessageDialog(null, "게시글이 등록되었습니다.");
    
     dispose();
-       
-    Home home = new Home();
-    home.setVisible(true);
-
         
+    MyPage mypage = new MyPage();
+    mypage.setVisible(true);
 	}
 
 
