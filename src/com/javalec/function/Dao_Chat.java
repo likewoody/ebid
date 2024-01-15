@@ -150,11 +150,19 @@ public class Dao_Chat {
 			Connection con = DriverManager.getConnection(url_mysql,id_mysql,pw_mysql);
 			Statement st = con.createStatement();
 			
-			String query = "SELECT c.postimage, s.nickname, c.title, DATE_FORMAT(c.date, '%y.%m.%d %H:%i'), c.chatid  "
-					+ "FROM chat c, sell s "
-					+ "WHERE (c.userid = '" + Share.id + "' OR c.sellerid = '" + Share.id + "') "
-					+ "AND c.sellid = s.sellid "
-					+ "ORDER BY c.date DESC;" ;
+			String query = "SELECT "
+					+ "    c.postimage, "
+					+ "    CASE "
+					+ "        WHEN c.userid = '"+Share.id+"' THEN s.nickname " // -- Buyer's nickname
+					+ "        WHEN c.sellerid = '"+Share.id+"' THEN c.nickname  " // -- Seller's nickname
+					+ "    END AS user_nickname, "
+					+ "    c.title, "
+					+ "    DATE_FORMAT(c.date, '%y.%m.%d %H:%i') AS formatted_date, "
+					+ "    c.chatid  "
+					+ "FROM chat c "
+					+ "JOIN sell s ON c.sellid = s.sellid "
+					+ "WHERE (c.userid = '"+Share.id+"' OR c.sellerid = '"+Share.id+"') "
+					+ "ORDER BY c.date DESC";
 			
 			ResultSet rs = st.executeQuery(query);
 			
