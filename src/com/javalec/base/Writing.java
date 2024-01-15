@@ -292,8 +292,6 @@ public class Writing extends JFrame {
 		
 		Dao_Write dao = new Dao_Write();
 		Dto_Write dto = dao.userIdinput();
-	
-		lblUserid.setText(dto.getUserid());
 	}
 	
 	//***************추가입력 미리보기*******************
