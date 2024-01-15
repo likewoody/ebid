@@ -93,8 +93,6 @@ public class ChatDetail extends JDialog {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					TestThread th = new TestThread();
-					th.start();
 					ChatDetail dialog = new ChatDetail();
 					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 					dialog.setVisible(true);
@@ -112,24 +110,35 @@ public class ChatDetail extends JDialog {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowActivated(WindowEvent e) {
-				if (Share.checkNewChat) {
-					newChatInit();
-					
-				}
-				else {
-					int currentCount = dao.findChatCount();
-					
-					// 이전 현재 카운트와 이전 카운트 비교 이전 카운트가 더 작다면 테이블 초기화, serachDB
-					if (currentCount > previousCount) {
-						tableInit();
-						searchDB();
+				if (!dao.blockOrNot()) {
+					if (Share.checkNewChat) {
+						newChatInit();
+						
+					}
+					else {
+						int currentCount = dao.findChatCount();
+						
+						// 이전 현재 카운트와 이전 카운트 비교 이전 카운트가 더 작다면 테이블 초기화, serachDB
+						for (int i = previousCount; previousCount < currentCount; i++) {
+							tableInit();
+							searchDB();
+							
+//							TestThread th = new TestThread();
+//							th.start();
+						}
 						Share.count = currentCount - previousCount;
 						previousCount = currentCount;
 					}
+					
 				}
-				
+				else {
+					JOptionPane.showMessageDialog(getRootPane(), "상대방으로부터 차단된 유저입니다", "알림", JOptionPane.ERROR_MESSAGE);
+					Chat c = new Chat();
+					c.setVisible(true);
+					dispose();
+				}
 			}
-
+			
 			@Override
 			// 화면이 꺼진 후 데이터가 아무 것도 입력되지 않았다면 삭제
 			public void windowDeactivated(WindowEvent e) {

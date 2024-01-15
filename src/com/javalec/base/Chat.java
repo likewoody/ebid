@@ -215,19 +215,20 @@ public class Chat extends JDialog {
 						// 챗 아이디를 찾기 위함
 						Dao_Chat dao = new Dao_Chat();
 //						if (Share.id.equals(Share.chatUserId)) {
-							ArrayList<Dto_Chat> dto = dao.searchChat();
-							
-							
-							int i = innerTable.getSelectedRow();
-							Share.chatid = dto.get(i).getChatId();
-							
-							// chatuser 와 share.id와 비교 같다면 sellUserId을 chatdeatil로 보내주고 같지 않다면 chatuser을 보내준다.
-							if (! Share.id.equals(dto.get(i).getChatUser())) Share.checkUser = dto.get(i).getChatUser();
-							else Share.checkUser = dto.get(i).getSellUser();
+						ArrayList<Dto_Chat> dto = dao.searchChat();
 						
-							ChatDetail cd = new ChatDetail();
-							cd.setVisible(true);
-							dispose();
+						
+						int i = innerTable.getSelectedRow();
+						Share.chatid = dto.get(i).getChatId();
+						Share.checkUser = dto.get(i).getSellUser();
+						
+						// chatuser 와 share.id와 비교 같다면 sellUserId을 chatdeatil로 보내주고 같지 않다면 chatuser을 보내준다.
+//						if (! Share.id.equals(dto.get(i).getChatUser())) Share.checkUser = dto.get(i).getChatUser();
+//						else Share.checkUser = dto.get(i).getSellUser();
+						
+						ChatDetail cd = new ChatDetail();
+						cd.setVisible(true);
+						dispose();
 //						}
 //						if (Share.id.equals(Share.chatSellerId)) {
 //							ArrayList<Dto_Chat> dto = dao.searchChatforSeller();
@@ -260,9 +261,9 @@ public class Chat extends JDialog {
 	
 	private void tableInit() {
 		
-		outerTable.addColumn("체크박");
-		outerTable.addColumn("이밎");
-		outerTable.addColumn("사용자, 채팅, 날짜");
+		outerTable.addColumn("");
+		outerTable.addColumn("");
+		outerTable.addColumn("");
 		outerTable.setColumnCount(3);
 		
 		TableColumn col = innerTable.getColumnModel().getColumn(0);

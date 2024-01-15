@@ -105,6 +105,7 @@ public class Dao_Chat {
 			ps = con.prepareStatement(query);
 //			System.out.println(Share.chatid + "adsasdasdasdasdasd chatid");
 //			System.out.println(Share.id);
+			System.out.println(Share.checkUser);
 			ps.setString(1, Share.id);
 			ps.setString(2, Share.checkUser);
 			
@@ -150,15 +151,11 @@ public class Dao_Chat {
 			Connection con = DriverManager.getConnection(url_mysql,id_mysql,pw_mysql);
 			Statement st = con.createStatement();
 			
-			String query = "SELECT "
-					+ "    c.postimage, "
-					+ "    CASE "
-					+ "        WHEN c.userid = '"+Share.id+"' THEN s.nickname " // -- Buyer's nickname
-					+ "        WHEN c.sellerid = '"+Share.id+"' THEN c.nickname  " // -- Seller's nickname
-					+ "    END AS user_nickname, "
-					+ "    c.title, "
-					+ "    DATE_FORMAT(c.date, '%y.%m.%d %H:%i') AS formatted_date, "
-					+ "    c.chatid  "
+			String query = "SELECT c.postimage, "
+					+ "CASE WHEN c.userid = '"+Share.id+"' THEN s.nickname "
+					+ "WHEN c.sellerid = '"+Share.id+"' THEN c.nickname  "
+					+ "END AS user_nickname, "
+					+ "c.title, DATE_FORMAT(c.date, '%y.%m.%d %H:%i') AS formatted_date, c.chatid, c.sellerid "
 					+ "FROM chat c "
 					+ "JOIN sell s ON c.sellid = s.sellid "
 					+ "WHERE (c.userid = '"+Share.id+"' OR c.sellerid = '"+Share.id+"') "
@@ -173,10 +170,10 @@ public class Dao_Chat {
 				String chatDate = rs.getString(4);
 				int chatId = rs.getInt(5);
 //				String userId = rs.getString(6);
-//				String sellUserId = rs.getString(7);
+				String sellUser = rs.getString(6);
 //				int date = rs.getInt(6);
 				
-				Dto_Chat dto = new Dto_Chat(profile_img, nick, post_title, chatDate, chatId);
+				Dto_Chat dto = new Dto_Chat(profile_img, nick, post_title, chatDate, chatId, sellUser);
 				dtoList.add(dto);
 			}
 		}
@@ -311,6 +308,8 @@ public class Dao_Chat {
 		return chatCoun;
 	}
 	
+	
+	
 	// chat detail 유저 정보 찾기
 	// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 	public void findChatDetailUserId() {
@@ -369,6 +368,32 @@ public class Dao_Chat {
 		return dL;
 	}
 	
+	public boolean blockOrNot() {
+		boolean checkBloockOrNot = false;
+		
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+			Statement st = con.createStatement();
+			
+			System.out.println(Share.checkUser + "    1");
+			System.out.println(Share.id);
+			String query = "select userid, block_user from block_list "
+					+ "where userid = '"+Share.checkUser+"' and block_user = '" + Share.id+ "'";
+					
+			ResultSet rs = st.executeQuery(query);
+			
+			if(rs.next()) {
+				checkBloockOrNot = true;
+			}
+			
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return checkBloockOrNot;
+	}
+	
 	// block search user
 	public boolean searchBlock() {
 		boolean check = false;
@@ -391,6 +416,7 @@ public class Dao_Chat {
 		}
 		return check;
 	}
+	
 	
 	// update
 	
