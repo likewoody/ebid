@@ -35,7 +35,6 @@ import com.javalec.function.Dao_Chat;
 import com.javalec.function.Dto_Chat;
 import com.javalec.function.Dto_Home;
 import com.javalec.function.Share;
-import com.javalec.function.TestThread;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -86,6 +85,7 @@ public class ChatDetail extends JDialog {
 	private byte[] bytes = null;
 	private int previousCount = 0;
 	private int currentCount = 0;
+	private boolean getInChattingRoom;
 
 	/**
 	 * Launch the application.
@@ -111,6 +111,7 @@ public class ChatDetail extends JDialog {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowActivated(WindowEvent e) {
+				getInChattingRoom = true;
 				if (!dao.blockOrNot()) {
 					if (Share.checkNewChat) {
 						newChatInit();
@@ -121,8 +122,8 @@ public class ChatDetail extends JDialog {
 						
 						// 이전 현재 카운트와 이전 카운트 비교 이전 카운트가 더 작다면 테이블 초기화, serachDB
 						if (currentCount > previousCount) {
-//							tableInit();
-//							searchDB();
+							tableInit();
+							searchDB();
 							
 							TestThread th = new TestThread();
 							th.start();
@@ -180,6 +181,7 @@ public class ChatDetail extends JDialog {
 			btnHome = new JButton("홈");
 			btnHome.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					getInChattingRoom = false;
 					Home home = new Home();
 					home.setVisible(true);
 					dispose();
@@ -197,6 +199,7 @@ public class ChatDetail extends JDialog {
 			btnMypage = new JButton("개인");
 			btnMypage.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					getInChattingRoom = false;
 					MyPage mypage = new MyPage();
 					mypage.setVisible(true);
 					dispose();
@@ -214,6 +217,7 @@ public class ChatDetail extends JDialog {
 			btnChat.setFont(new Font("Helvetica", Font.PLAIN, 14));
 			btnChat.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					getInChattingRoom = false;
 					Chat chat = new Chat();
 					chat.setVisible(true);
 					dispose();
@@ -229,6 +233,7 @@ public class ChatDetail extends JDialog {
 			btnWrite = new JButton("글쓰기");
 			btnWrite.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					getInChattingRoom = false;
 					Writing wrt = new Writing();
 					wrt.setVisible(true);
 					dispose();
@@ -614,7 +619,7 @@ public class ChatDetail extends JDialog {
 
 		@Override
 		public void run() {
-			while(previousCount != currentCount) {
+			while(true) {
 				tableInit();
 				searchDB();
 				
@@ -624,7 +629,9 @@ public class ChatDetail extends JDialog {
 				catch (Exception e) {
 					e.printStackTrace();
 				}
+				
 			}
+			
 		}
 		
 	}
