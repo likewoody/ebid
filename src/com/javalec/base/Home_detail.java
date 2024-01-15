@@ -85,6 +85,7 @@ public class Home_detail extends JDialog {
 //				getPostInfo();
 				tableInit();
 				searchDB();
+				checkBlock();
 			}
 		});
 		setFont(new Font("Lucida Grande", Font.BOLD, 27));
@@ -269,11 +270,16 @@ public class Home_detail extends JDialog {
 			lbBid.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					System.out.println(Share.sellId);
+					System.out.println(dao.findChatExist() + " false");
 					if (!dao.findChatExist()) {
+						System.out.println("get in chatroom");
 						createChatRoom();
+						System.out.println(Share.chatid + "chat id");
+						System.out.println(Share.checkNewChat + " new chat?");
 						Share.chatid = dao.findChatId();
 						Share.checkNewChat = true;
+						System.out.println(Share.checkNewChat + " new chat?");
+						
 					}
 					ChatDetail cd = new ChatDetail();
 					cd.setVisible(true);
@@ -480,6 +486,10 @@ public class Home_detail extends JDialog {
 //		Dao_Home dao = new Dao_Home();
 		dao.createChatRoom();
 		
+	}
+	
+	private void checkBlock() {
+		dao.checkBlock();
 	}
 	
 }

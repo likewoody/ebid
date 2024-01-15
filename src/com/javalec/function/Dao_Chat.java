@@ -12,9 +12,6 @@ import java.util.List;
 
 import javax.sql.rowset.serial.SerialBlob;
 
-import com.mysql.cj.x.protobuf.MysqlxPrepare.Prepare;
-
-
 public class Dao_Chat {
 	
 	
@@ -51,6 +48,7 @@ public class Dao_Chat {
 			ps = con.prepareStatement(query);
 //			System.out.println(Share.chatid + "adsasdasdasdasdasd chatid");
 //			System.out.println(Share.id);
+			System.out.println(Share.chatid + " : insdie insert chat");
 			ps.setInt(1, Share.chatid);
 			ps.setString(2, chatText);
 			ps.setString(3, Share.id);
@@ -153,14 +151,12 @@ public class Dao_Chat {
 			Connection con = DriverManager.getConnection(url_mysql,id_mysql,pw_mysql);
 			Statement st = con.createStatement();
 			
-//			@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 이미지 작동안됨
-			String query = "SELECT c.userImage, c.nickname, c.title, date_format(c.date, '%y.%m.%d %H:%i'), c.chatid, c.userid, c.selluserid "
-					+ "					FROM user u "
-					+ "					LEFT JOIN sell s ON u.userid = s.userid "
-					+ "					LEFT JOIN chat c ON c.sellid = s.sellid "
-					+ "					WHERE s.userid = '" +Share.id+ "' OR c.userid = '" + Share.id + "' "
-							+ "order by c.date desc" ;
-//			@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 작동안됨
+			String query = "SELECT s.sellerImage, s.nickname, c.title, date_format(c.date, '%y.%m.%d %H:%i'), c.chatid "
+					+ "					from chat c, sell s "
+					+ "					where c.sellid = s.sellid "
+					+ "                    and c.userid = '" + Share.id+ "' "
+					+ "					order by c.date desc;" ;
+			
 			ResultSet rs = st.executeQuery(query);
 			
 			while(rs.next()) {
@@ -169,11 +165,11 @@ public class Dao_Chat {
 				String post_title = rs.getString(3);
 				String chatDate = rs.getString(4);
 				int chatId = rs.getInt(5);
-				String userId = rs.getString(6);
-				String sellUserId = rs.getString(7);
+//				String userId = rs.getString(6);
+//				String sellUserId = rs.getString(7);
 //				int date = rs.getInt(6);
 				
-				Dto_Chat dto = new Dto_Chat(profile_img, nick, post_title, chatDate, chatId, userId, sellUserId);
+				Dto_Chat dto = new Dto_Chat(profile_img, nick, post_title, chatDate, chatId);
 				dtoList.add(dto);
 			}
 		}
