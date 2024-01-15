@@ -24,6 +24,11 @@ public class Dao_Write {
 	private String view_count;
 	private String start_date;
 	private int postid;
+	
+	// 추가
+	private String nickname;
+	private String profile_image;
+	private String sellerImage;
 		
 	
 
@@ -34,6 +39,21 @@ public class Dao_Write {
 	}
 	
 	
+	
+	// 추가
+	
+	public Dao_Write(String userid, int postid, String nickname, String profile_image) {
+		super();
+		this.userid = userid;
+		this.postid = postid;
+		this.nickname = nickname;
+		this.profile_image = profile_image;
+	}
+
+
+
+
+
 	public Dao_Write(String title, String description, String post_status, String sort, String price, String view_count,
 			String start_date) {
 		super();
@@ -131,7 +151,7 @@ public class Dao_Write {
 		    
 		    String postidQ = "SELECT MAX(postid) FROM ebid.post";
 		    String userid = Share.id;
-		    String ISC ="INSERT INTO ebid.sell (userid, postid) VALUES (?, ?)"; //<=sell로 변경.
+		    String ISC ="INSERT INTO ebid.sell (userid, postid, nickname, sellerImage) VALUES (?, ?, ?, ?)"; //<=sell로 변경. 쿼리변경.
 		    try {
 		        Class.forName("com.mysql.cj.jdbc.Driver");
 		        Connection conn = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
@@ -140,7 +160,7 @@ public class Dao_Write {
 		        int maxPostId =getMaxPostId(conn, postidQ);
 		        
 		        // Step 2: Insert sales data using the obtained maxPostId
-		        insertSalesData(conn, ISC, userid, maxPostId);
+		        insertSalesData(conn, ISC, userid, maxPostId, nickname, sellerImage);
 		        
 		        conn.close();
 		    } catch (Exception e) {
@@ -158,11 +178,14 @@ public class Dao_Write {
 			    }
 			}
 		 
-		 private void insertSalesData(Connection connection, String insertSalesQuery, String userid, int postid) throws SQLException {
+		 private void insertSalesData(Connection connection, String insertSalesQuery, String userid, int postid, String nickname, String sellerImage) throws SQLException {
 			    try (PreparedStatement pstmt = connection.prepareStatement(insertSalesQuery)) {
 			        // Set the values for the insert statement
+			    	// 변경
 			        pstmt.setString(1, userid);
 			        pstmt.setInt(2, postid);
+			        pstmt.setString(3, nickname);
+			        pstmt.setString(4, sellerImage);
 
 			        // Set the current timestamp
 			     //   java.sql.Timestamp currentDateAndTime = new java.sql.Timestamp(System.currentTimeMillis());
