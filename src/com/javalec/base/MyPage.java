@@ -282,8 +282,11 @@ public class MyPage extends JDialog {
 		Dao_MyPage dao = new Dao_MyPage();
 		Dto_MyPage dto = dao.insertInfo();
 
+		double rating = dto.getRating();
+		String formattedRating = String.format("%.1f", rating);
+
 		lblUserNick.setText(dto.getNickname() + "님 안녕하세요 :)");
-		lblRating.setText("별점 : " + Double.toString(dto.getRating()));
+		lblRating.setText("별점 : " + formattedRating);
 
 		String filePath = Integer.toString(Share.filename);
 		// 파일이 존재하는지 확인
