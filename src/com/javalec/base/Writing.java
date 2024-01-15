@@ -523,9 +523,11 @@ public class Writing extends JFrame {
     JOptionPane.showMessageDialog(null, "게시글이 등록되었습니다.");
    
     dispose();
+       
+    Home home = new Home();
+    home.setVisible(true);
+
         
-    MyPage mypage = new MyPage();
-    mypage.setVisible(true);
 	}
 
 

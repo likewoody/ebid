@@ -127,10 +127,11 @@ public class Dao_Write {
   } 
 	 public void sUpdate() {
 		    //-----sales table에 data 넣기----------
+		 	// sell로 변경
 		    
 		    String postidQ = "SELECT MAX(postid) FROM ebid.post";
 		    String userid = Share.id;
-		    String ISC ="INSERT INTO ebid.sales (userid, postid, date) VALUES (?, ?, ?)";
+		    String ISC ="INSERT INTO ebid.sell (userid, postid) VALUES (?, ?)"; //<=sell로 변경.
 		    try {
 		        Class.forName("com.mysql.cj.jdbc.Driver");
 		        Connection conn = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
@@ -164,8 +165,8 @@ public class Dao_Write {
 			        pstmt.setInt(2, postid);
 
 			        // Set the current timestamp
-			        java.sql.Timestamp currentDateAndTime = new java.sql.Timestamp(System.currentTimeMillis());
-			        pstmt.setTimestamp(3, currentDateAndTime);
+			     //   java.sql.Timestamp currentDateAndTime = new java.sql.Timestamp(System.currentTimeMillis());
+			     //   pstmt.setTimestamp(3, currentDateAndTime);
 
 			        // Execute the insert statement
 			        int rowsAffected = pstmt.executeUpdate();
