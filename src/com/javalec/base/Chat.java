@@ -89,7 +89,6 @@ public class Chat extends JDialog {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowActivated(WindowEvent e) {
-				System.out.println(Share.id);
 				tableInit();
 				searchChat();
 			}

@@ -62,6 +62,13 @@ public class Dto_Chat {
 	}
 
 
+	public Dto_Chat(byte[] profile_image, String nickname, String title, String chatDate, int chatId) {
+		this.profile_image = profile_image;
+		this.nickname = nickname;
+		this.title = title;
+		this.chatDate = chatDate;
+		this.chatId = chatId;
+	}
 	public Dto_Chat(byte[] profile_image, String nickname, String title, String chatDate, int chatId, String chatUser, String sellUser) {
 		this.profile_image = profile_image;
 		this.nickname = nickname;

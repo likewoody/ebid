@@ -62,17 +62,21 @@ public class Dao_Home {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
 			
-			String query = "insert into chat (userid, nickname, selluserid, date, sellid, userImage) values (?, ?, ?, now(), ?, ?)";
+			String query = "insert into chat (userid, nickname, date, sellid, userImage) values (?, ?, now(), ?, ?)";
 			
 			ps = con.prepareStatement(query);
 			
+//			System.out.println(Share.id + ": inside create chatroom id");
+//			System.out.println(findUserNickname() + " : user nick");
+//			System.out.println(findSellerId() + " : seller id");
+//			System.out.println(Share.sellId + " : sellid");
 			ps.setString(1, Share.id);
 			ps.setString(2, findUserNickname());
-			ps.setString(3, findSellerId());
-			ps.setInt(4, Share.sellId);
+//			ps.setString(3, findSellerId());
+			ps.setInt(3, Share.sellId);
 			
 			ByteArrayInputStream inputStream = new ByteArrayInputStream(findBuyerImage());
-			ps.setBlob(5, inputStream);
+			ps.setBlob(4, inputStream);
 			
 			ps.executeUpdate();
 			
