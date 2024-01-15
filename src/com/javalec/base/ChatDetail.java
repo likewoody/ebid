@@ -118,17 +118,17 @@ public class ChatDetail extends JDialog {
 						
 					}
 					else {
-						currentCount = dao.findChatCount();
+//						currentCount = dao.findChatCount();
 						
 						// 이전 현재 카운트와 이전 카운트 비교 이전 카운트가 더 작다면 테이블 초기화, serachDB
-						if (currentCount > previousCount) {
-							tableInit();
-							searchDB();
+//						if (currentCount > previousCount) {
+						tableInit();
+						searchDB();
 							
-							TestThread th = new TestThread();
-							th.start();
-							previousCount++;
-						}
+						thread th = new thread();
+						th.start();
+//						previousCount++;
+//						}
 					}
 					
 				}
@@ -615,7 +615,7 @@ public class ChatDetail extends JDialog {
 	    }
 	}
 	
-	private class TestThread extends Thread {
+	private class thread extends Thread {
 
 		@Override
 		public void run() {

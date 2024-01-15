@@ -283,31 +283,31 @@ public class Dao_Chat {
 	}
 	
 	// 챗 카운트 
-	public int findChatCount() {
-		int chatCoun = 0;
-		try {
-	        Class.forName("com.mysql.cj.jdbc.Driver");
-	        Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
-	        Statement st = con.createStatement();
-	        
-	        String query = "SELECT count(*) "
-	        		+ "	                FROM chat_text_detail cd "
-	        		+ "	                JOIN chat c ON c.chatid = cd.chatid "
-	        		+ "	                JOIN sell s ON s.sellid = c.sellid "
-	        		+ "	                JOIN user u ON u.userid = s.userid "
-	        		+ "	                AND c.chatid = " + Share.chatid;
-	        
-	        ResultSet rs = st.executeQuery(query);
-	        if(rs.next()) {
-	        	chatCoun = rs.getInt(1);
-	        }
-	        con.close();
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-		return chatCoun;
-	}
+//	public int findChatCount() {
+//		int chatCoun = 0;
+//		try {
+//	        Class.forName("com.mysql.cj.jdbc.Driver");
+//	        Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+//	        Statement st = con.createStatement();
+//	        
+//	        String query = "SELECT count(*) "
+//	        		+ "	                FROM chat_text_detail cd "
+//	        		+ "	                JOIN chat c ON c.chatid = cd.chatid "
+//	        		+ "	                JOIN sell s ON s.sellid = c.sellid "
+//	        		+ "	                JOIN user u ON u.userid = s.userid "
+//	        		+ "	                AND c.chatid = " + Share.chatid;
+//	        
+//	        ResultSet rs = st.executeQuery(query);
+//	        if(rs.next()) {
+//	        	chatCoun = rs.getInt(1);
+//	        }
+//	        con.close();
+//		}
+//		catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		return chatCoun;
+//	}
 	
 	
 	
