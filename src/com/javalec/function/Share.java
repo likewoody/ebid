@@ -2,7 +2,7 @@ package com.javalec.function;
 
 public class Share {
 	public static String dbName = "jdbc:mysql://192.168.50.2/ebid?serverTimezone=UTC&charactorEncoding=utf8&useSSL=FALSE";
-	public static String dbUser = "root";
+	public static String dbUser = "ebid";
 	public static String dbPass = "qwer1234";
 	
 	public static String id;
