@@ -10,6 +10,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
+
+import com.javalec.function.Dao_Login;
+
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -28,7 +31,7 @@ public class FindPw extends JDialog {
 	private JTextField tfphone;
 	private JButton btnSearchpw;
 	private JButton btnNewButton;
-
+					
 	/**
 	 * Launch the application.
 	 */
@@ -194,10 +197,12 @@ public class FindPw extends JDialog {
 		        return;
 		    }
 
-	        com.javalec.function.Dao_Login dao = new com.javalec.function.Dao_Login(id);
+	      //  com.javalec.function.Dao_Login dao = new com.javalec.function.Dao_Login(id);
+	        				
+	        						Dao_Login dao = new Dao_Login(id);
 	        dao.setNickname(name);	        
 	        dao.setPhone(phone);
-
+	        		
 	        if (dao.findPw()) {
 	            // 비밀번호를 찾았을 경우
 	            String foundPw = dao.getPw();

@@ -28,7 +28,7 @@ public class FindId extends JDialog {
 	private JTextField tfname;
 	private JTextField tfphone;
 	private JButton btnFindid;
-
+				
 	/**
 	 * Launch the application.
 	 */
@@ -170,10 +170,6 @@ public class FindId extends JDialog {
 		    }
 		 
 		 			
-		 	
-		 Dao_Login dao = new Dao_Login();
-		 dao.setNickname(name);
-		 dao.setPhone(phone);
 
 		    
 		 if (name.isEmpty() ) {
@@ -181,7 +177,7 @@ public class FindId extends JDialog {
 			 return;
 		 }
 		     else if ( phone.isEmpty()) {
-		        JOptionPane.showMessageDialog(null, "전화번호를 작성해주세요.", "알림", JOptionPane.WARNING_MESSAGE);
+		        JOptionPane.showMessageDialog(null, "전화번호를 작성해주세요.", "알림", JOptionPane.WARNING_MESSAGE);	// 이 메세지가 두번나오면 화면 먹통
 		        return;
 		    }
 		    else if (!isValidPhoneNumber(phone)) {
@@ -189,27 +185,34 @@ public class FindId extends JDialog {
 		        return;
 		    }
 
+		 
+		 Dao_Login dao = new Dao_Login();
+		 dao.setNickname(name);
+		 dao.setPhone(phone);
 
-		
-		    if (dao.findId()) {
-		        String foundUserId = dao.getUserid();
+		 									
+		    if (dao.findId()) {							
+		        String foundUserId = dao.getUserid();	
 		        // 아이디를 알려주는 메시지 창에 닫기 버튼 추가
-		        Object[] options = {"닫기"};
+		        Object[] options = {"닫기"};				
 		        int choice = JOptionPane.showOptionDialog(null,"아이디는 " + foundUserId + " 입니다.", "아이디 찾기 결과",
 		            JOptionPane.DEFAULT_OPTION,
 		            JOptionPane.INFORMATION_MESSAGE,
 		            null,
 		            options,
 		            options[0]
+		            		
+		            		
 		        );			
 		        			
 		        if (choice == 0) {
 		        
 		            dispose();
 		    } else {
+		    		
 		        JOptionPane.showMessageDialog(null, "일치하는 정보가 없습니다. 다시 입력해 주새요.", "알림", JOptionPane.ERROR_MESSAGE);
 		    }
-		
+		        							
 		    }
 	}
 

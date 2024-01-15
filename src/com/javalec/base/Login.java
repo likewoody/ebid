@@ -240,7 +240,7 @@ public class Login extends JDialog {
 	
 	
 	public void Signclick() {
-		dispose();
+	
 				Register register = new Register();			//회원가입 클릭
 				register.setVisible(true);
 

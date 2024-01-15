@@ -341,7 +341,7 @@ public class Register extends JDialog {
 				}
 			});
 			cbaddress1.setEnabled(false);
-			cbaddress1.setModel(new DefaultComboBoxModel(new String[] {"-", "서울시", "인천시", "대전시", "대구시", "울산시", "부산시", "광주시", "세종시", "경기도", "강원도", "충청남도", "충청북도", "경상북도", "전라북도", "전라남도", "경상남도", "제주도"}));
+			cbaddress1.setModel(new DefaultComboBoxModel(new String[] {"-", "서울시", "경기도" }));
 			cbaddress1.setBounds(130, 516, 135, 27);
 		}
 		return cbaddress1;
@@ -630,7 +630,7 @@ public class Register extends JDialog {
 		      else  if (tfname.getText().isEmpty()) {
 	            JOptionPane.showMessageDialog(this, "이름을 입력하세요.", "알림", JOptionPane.WARNING_MESSAGE);
 	            return false;
-		    }
+		    }			
 		      else if (!tfname.getText().matches("^[가-힣]{3}$")) {
 			        JOptionPane.showMessageDialog(this, "이름을 다시한번 확인해 주세요.", "알림", JOptionPane.WARNING_MESSAGE);
 			        return false;
@@ -758,10 +758,10 @@ public class Register extends JDialog {
 			String userid = tfid.getText();
 		Dao_Login dao = new Dao_Login();		
 		  dao.idDelete(userid);
-		Login login = new Login();
-		login.setVisible(true);
-		
-		
+//		Login login = new Login();
+//		login.setVisible(true);
+//		
+						
 		dispose();
 		}
 											
