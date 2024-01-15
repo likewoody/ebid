@@ -1,11 +1,18 @@
 package com.javalec.function;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Base64;
 
 public class Dao_Write {
 	
@@ -145,38 +152,71 @@ public class Dao_Write {
     sUpdate();
     
   } 
+	//*******************추가 코드 nickname*******************
+	// 이미지 파일을 바이트 배열로 읽어오는 메서드
+	private byte[] readImageFile(String imagePath) throws IOException {
+	
+	    Path path = Paths.get(imagePath);
+	    return Files.readAllBytes(path);
+	}
+	 	
+	// ebid.User 테이블에서 userid를 기반으로 nickname과 profile_image를 가져오는 메서드
+	public Dto_Write getUserInfo(Connection connection, String userid) throws SQLException,IOException {
+        Dto_Write dto = new Dto_Write();
+	
+        String getUserInfoQuery = "SELECT nickname, profile_image FROM ebid.User WHERE userid = ?";
+        try (PreparedStatement ps = connection.prepareStatement(getUserInfoQuery)) {
+            ps.setString(1, userid);
+
+            try (ResultSet resultSet = ps.executeQuery()) {
+                if (resultSet.next()) {
+                    dto.setNickname(resultSet.getString("nickname"));         
+                 
+           
+                    // profile_image를 가져와서 바이트 배열로 저장
+                    byte[] profileImageBytes = resultSet.getBytes("profile_image");
+                    dto.setSellerImage(Base64.getEncoder().encodeToString(profileImageBytes)); 
+                    
+                }
+            }
+        } 
+        
+        return dto;
+	}
+	
 	 public void sUpdate() {
 		 
 		 //**********새로운 코드************************
-		 
-		 //-----sales table에 data 넣기----------
+ 		 //-----sales table에 data 넣기----------
 		    // sell로 변경
 
 		    String postidQ = "SELECT MAX(postid) FROM ebid.post";
 		    String userid = Share.id;
 		    
-		    // 예시로 정의된 nickname과 sellerImage 변수
-		    String nickname = "JohnDoe";
-		    String sellerImage = "path/to/seller/image.jpg";
-		    
 		    String ISC ="INSERT INTO ebid.sell (userid, postid, nickname, sellerImage) VALUES (?, ?, ?, ?)";
-		    
+		  
+		   
 		    try {
 		        Class.forName("com.mysql.cj.jdbc.Driver");
 		        Connection conn = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
 
 		        // Step 1: Get the maximum postid from the database
 		        int maxPostId = getMaxPostId(conn, postidQ);
+		        
+		        // Dao_Writing를 사용하여 사용자 정보 가져오기
+		      //  Dao_Write daoWriting = new Dao_Write();
+	            Dto_Write dtoWrite = getUserInfo(conn, userid);
 
 		        // Step 2: Insert sales data using the obtained maxPostId
-		        insertSalesData(conn, ISC, userid, maxPostId, nickname, sellerImage);
+		        insertSalesData(conn, ISC, userid, maxPostId, dtoWrite.getNickname(), dtoWrite.getSellerImage());
+		        
 
 		        conn.close();
 		    } catch (Exception e) {
 		        e.printStackTrace();
 		    }
 		}
-
+	 	
 		private int getMaxPostId(Connection connection, String postidQ) throws SQLException {
 		    try (PreparedStatement ps = connection.prepareStatement(postidQ);
 		         ResultSet resultSet = ps.executeQuery()) {
@@ -187,7 +227,8 @@ public class Dao_Write {
 		        }
 		    }
 		}
-
+		
+		// 추가: sellerImage로 수정
 		private void insertSalesData(Connection connection, String insertSalesQuery, String userid, int postid, String nickname, String sellerImage) throws SQLException {
 		    try (PreparedStatement pstmt = connection.prepareStatement(insertSalesQuery)) {
 		        // Set the values for the insert statement
@@ -195,13 +236,18 @@ public class Dao_Write {
 		        pstmt.setString(1, userid);
 		        pstmt.setInt(2, postid);
 		        pstmt.setString(3, nickname);
+		        
+		        // sellerImage를 그대로 사용
 		        pstmt.setString(4, sellerImage);
+		        
+		        // Base64로 인코딩된 이미지를 디코딩하여 바이트 배열로 변환
+		       // byte[] sellerImageBytes = Base64.getDecoder().decode(sellerImage);
+		        // 바이트 배열을 이용하여 Blob 객체 생성
+		     //   Blob sellerImageBlob = connection.createBlob();
+		      //  sellerImageBlob.setBytes(1, sellerImageBytes);
+		      //  pstmt.setBlob(4, sellerImageBlob);
 
-		        // Set the current timestamp
-		        //   java.sql.Timestamp currentDateAndTime = new java.sql.Timestamp(System.currentTimeMillis());
-		        //   pstmt.setTimestamp(3, currentDateAndTime);
-
-		        // Debugging: Add these print statements
+		       // Debugging: Add these print statements
 		        System.out.println("userid: " + userid);
 		        System.out.println("postid: " + postid);
 		        System.out.println("nickname: " + nickname);

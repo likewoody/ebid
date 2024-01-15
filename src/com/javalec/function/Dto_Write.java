@@ -33,9 +33,16 @@ public class Dto_Write {
 		this.nickname = nickname;
 		this.profile_image = profile_image;
 	}
+	
 
 
 
+
+	public Dto_Write(String nickname, String sellerImage) {
+		super();
+		this.nickname = nickname;
+		this.sellerImage = sellerImage;
+	}
 
 	public Dto_Write(String userid) {
 		super();
@@ -66,11 +73,6 @@ public class Dto_Write {
 	}
 
 
-	public Dto_Write(String userid, String pw) {
-		super();
-		this.userid = userid;
-		this.pw = pw;
-	}
 	
 	// 생성자를 Dao Class 로 보내주기 위하여 Getter, Setter 를 사용한다.
 
@@ -194,6 +196,7 @@ public class Dto_Write {
 	public void setSellerImage(String sellerImage) {
 		this.sellerImage = sellerImage;
 	}
+	
 	
 	
 	
