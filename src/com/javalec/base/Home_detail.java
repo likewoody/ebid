@@ -24,6 +24,7 @@ import java.awt.Font;
 import java.awt.Image;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.JScrollPane;
@@ -85,7 +86,6 @@ public class Home_detail extends JDialog {
 //				getPostInfo();
 				tableInit();
 				searchDB();
-				checkBlock();
 			}
 		});
 		setFont(new Font("Lucida Grande", Font.BOLD, 27));
@@ -270,20 +270,18 @@ public class Home_detail extends JDialog {
 			lbBid.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					System.out.println(dao.findChatExist() + " false");
-					if (!dao.findChatExist()) {
-						System.out.println("get in chatroom");
-						createChatRoom();
-						System.out.println(Share.chatid + "chat id");
-						System.out.println(Share.checkNewChat + " new chat?");
-						Share.chatid = dao.findChatId();
-						Share.checkNewChat = true;
-						System.out.println(Share.checkNewChat + " new chat?");
-						
+					
+					if (! dao.checkBlock()) {
+						if (!dao.findChatExist()) {
+							dao.createChatRoom();
+							Share.chatid = dao.findChatId();
+							Share.checkNewChat = true;
+						}
+						ChatDetail cd = new ChatDetail();
+						cd.setVisible(true);
+						dispose();
 					}
-					ChatDetail cd = new ChatDetail();
-					cd.setVisible(true);
-					dispose();
+					else JOptionPane.showMessageDialog(getRootPane(), "상대방에게 차단된 사용자입니다.", "알림", JOptionPane.ERROR_MESSAGE);
 				}
 			});
 			lbBid.setHorizontalAlignment(SwingConstants.CENTER);
@@ -480,16 +478,6 @@ public class Home_detail extends JDialog {
 			return this;
 		}
 		
-	}
-	
-	private void createChatRoom() {
-//		Dao_Home dao = new Dao_Home();
-		dao.createChatRoom();
-		
-	}
-	
-	private void checkBlock() {
-		dao.checkBlock();
 	}
 	
 }

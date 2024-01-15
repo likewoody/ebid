@@ -436,7 +436,6 @@ public class Dao_Home {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
 			Statement st = con.createStatement();
-			System.out.println(Share.sellId);
 			String query = "SELECT ROUND(AVG(r.rating), 1) "
 					+ "FROM rating r "
 					+ "JOIN user u ON r.userid = u.userid "
@@ -643,7 +642,30 @@ public class Dao_Home {
 		}
 		return checkExist;
 	}
-
+	
+	// check if user is blocked or not
+	public boolean checkBlock() {
+		boolean checkBlockorNot = false;
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+			Statement st = con.createStatement();
+			
+			String query = "select distinct (select userid from sell where sellid = 14) sellerid, block_user from block_list where block_user = '" + Share.id + "'";
+			
+			ResultSet rs = st.executeQuery(query);
+			
+			if(rs.next()) {
+				checkBlockorNot = true;
+			}
+			con.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return checkBlockorNot;
+	}
+	
 	// 고객이 클릭 시 제품 카운트를 센다
 	public void viewCount() {
 		PreparedStatement ps = null;
