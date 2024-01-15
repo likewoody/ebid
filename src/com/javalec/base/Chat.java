@@ -215,7 +215,7 @@ public class Chat extends JDialog {
 						// 챗 아이디를 찾기 위함
 						Dao_Chat dao = new Dao_Chat();
 //						if (Share.id.equals(Share.chatUserId)) {
-							ArrayList<Dto_Chat> dto = dao.searchChatforUser();
+							ArrayList<Dto_Chat> dto = dao.searchChat();
 							
 							
 							int i = innerTable.getSelectedRow();
@@ -301,7 +301,7 @@ public class Chat extends JDialog {
 		
 		// 유저가 일반 사용자 일 때
 //		if (Share.id.equals(Share.chatUserId)) { 
-			for (Dto_Chat dto : dao.searchChatforUser()) {
+			for (Dto_Chat dto : dao.searchChat()) {
 				outerTable.addRow(new Object[] {
 						false,
 						dto.getProfile_image(),
@@ -329,7 +329,7 @@ public class Chat extends JDialog {
 	private void deleteChat() {
 		// 챗 아이디를 찾기 위함
 		Dao_Chat dao = new Dao_Chat();
-		ArrayList<Dto_Chat> dto = dao.searchChatforUser();
+		ArrayList<Dto_Chat> dto = dao.searchChat();
 		
 		int i = innerTable.getSelectedRow();
 		Share.chatid = dto.get(i).getChatId();

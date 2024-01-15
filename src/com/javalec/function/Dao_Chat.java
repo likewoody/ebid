@@ -142,7 +142,7 @@ public class Dao_Chat {
 	
 	
 	// read
-	public ArrayList<Dto_Chat> searchChatforUser() {
+	public ArrayList<Dto_Chat> searchChat() {
 		ArrayList<Dto_Chat> dtoList = new ArrayList<Dto_Chat>();
 		
 		try {
@@ -231,20 +231,14 @@ public class Dao_Chat {
 	        Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
 
 	        String textQuery = "SELECT "
-	        		+ "    c.userImage, "
-	        		+ "    cd.text,  "
-	        		+ "    DATE_FORMAT(cd.date, '%y.%m.%d %H:%i') as formatted_date, "
-	        		+ "    u.nickname "
-	        		+ "FROM "
-	        		+ "    chat c "
-	        		+ "JOIN "
-	        		+ "    sell s ON s.sellid = c.sellid "
-	        		+ "JOIN "
-	        		+ "    chat_text_detail cd ON cd.chatid = c.chatid "
-	        		+ "JOIN "
-	        		+ "    user u ON u.userid = cd.userid "
-	        		+ "WHERE "
-	        		+ "    c.chatid = " + Share.chatid;
+	        		+ "case "
+	        		+ "when cd.userid = u.userid then u.profile_image end as image, "
+	        		+ "cd.text,  DATE_FORMAT(cd.date, '%y.%m.%d %H:%i') as formatted_date, u.nickname "
+	        		+ "FROM chat c "
+	        		+ "JOIN sell s ON s.sellid = c.sellid "
+	        		+ "JOIN chat_text_detail cd ON cd.chatid = c.chatid "
+	        		+ "JOIN user u ON u.userid = cd.userid "
+	        		+ "WHERE c.chatid = " + Share.chatid;
 
 	        try (Statement st = con.createStatement();
 	             ResultSet textRs = st.executeQuery(textQuery)) {
