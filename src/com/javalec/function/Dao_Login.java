@@ -1,5 +1,9 @@
 package com.javalec.function;	
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -9,6 +13,11 @@ import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.io.InputStream;
+import javax.swing.ImageIcon;
+
+import com.javalec.base.Main;
+import com.mysql.cj.jdbc.Blob;
 
 //import com.javalec.base.Register;
 //import com.mysql.cj.exceptions.RSAException;
@@ -36,6 +45,7 @@ public class Dao_Login {
      private String profile_image;
      private String address;
      private String name;
+     private File imageFile;
      public boolean passableNickname = true;
     // public boolean deleteCom = true;
 	//Constructor
@@ -59,6 +69,18 @@ public class Dao_Login {
 		this.name = name;
 		
 	}
+	
+	public Dao_Login(String userid, String pw, String phone, String email, String nickname, String address, File imageFile) {
+        this.userid = userid;
+        this.pw = pw;
+        this.phone = phone;
+        this.email = email;
+        this.nickname = nickname;
+        this.address = address;
+        this.imageFile = imageFile;
+    }
+	
+	
 	
 	 public Dao_Login(String userid, String pw, String phone, String nickname, String address) {
 		super();
@@ -331,21 +353,28 @@ public class Dao_Login {
 	}
 	return searchPw;
 	}
-
+					
+	
+				
+	
+	//("/com/javalec/images/logindetailBackground.png");				내 이미지 경로
+						
+	
 	public void signUpdate() {
 		   // 회원 정보 업데이트 쿼리
 			
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String currentDateAndTime = sdf.format(new Date());
-
-		
-	    String A = "UPDATE user SET pw = ?, phone = ?, email = ?, nickname = ?, join_date = ?, address = ? WHERE userid = ?";
+        		
+																
+	    String A = "UPDATE user SET pw = ?, phone = ?, email = ?, nickname = ?, join_date = ?, address = ?,profile_image = ? WHERE userid = ?";
 	   
 	    try {
 	        Class.forName("com.mysql.cj.jdbc.Driver");
 	        Connection conn = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
-	 
-	        //업데이트
+	        
+	        												
+	        //업데이트				
 	        PreparedStatement pstmt = conn.prepareStatement(A);
 	        pstmt.setString(1, pw);
 	        pstmt.setString(2, phone);
@@ -353,17 +382,26 @@ public class Dao_Login {
 	        pstmt.setString(4, nickname);
 	        pstmt.setString(5, currentDateAndTime);
 	        pstmt.setString(6, address);
-	        pstmt.setString(7, userid);
+	        // 이미지 파일을 Blob으로 변환
+	        File imageFile = new File(getClass().getResource("/com/javalec/images/Registerimage.jpg").getFile());
+	        InputStream inputStream = new FileInputStream(imageFile);
+	        pstmt.setBinaryStream(7, inputStream, (int) imageFile.length());
+	        pstmt.setString(8, userid);
 
+	        
+	        
+	    
+	        		
 	        // 업데이트 실행
 	        pstmt.executeUpdate();
-
+	        
 	        conn.close();
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	    }
-
+ 
 	}
+	
 	
 	
 	

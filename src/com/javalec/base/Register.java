@@ -30,6 +30,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.util.ArrayList;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -126,7 +127,7 @@ public class Register extends JDialog {
 		tfpwmatch.setEditable(false);
 		tfpwmatch.setText("비밀번호가 일치하지않습니다.");
 		 tfpwmatch.setBorder(null);
-		tfpwmatch.setBounds(135, 360, 260, 20);
+		tfpwmatch.setBounds(135, 300, 260, 20);
 		tfpwmatch.setForeground(Color.RED);
 		contentPanel.add(tfpwmatch);
 		tfpwmatch.setVisible(false);
@@ -157,49 +158,49 @@ public class Register extends JDialog {
 	private JLabel getLblid() {
 		if (lblid == null) {
 			lblid = new JLabel("ID :");
-			lblid.setBounds(52, 262, 40, 16);
+			lblid.setBounds(52, 202, 40, 16);
 		}
 		return lblid;
 	}
 	private JLabel getLblpw() {
 		if (lblpw == null) {
 			lblpw = new JLabel("PW :");
-			lblpw.setBounds(52, 305, 61, 16);
+			lblpw.setBounds(52, 245, 61, 16);
 		}
 		return lblpw;
 	}
 	private JLabel getLblpwRe() {
 		if (lblpwRe == null) {
 			lblpwRe = new JLabel("PW 재입력 :");
-			lblpwRe.setBounds(52, 335, 65, 16);
+			lblpwRe.setBounds(52, 275, 65, 16);
 		}
 		return lblpwRe;
 	}
 	private JLabel getLblNickname() {
 		if (lblNickname == null) {
 			lblNickname = new JLabel("닉네임 :");
-			lblNickname.setBounds(52, 394, 61, 16);
+			lblNickname.setBounds(52, 334, 61, 16);
 		}
 		return lblNickname;
 	}
 	private JLabel getLblname() {
 		if (lblname == null) {
 			lblname = new JLabel("이름 :");
-			lblname.setBounds(52, 440, 61, 16);
+			lblname.setBounds(52, 380, 61, 16);
 		}
 		return lblname;
 	}
 	private JLabel getLblphone() {
 		if (lblphone == null) {
 			lblphone = new JLabel("전화번호 :");
-			lblphone.setBounds(52, 480, 61, 16);
+			lblphone.setBounds(52, 420, 61, 16);
 		}
 		return lblphone;
 	}
 	private JLabel getLbladdress() {
 		if (lbladdress == null) {
 			lbladdress = new JLabel("주소 :");
-			lbladdress.setBounds(52, 520, 61, 16);
+			lbladdress.setBounds(52, 460, 61, 16);
 		}
 		return lbladdress;
 	}
@@ -215,7 +216,7 @@ public class Register extends JDialog {
 				}   
 			});
 			tfnickname.setEditable(false);
-			tfnickname.setBounds(130, 390, 200, 26);
+			tfnickname.setBounds(130, 330, 200, 26);
 			tfnickname.setColumns(10);
 		}
 		return tfnickname;
@@ -233,7 +234,7 @@ public class Register extends JDialog {
 			});
 			tfphone.setEditable(false);
 			tfphone.setColumns(10);
-			tfphone.setBounds(130, 475, 290, 26);
+			tfphone.setBounds(130, 415, 290, 26);
 		}
 		return tfphone;
 	}
@@ -265,7 +266,7 @@ public class Register extends JDialog {
 			});
 			tfpw.setEditable(false);
 			tfpw.setColumns(10);
-			tfpw.setBounds(130, 300, 290, 26);
+			tfpw.setBounds(130, 240, 290, 26);
 		}
 		return tfpw;
 	}
@@ -273,7 +274,7 @@ public class Register extends JDialog {
 		if (tfid == null) {
 			tfid = new JTextField();
 			tfid.setColumns(10);
-			tfid.setBounds(130, 257, 200, 26);
+			tfid.setBounds(130, 197, 200, 26);
 		}
 		return tfid;
 	}
@@ -281,7 +282,7 @@ public class Register extends JDialog {
 		if (tfname == null) {
 			tfname = new JTextField();
 			tfname.setColumns(10);
-			tfname.setBounds(130, 437, 290, 26);
+			tfname.setBounds(130, 377, 290, 26);
 			tfname.setEditable(false);
 			tfname.addMouseListener(new MouseAdapter() {
 				@Override
@@ -320,7 +321,7 @@ public class Register extends JDialog {
 			});
 			
 			tfpwRe.setColumns(10);
-			tfpwRe.setBounds(130, 330, 290, 26);
+			tfpwRe.setBounds(130, 270, 290, 26);
 		}
 		return tfpwRe;
 	}
@@ -342,7 +343,7 @@ public class Register extends JDialog {
 			});
 			cbaddress1.setEnabled(false);
 			cbaddress1.setModel(new DefaultComboBoxModel(new String[] {"-", "서울시", "경기도" }));
-			cbaddress1.setBounds(130, 516, 135, 27);
+			cbaddress1.setBounds(130, 456, 135, 27);
 		}
 		return cbaddress1;
 	}
@@ -355,7 +356,7 @@ public class Register extends JDialog {
 					  		idDoubleCheck();						  		
 				}
 			});
-			btnIdchek.setBounds(330, 257, 80, 26);
+			btnIdchek.setBounds(330, 197, 80, 26);
 		}
 		return btnIdchek;
 	}
@@ -376,7 +377,7 @@ public class Register extends JDialog {
 				}  
 			});
 
-			btnnickNamechek.setBounds(330, 390, 80, 26);
+			btnnickNamechek.setBounds(330, 330, 80, 26);
 		}
 		return btnnickNamechek;
 	}
@@ -401,7 +402,7 @@ public class Register extends JDialog {
                    					
 				}
 			});
-			btnsignIn.setBounds(260, 624, 117, 29);
+			btnsignIn.setBounds(260, 650, 117, 29);
 		}
 		return btnsignIn;
 	}
@@ -459,7 +460,7 @@ public class Register extends JDialog {
 			btnBack.setOpaque(true);
 			btnBack.setBorder(new LineBorder(new Color(214, 203, 216), 2));
 			btnBack.setBackground(new Color(214, 203, 216));
-			btnBack.setBounds(70, 624, 117, 29);
+			btnBack.setBounds(70, 650, 117, 29);
 		}
 		return btnBack;
 	}
@@ -481,7 +482,7 @@ public class Register extends JDialog {
 				}
 				}
 			});
-			cbaddress2.setBounds(280, 516, 135, 27);
+			cbaddress2.setBounds(280, 456, 135, 27);
 				address2info();
 		}
 		return cbaddress2;
@@ -490,7 +491,7 @@ public class Register extends JDialog {
 	private JLabel getLblNewLabel_1() {
 		if (lblNewLabel_1 == null) {
 			lblNewLabel_1 = new JLabel("이메일 :");
-			lblNewLabel_1.setBounds(52, 560, 61, 16);
+			lblNewLabel_1.setBounds(52, 500, 61, 16);
 		}
 		return lblNewLabel_1;
 	}
@@ -506,7 +507,7 @@ public class Register extends JDialog {
 				}
 			});
 			tfemail.setEditable(false);
-			tfemail.setBounds(130, 555, 290, 26);
+			tfemail.setBounds(130, 495, 290, 26);
 			tfemail.setColumns(10);
 		}
 		return tfemail;
@@ -778,9 +779,12 @@ public class Register extends JDialog {
         String address = add1.trim().concat(add2.trim());
         String email = tfemail.getText().trim();
         
+        String imagePath = "/com/javalec/images/Registerimage.jpg";
+        File profile_image = new File(getClass().getResource(imagePath).getFile());
+        					
         
     // 회원가입 처리
-    Dao_Login dao = new Dao_Login(userid, pw, phone, email, nickname, address );
+    Dao_Login dao = new Dao_Login(userid, pw, phone, email, nickname, address, profile_image );
     // 사용자 등록 수행
     dao.signUpdate();
 
