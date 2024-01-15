@@ -46,8 +46,6 @@ public class Dao_Chat {
 					+ "values(?, ?, now(), ?)";
 			
 			ps = con.prepareStatement(query);
-//			System.out.println(Share.chatid + "adsasdasdasdasdasd chatid");
-//			System.out.println(Share.id);
 			ps.setInt(1, Share.chatid);
 			ps.setString(2, chatText);
 			ps.setString(3, Share.id);
@@ -72,8 +70,6 @@ public class Dao_Chat {
 					+ "values(?, ?, now(), ?)";
 			
 			ps = con.prepareStatement(query);
-//			System.out.println(Share.chatid + "adsasdasdasdasdasd chatid");
-//			System.out.println(Share.id);
 			ps.setInt(1, Share.chatid);
 			
 			// Create a ByteArrayInputStream from the byte array
@@ -103,9 +99,6 @@ public class Dao_Chat {
 					+ "values(?, ?)";
 			
 			ps = con.prepareStatement(query);
-//			System.out.println(Share.chatid + "adsasdasdasdasdasd chatid");
-//			System.out.println(Share.id);
-			System.out.println(Share.checkUser);
 			ps.setString(1, Share.id);
 			ps.setString(2, Share.checkUser);
 			
@@ -326,10 +319,8 @@ public class Dao_Chat {
 			
 			ResultSet rs = st.executeQuery(query);
 			while(rs.next()) {
-				System.out.println("right");
 				Dto_Chat dto = new Dto_Chat(rs.getString(1));
 				dtoList.add(dto);
-				System.out.println(dtoList);
 			}
 			
 			con.close();
@@ -377,8 +368,6 @@ public class Dao_Chat {
 			Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
 			Statement st = con.createStatement();
 			
-			System.out.println(Share.checkUser + "    1");
-			System.out.println(Share.id);
 			String query = "select userid, block_user from block_list "
 					+ "where userid = '"+Share.checkUser+"' and block_user = '" + Share.id+ "'";
 					
