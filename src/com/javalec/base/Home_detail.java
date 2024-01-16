@@ -454,7 +454,7 @@ public class Home_detail extends JDialog {
 		lbUserNick.setText(getUserInfo.get(0).getNickname());
 		
 		// 4. 설명 설정
-		lbDescription.setText(getUserInfo.get(0).getDesc());
+		lbDescription.setText("<html>"+getUserInfo.get(0).getDesc()+"</html>");
 		
 		// 5. 가격 설정
 		lbPrice.setText(String.format("%,d원", getUserInfo.get(0).getStart_price()));

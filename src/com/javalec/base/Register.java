@@ -423,9 +423,9 @@ public class Register extends JDialog {
 			tfPinfo.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseEntered(MouseEvent e) {
-					tfPinfo.setForeground(Color.BLACK);						//글씨 색깔
-			        Font font = new Font("Arial Black", Font.ITALIC, 13);		//사용 폰트
-			        tfPinfo.setFont(font);	
+					tfPinfo.setForeground(Color.BLUE);						//글씨 색깔
+			   //     Font font = new Font("Arial Black", Font.ITALIC, 13);		//사용 폰트
+			    //    tfPinfo.setFont(font);	
 				}
 				@Override
 				public void mouseExited(MouseEvent e) {
