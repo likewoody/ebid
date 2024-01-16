@@ -134,6 +134,28 @@ public class Dao_Chat {
 		}
 	}
 	
+	// insert 거래 완료
+	public void okAction() {
+		PreparedStatement ps = null;
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection(url_mysql,id_mysql,pw_mysql);
+			String query = "insert into purchase (userid, postid, date) "
+					+ "values(?, ?, now())";
+			
+			ps = con.prepareStatement(query);
+			ps.setString(1, Share.id);
+			ps.setInt(2, searchPostIdofSell());
+			
+			ps.executeUpdate();
+			
+			con.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	
 	// read
 	public ArrayList<Dto_Chat> searchChat() {
@@ -407,6 +429,28 @@ public class Dao_Chat {
 		return check;
 	}
 	
+	// serach sellid
+	public int searchPostIdofSell() {
+		int sellid = 0;
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+			Statement st = con.createStatement();
+			
+			String query = "select s.postid from sell s, chat c "
+					+ "					where c.sellid = s.sellid and c.chatid = " + Share.chatid;
+					
+			ResultSet rs = st.executeQuery(query);
+			
+			if (rs.next()) {
+				sellid = rs.getInt(1);
+			}
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return sellid;
+	}
 	
 	// update
 	
@@ -421,6 +465,29 @@ public class Dao_Chat {
 			ps = con.prepareStatement(query);
 			
 			ps.setString(1, title);
+			
+			ps.executeUpdate();
+			
+			con.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	public void updatePostStatus() {
+		PreparedStatement ps = null;
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+			
+			System.out.println(searchPostIdofSell());
+			String query = "update post set post_status = ? where postid = " + searchPostIdofSell();
+			
+			ps = con.prepareStatement(query);
+			
+			ps.setString(1, "거래완료");
 			
 			ps.executeUpdate();
 			

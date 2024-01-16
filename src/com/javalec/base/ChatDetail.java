@@ -32,6 +32,7 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 
 import com.javalec.function.Dao_Chat;
+import com.javalec.function.Dao_Home;
 import com.javalec.function.Dto_Chat;
 import com.javalec.function.Dto_Home;
 import com.javalec.function.Share;
@@ -86,6 +87,7 @@ public class ChatDetail extends JDialog {
 	private int previousCount = 0;
 	private int currentCount = 0;
 	private boolean getInChattingRoom;
+	private JButton btnOk;
 
 	/**
 	 * Launch the application.
@@ -161,6 +163,7 @@ public class ChatDetail extends JDialog {
 		getContentPane().add(getBtnCb());
 		getContentPane().add(getBtnInsert());
 		getContentPane().add(getBtnRating());
+		getContentPane().add(getBtnOk());
 		getContentPane().add(getLbText());
 		getContentPane().add(getTfText());
 		getContentPane().add(getBtnBlock());
@@ -324,7 +327,7 @@ public class ChatDetail extends JDialog {
 				}
 			});
 			btnRating.setFont(new Font("Helvetica", Font.BOLD, 14));
-			btnRating.setBounds(60, 648, 128, 34);
+			btnRating.setBounds(30, 648, 128, 34);
 		}
 		return btnRating;
 	}
@@ -346,14 +349,14 @@ public class ChatDetail extends JDialog {
 	}
 	private JButton getBtnBlock() {
 		if (btnBlock == null) {
-			btnBlock = new JButton("차단하기");
+			btnBlock = new JButton("차단");
 			btnBlock.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					block();
 				}
 			});
 			btnBlock.setFont(new Font("Helvetica", Font.BOLD, 14));
-			btnBlock.setBounds(230, 650, 128, 34);
+			btnBlock.setBounds(380, 650, 40, 34);
 		}
 		return btnBlock;
 	}
@@ -365,6 +368,34 @@ public class ChatDetail extends JDialog {
 			lbText.setBounds(65, 555, 290, 50);
 		}
 		return lbText;
+	}
+	
+	private JButton getBtnOk() {
+		if (btnOk == null) {
+			btnOk = new JButton("거래완료");
+			btnOk.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					int i = JOptionPane.showConfirmDialog(getRootPane(), "거래를 완료 처리하시겠습니까?", "알림", JOptionPane.YES_OPTION);
+					
+					if (i == 0) {
+						Dao_Home d_home = new Dao_Home();
+						if (d_home.findPostStatus().equals("거래완료")) {
+							JOptionPane.showMessageDialog(getRootPane(), "이미 거래가 완료 되었습니다.", "알림", JOptionPane.ERROR_MESSAGE);
+						}
+						else {
+							dao.okAction();
+							dao.updatePostStatus();
+							tfText.setEditable(false);
+							JOptionPane.showMessageDialog(getRootPane(), "거래가 완료 되었습니다.", "알림", JOptionPane.ERROR_MESSAGE);
+						}
+					}
+					
+				}
+			});
+			btnOk.setFont(new Font("Helvetica", Font.BOLD, 14));
+			btnOk.setBounds(205, 650, 128, 34);
+		}
+		return btnOk;
 	}
 	
 	// ---- Fucntion ----
@@ -624,7 +655,7 @@ public class ChatDetail extends JDialog {
 				searchDB();
 				
 				try {
-					Thread.sleep(7000);
+					Thread.sleep(5000);
 				}
 				catch (Exception e) {
 					e.printStackTrace();
@@ -635,4 +666,6 @@ public class ChatDetail extends JDialog {
 		}
 		
 	}
+	
+	
 }
