@@ -281,9 +281,11 @@ public class Login extends JDialog {
 	
 //	// 중복되는 코드 모아주는 매소드   ************************************************
 	 private void setMouseOverEffect(JButton btnSign2) {
-	        btnSign2.setForeground(Color.BLACK);						//글씨 색깔
-	        Font font = new Font("Arial Black", Font.ITALIC, 13);		//사용 폰트
-	        btnSign2.setFont(font);									    //폰트 적용
+		 	btnSign2.setForeground(Color.BLUE);							// 	 원래는 폰트를 변경했는데 다른 컴퓨터에는 폰트가 설치되지않아 정상출력이 안됨. 
+		 								//   그래서 그냥 색깔변경으로 변경
+	      //  btnSign2.setForeground(Color.BLACK);						//글씨 색깔
+	      //  Font font = new Font("Arial Black", Font.ITALIC, 13);		//사용 폰트
+	    //    btnSign2.setFont(font);									    //폰트 적용
 	    }
 	
 	 private void resetButton(JButton btnLogin2) {
