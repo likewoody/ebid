@@ -317,7 +317,7 @@ public class Login extends JDialog {
 		        JOptionPane.showMessageDialog(null, "비밀번호를 입력하세요", "알림", JOptionPane.ERROR_MESSAGE);
 		        return;
 		    }
-	    
+		    		
 		    	 Dao_Login dao = new Dao_Login(inputid, inputPw);
 		    	 
 		    	
