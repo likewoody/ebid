@@ -227,18 +227,18 @@ public class Home extends JDialog {
 	        innerTable.addMouseListener(new MouseAdapter() {
 	            @Override
 	            public void mouseClicked(MouseEvent e) {
+	            	// 더블 클릭 이벤트 처리 코드
+	            	Dao_Home dao = new Dao_Home();
+	            	ArrayList<Dto_Home> dto = dao.searchDB();
+	            	
+	            	// postid 찾기
+	            	Share.postId = dto.get(innerTable.getSelectedRow()).getPostId();
+	            	
+	            	// sellid 찾기
+	            	Share.sellId = dto.get(innerTable.getSelectedRow()).getSellid();
+	            	
+	            	Share.post_status = dao.findPostStatus();
 	                if (e.getClickCount() == 2) {
-	                    // 더블 클릭 이벤트 처리 코드
-	                    Dao_Home dao = new Dao_Home();
-	                    ArrayList<Dto_Home> dto = dao.searchDB();
-
-	                    // postid 찾기
-	                    Share.postId = dto.get(innerTable.getSelectedRow()).getPostId();
-
-	                    // sellid 찾기
-	                    Share.sellId = dto.get(innerTable.getSelectedRow()).getSellid();
-	                    
-	                    Share.post_status = dao.findPostStatus();
 
 	                    dao.viewCount();
 	                    Home_detail homeDetail = new Home_detail();

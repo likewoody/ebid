@@ -83,7 +83,6 @@ public class Home_detail extends JDialog {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowActivated(WindowEvent e) {
-//				getPostInfo();
 				tableInit();
 				searchDB();
 			}
@@ -272,21 +271,25 @@ public class Home_detail extends JDialog {
 				public void mouseClicked(MouseEvent e) {
 					Share.chatSellerId = dao.findSellerId();
 					
+					System.out.println(Share.post_status);
 					if (Share.id.equals(Share.chatSellerId)) {
 						JOptionPane.showMessageDialog(getRootPane(), "채팅을 실행할 수 없습니다", "알림", JOptionPane.ERROR_MESSAGE);
 					}
+					if (Share.post_status.equals("거래완료")) {
+						JOptionPane.showMessageDialog(getRootPane(), "이미 거래가 완료 되었습니다.", "알림", JOptionPane.ERROR_MESSAGE);
+					}
 					else {
-						if (! dao.checkBlock()) {
-							if (!dao.findChatExist()) {
-								dao.createChatRoom();
-								Share.chatid = dao.findChatId();
-								Share.checkNewChat = true;
+							if (! dao.checkBlock()) {
+								if (!dao.findChatExist()) {
+									dao.createChatRoom();
+									Share.chatid = dao.findChatId();
+									Share.checkNewChat = true;
+								}
+								ChatDetail cd = new ChatDetail();
+								cd.setVisible(true);
+								dispose();
 							}
-							ChatDetail cd = new ChatDetail();
-							cd.setVisible(true);
-							dispose();
-						}
-						else JOptionPane.showMessageDialog(getRootPane(), "상대방에게 차단된 사용자입니다.", "알림", JOptionPane.ERROR_MESSAGE);
+							else JOptionPane.showMessageDialog(getRootPane(), "상대방에게 차단된 사용자입니다.", "알림", JOptionPane.ERROR_MESSAGE);
 					}
 				}
 			});
