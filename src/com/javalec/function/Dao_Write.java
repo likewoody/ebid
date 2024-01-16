@@ -118,40 +118,46 @@ public class Dao_Write {
 		
     }
 	 //회원 정보 업데이트
-	public void wUpdate() {
-		
-		//글게시 완료 업로드 *****************************************
-		
-		String AA ="INSERT INTO ebid.post (title, description, post_status, sort, price, view_count, start_date) VALUES (?, ?, ?, ?, ?, ?, ?)";
 	
-    try {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection conn = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
-    
-        //업데이트
-        PreparedStatement pstmt = conn.prepareStatement(AA);
-        pstmt.setString(1, title);
-        pstmt.setString(2, description);
-        pstmt.setString(3, "판매중");
-        pstmt.setString(4, "판매");
-        pstmt.setString(5,  price);
-        pstmt.setString(6, "0");
-       
-     // 현재의 timestamp 얻기
-        java.sql.Timestamp start_date = new java.sql.Timestamp(System.currentTimeMillis());
-        pstmt.setTimestamp(7, start_date);
-    	        
+	public void wUpdate() {
+	    // ...
 
-        // 업데이트 실행
-        pstmt.executeUpdate();
+	    //글게시 완료 업로드 *****************************************
+	    String AA = "INSERT INTO ebid.post (title, description, post_status, sort, price, view_count, start_date) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-        conn.close();
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-    sUpdate();
-    
-  } 
+	    try {
+	    	Class.forName("com.mysql.cj.jdbc.Driver");
+	    	Connection conn = DriverManager.getConnection(url_mysql, id_mysql, pw_mysql);
+	        // ...
+	        PreparedStatement pstmt = conn.prepareStatement(AA);
+
+	        // Set other parameters
+	        pstmt.setString(1, title);
+
+	        // Handle newline characters in description
+	        String formattedDescription = description.replace("\n", "<br>"); // Replace newline with HTML <br> tag
+	        pstmt.setString(2, formattedDescription);
+
+	        pstmt.setString(3, "판매중");
+	        pstmt.setString(4, "판매");
+	        pstmt.setString(5, price);
+	        pstmt.setString(6, "0");
+
+	        // 현재의 timestamp 얻기
+	        java.sql.Timestamp start_date = new java.sql.Timestamp(System.currentTimeMillis());
+	        pstmt.setTimestamp(7, start_date);
+
+	        // 업데이트 실행
+	        pstmt.executeUpdate();
+
+	        conn.close();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    sUpdate();
+	}
+
+   
 	//*******************추가 코드 nickname*******************
 	// 이미지 파일을 바이트 배열로 읽어오는 메서드
 	private byte[] readImageFile(String imagePath) throws IOException {
